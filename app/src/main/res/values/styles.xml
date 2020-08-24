@@ -1,0 +1,30 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:spinnerItemStyle">@style/spinnerDropDownItemStyle</item>
+        <item name="android:logo">@android:color/transparent</item>
+        <item name="android:actionBarStyle">@style/actionbar</item>
+        <item name="android:colorControlActivated">@color/active</item>
+    </style>
+
+    <style name="AppThemeExtras" parent="AppTheme">
+        <!-- the following property cannot be applied without this extra child. -->
+        <item name="android:colorControlActivated">@color/active</item>
+    </style>
+
+    <style name="spinnerDropDownItemStyle">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:background">@color/solid</item>
+    </style>
+
+    <style name="actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/solid</item>
+    </style>
+
+</resources>

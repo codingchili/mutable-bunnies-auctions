@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- merge into single prop -->
+    <color name="colorPrimary">#00b0ff</color>
+    <color name="colorPrimaryDark">#00b0ff</color>
+    <color name="colorAccent">#00b0ff</color>
+
+    <color name="background">#F8F8FF</color>
+    <color name="card">#FFFFFF</color>
+    <color name="text">#323232</color>
+    <color name="text_hint">#4D4847</color>
+    <color name="text_solid">#FFFFFF</color>
+    <color name="solid">#00b0ff</color>
+    <color name="active">#033638</color>
+    <color name="toolbar">#88033638</color>
+    <color name="accent">#29B6F6</color>
+
+    <!-- auction status -->
+    <color name="auction_end">#EF5350</color>
+    <color name="auction_lead">#66BB6A</color>
+    <color name="auction_wait">#FFEE58</color>
+
+    <!-- item rarities -->
+    <color name="quality_mythic">#FFCA28</color>
+    <color name="quality_legendary">#FF7043</color>
+    <color name="quality_epic">#AB47BC</color>
+    <color name="quality_rare">#5C6BC0</color>
+    <color name="quality_uncommon">#66BB6A</color>
+    <color name="quality_common">#9FA8DA</color>
+
+    <!-- item types -->
+    <color name="type_consumable">#81C784</color>
+    <color name="type_weapon">#E57373</color>
+    <color name="type_armor">#4DB6AC</color>
+    <color name="type_quest">#DCE775</color>
+
+</resources>

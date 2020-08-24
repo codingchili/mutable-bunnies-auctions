@@ -1,0 +1,134 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background">
+
+    <EditText
+        android:id="@+id/edit_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:hint="@string/hint_username"
+        android:singleLine="true"
+        android:textColor="@color/text"
+        android:textColorHint="@color/text_hint" />
+
+    <EditText
+        android:id="@+id/edit_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_username"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:fontFamily="sans-serif"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColor="@color/text"
+        android:textColorHint="@color/text_hint" />
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/solid"
+        android:text="@string/login"
+        android:textColor="@color/text_solid" />
+
+    <TextView
+        android:id="@+id/button_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp"
+        android:padding="16dp"
+        android:text="@string/link_register"
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/app_logo"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:baselineAlignBottom="false"
+        android:src="@drawable/bunny" />
+
+    <RelativeLayout
+        android:id="@+id/loading_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:background="@color/card"
+        android:elevation="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:text="@string/loading"
+            android:textColor="@color/text" />
+
+        <ProgressBar
+            android:id="@+id/loading_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="4dp"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/accent"
+        android:textSize="18sp"
+        android:text="EU" />
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.64"
+        android:text="v1.0.1" />
+
+</RelativeLayout>

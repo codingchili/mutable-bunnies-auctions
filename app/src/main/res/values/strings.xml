@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Bunnies Auctions</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="hint_username">e-mail address</string>
+    <string name="hint_password">password</string>
+    <string name="login">Login</string>
+    <string name="link_register">Create account</string>
+    <string name="loading">Loading…</string>
+</resources>

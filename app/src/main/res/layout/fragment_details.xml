@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:background="#ffffff"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_white_24dp" />
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="132dp"
+        android:layout_height="132dp"
+        android:background="@color/card"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.12" />
+
+    <TextView
+        android:id="@+id/current_bid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:alpha="0.64"
+        android:padding="6dp"
+        android:text="600 Ξ"
+        android:textColor="@color/text"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_image"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <RelativeLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="76dp"
+        android:background="@color/card"
+        android:elevation="16dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_image">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/auction_lead"
+            android:clickable="false"
+            android:elevation="8dp"
+            android:text="auction won"
+            android:textColor="@color/text_solid" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/related_items"
+            android:layout_below="@id/button"
+            android:layout_marginTop="2dp"
+            android:background="@color/card"
+            android:elevation="12dp"
+            android:scrollIndicators="end"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:id="@+id/auction_meta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/button"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:background="@color/card"
+                    android:elevation="0dp"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Bids"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="24dp"
+                        android:text="27"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_right"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/card"
+                    android:elevation="8dp"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Ends in"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="8dp"
+                        android:text="1 day, 3 hours, 26 minutes."></TextView>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/card"
+                    android:elevation="8dp"
+                    android:layout_marginTop="4dp">
+
+                    <RelativeLayout
+                        android:id="@+id/item_stats_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/item_stats_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Stats"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/item_stats"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/item_stats_title"
+                            android:layout_centerInParent="true"
+                            android:layout_marginBottom="8dp"
+                            android:text="+4 Wisdom\n+4 Constitution" />
+
+                        <LinearLayout
+                            android:id="@+id/tags"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/item_stats"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp">
+
+                            <TextView
+                                android:id="@+id/item_quality"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/tag"
+                                android:padding="6dp"
+                                android:text="epic"
+                                android:textColor="@color/text_solid"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/item_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/tag_type"
+                                android:padding="6dp"
+                                android:text="weapon: staff"
+                                android:textColor="@color/text_solid"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/item_description_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/item_stats_container"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/card"
+                        android:elevation="12dp">
+
+                        <TextView
+                            android:id="@+id/item_description_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Description Foo"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/item_description"
+                            android:layout_width="256dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/item_description_title"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="8dp"
+                            android:text="By holding this stick, with a few green leaves weakly attached - you feel closer to nature.\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others EPIC MEAL TIME\nbeep bepp bloop" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/related_items"
+            android:layout_width="match_parent"
+            android:layout_height="142dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="4dp"
+            android:background="@color/card"
+            android:elevation="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="2dp"
+                android:alpha="0.6"
+                android:text="Related items"></TextView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/card"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="108dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s0"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_mythic"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_10"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/ring_1" />
+
+                        <TextView
+                            android:id="@+id/sample_10_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginBottom="24dp"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="3,600,000 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/text"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_10_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text="x99"
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_10_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_10"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="112dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s2"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_epic"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_12"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/wand_1" />
+
+                        <TextView
+                            android:id="@+id/sample_12_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/sample_12"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="900 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/accent"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_12_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text=""
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_12_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_12"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textFontWeight="800"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="112dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s3"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_common"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_13"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/apple_green" />
+
+                        <TextView
+                            android:id="@+id/sample_13_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/sample_13"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="60.5 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/accent"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_13_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text="x99"
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_13_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_13"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textFontWeight="800"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="112dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s4"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_rare"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_14"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/ring_1" />
+
+                        <TextView
+                            android:id="@+id/sample_14_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/sample_14"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="3,600,000 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/accent"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_14_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text=""
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_14_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_14"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textFontWeight="800"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="112dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s5"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_legendary"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_15"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/flaming_stick" />
+
+                        <TextView
+                            android:id="@+id/sample_15_price"
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/sample_15"
+                            android:layout_marginLeft="16dp"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="60.5 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/accent"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_15_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text="x99"
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_15_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_15"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textFontWeight="800"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="112dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s6"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_legendary"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_16"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/flaming_stick" />
+
+                        <TextView
+                            android:id="@+id/sample_16_price"
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/sample_16"
+                            android:layout_marginLeft="16dp"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="60.5 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/accent"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_16_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text="x99"
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_16_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_16"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textFontWeight="800"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="96dp"
+                        android:layout_height="112dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@color/card"
+                        android:elevation="4dp">
+
+                        <View
+                            android:id="@+id/item_quality_s"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/quality_uncommon"></View>
+
+                        <ImageView
+                            android:id="@+id/sample_1"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.12"
+                            app:srcCompat="@drawable/flaming_stick" />
+
+                        <TextView
+                            android:id="@+id/sample_1_price"
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/sample_1"
+                            android:layout_marginLeft="16dp"
+                            android:alpha="0.6"
+                            android:background="@color/card"
+                            android:text="60.5 Ξ"
+                            android:textAlignment="center"
+                            android:textColor="@color/accent"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sample_1_quantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginRight="4dp"
+                            android:padding="2dp"
+                            android:text="x99"
+                            android:textColor="@color/accent" />
+
+                        <TextView
+                            android:id="@+id/sample_1_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/sample_1"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginBottom="2dp"
+                            android:gravity="center"
+                            android:padding="2dp"
+                            android:text="Stick of Truth +5"
+                            android:textColor="@color/text"
+                            android:textFontWeight="800"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_seller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:text="EU/Angel Oak/Eternalfoo"
+        android:textColor="@color/accent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/star_outline" />
+
+    <!-- change theme colors to match hue; button,quality -->
+    <!-- move title to actionbar -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
