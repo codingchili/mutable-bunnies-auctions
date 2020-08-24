@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainFragment: Fragment() {
+    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,14 +27,18 @@ class MainFragment: Fragment() {
         val navHostFragment = childFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
+                R.id.navigation_search, R.id.navigation_dashboard, R.id.navigation_notifications))
 
         (activity as AppCompatActivity)
             .setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         return fragment
+    }
+
+    public fun getCurrent(): String {
+        return resources.getResourceName(navController.currentDestination!!.id)
     }
 }

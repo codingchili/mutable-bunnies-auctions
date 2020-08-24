@@ -33,5 +33,9 @@
     <color name="type_weapon">#E57373</color>
     <color name="type_armor">#4DB6AC</color>
     <color name="type_quest">#DCE775</color>
+    <color name="type_default">#4DB6AC</color>
+
+
+    <color name="background_text_overlay">#A3FFFFFF</color>
 
 </resources>
