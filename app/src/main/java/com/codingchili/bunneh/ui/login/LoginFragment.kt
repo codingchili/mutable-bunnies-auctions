@@ -23,7 +23,7 @@ class LoginFragment : Fragment() {
         // 1. auto select region based on GEO
                 // change from login
 
-        Glide.with(context)
+        Glide.with(context!!)
             .load(R.drawable.bunny)
             .into(fragment.findViewById(R.id.app_logo))
 

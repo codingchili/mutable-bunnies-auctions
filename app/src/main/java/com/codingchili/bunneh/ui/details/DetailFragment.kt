@@ -6,12 +6,10 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Chronometer
-import android.widget.GridView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.ui.formatValue
@@ -79,6 +77,20 @@ class DetailFragment : Fragment() {
         fragment.findViewById<TextView>(R.id.item_stats).text = item.stats
         fragment.findViewById<TextView>(R.id.item_bid).text = formatValue(item.bid)
         fragment.findViewById<TextView>(R.id.item_seller).text = item.seller
+        fragment.findViewById<TextView>(R.id.auction_bid_count).text = item.bids.size.toString()
+
+        fragment.findViewById<RelativeLayout>(R.id.bid_list).setOnClickListener {
+            BidlistDialogFragment()
+                .setAuction(item)
+                .show(activity!!.supportFragmentManager, "foo")
+        }
+
+        val swipe = fragment.findViewById<SwipeRefreshLayout>(R.id.pull_refresh)
+        swipe.setOnRefreshListener {
+            // pull item/auction data from server.
+            activity!!.title = "UPDATED FROM PULL-DN"
+            swipe.isRefreshing = false
+        }
 
         val quantity = fragment.findViewById<TextView>(R.id.item_quantity)
         if (item.quantity > 1) {
@@ -86,8 +98,6 @@ class DetailFragment : Fragment() {
         } else {
             quantity.visibility = View.GONE
         }
-
-        fragment.findViewById<TextView>(R.id.auction_bid_count).text = item.bids.size.toString()
 
         val chronometer = fragment.findViewById<Chronometer>(R.id.auction_end)
         chronometer.base = item.end
@@ -103,14 +113,11 @@ class DetailFragment : Fragment() {
             item.rarity.resource
         )
 
-        Glide.with(context)
+        Glide.with(context!!)
             .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
             .into(fragment.findViewById(R.id.item_image))
 
         val grid = fragment.findViewById<GridView>(R.id.search_related)
-        /*val search = root.findViewById<TextView>(R.id.search_text)
-        search.setOnEditorActionListener(onSearchHandler)*/
-
         val adapter = itemGridAdapter(this, inflater, Consumer<AuctionItem> {
             activity!!.supportFragmentManager.beginTransaction()
                 .add(R.id.root, DetailFragment().load(it, hits))
@@ -126,13 +133,11 @@ class DetailFragment : Fragment() {
 
         val width = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            (related.size * (96 + 8)).toFloat(),
+            (related.size * (96 + 8 + 1)).toFloat(),
             resources.displayMetrics
         ).toInt()
 
-        fragment.findViewById<LinearLayout>(R.id.horizontal_scroll)
-            .layoutParams.width = width
-
+        fragment.findViewById<LinearLayout>(R.id.horizontal_scroll).layoutParams.width = width
         fragment.findViewById<FloatingActionButton>(R.id.back).setOnClickListener {
             activity!!.onBackPressed()
         }

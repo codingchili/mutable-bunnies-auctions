@@ -15,6 +15,13 @@ class AuctionItem(
     val type: String? = null
 ) {
     val seller = "EU/Hazel Dream/Ethercat"
-    val bids = ArrayList<AuctionBid>()
+    val bids =
+        listOf(
+            AuctionBid(owner = "EU/Gloomville/Dr.Foo", value = 41),
+            AuctionBid(owner = "EU/Hazel Dream/Birthcake", value = 1200),
+            AuctionBid(owner = "EU/Angel Oak/Etherbloom", value = 1201),
+            AuctionBid(owner = "EU/Angel Oak/Foowoo", value = 1800),
+            AuctionBid(owner = "EU/Hazel Dream/Birthcake", value = 36000000)
+        )
     val end: Long = Date().time + 72 * 60 * 60 * 1000 // 72 hours
 }

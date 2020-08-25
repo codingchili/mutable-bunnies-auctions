@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStack()
-            title = main.getCurrent()
+            title = resources.getString(R.string.app_name)
         } else {
             finish()
         }
