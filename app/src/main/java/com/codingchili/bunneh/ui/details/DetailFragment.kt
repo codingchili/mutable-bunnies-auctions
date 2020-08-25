@@ -16,8 +16,7 @@ import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.ui.RecyclerAdapter
 import com.codingchili.bunneh.ui.formatValue
-import com.codingchili.bunneh.ui.home.AuctionItem
-import com.codingchili.bunneh.ui.itemGridAdapter
+import com.codingchili.bunneh.ui.search.AuctionItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.Instant
 import java.time.ZoneId
@@ -103,7 +102,7 @@ class DetailFragment : Fragment() {
         }
 
         fragment.findViewById<ImageView>(R.id.auction_favorite).setOnClickListener {
-            it.background = ResourcesCompat.getDrawable(resources, R.drawable.star_icon, null)
+            it.background = ResourcesCompat.getDrawable(resources, R.drawable.icon_star, null)
         }
 
         val chronometer = fragment.findViewById<Chronometer>(R.id.auction_end)

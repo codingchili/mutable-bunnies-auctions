@@ -29,7 +29,7 @@ class MainFragment: Fragment() {
 
         navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_search, R.id.navigation_dashboard, R.id.navigation_notifications))
+                R.id.navigation_search, R.id.navigation_inventory, R.id.navigation_notifications))
 
         (activity as AppCompatActivity)
             .setupActionBarWithNavController(navController, appBarConfiguration)

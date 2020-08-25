@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.ui.home.AuctionBid
-import com.codingchili.bunneh.ui.home.AuctionItem
+import com.codingchili.bunneh.ui.search.AuctionBid
+import com.codingchili.bunneh.ui.search.AuctionItem
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -32,7 +32,7 @@ fun bidListAdapter(
             )
 
             val format = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-            view.findViewById<TextView>(R.id.bid_value).text = "${bid.value} Ξ"
+            view.findViewById<TextView>(R.id.bid_value).text = formatValue(bid.value)
             view.findViewById<TextView>(R.id.bid_owner).text = bid.owner
             view.findViewById<TextView>(R.id.bid_date).text = LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(bid.date), ZoneId.systemDefault())

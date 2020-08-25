@@ -57,6 +57,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/quick_search"
             android:layout_height="match_parent"
             android:layout_width="92dp"
             android:layout_margin="8dp"
@@ -83,6 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/text_query"
             android:layout_height="match_parent"
             android:layout_width="92dp"
             android:layout_margin="8dp"
@@ -108,6 +110,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/sort"
             android:layout_height="match_parent"
             android:layout_width="92dp"
             android:layout_margin="8dp"

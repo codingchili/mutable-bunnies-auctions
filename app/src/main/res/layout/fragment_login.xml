@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/background">
 
-    <EditText
+<!--    <EditText
         android:id="@+id/edit_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,9 +18,56 @@
         android:hint="@string/hint_username"
         android:singleLine="true"
         android:textColor="@color/text"
-        android:textColorHint="@color/text_hint" />
+        android:textColorHint="@color/text_hint" />-->
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:hint="@string/hint_username"
+        android:textColor="@color/text"
+        android:textColorHint="@color/text_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/card"
+            android:singleLine="true"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/edit_username"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:hint="@string/hint_password"
+
+        android:textColor="@color/text"
+        android:textColorHint="@color/text_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:background="@color/card"
+            android:singleLine="true"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    <EditText
         android:id="@+id/edit_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +84,7 @@
         android:inputType="textPassword"
         android:singleLine="true"
         android:textColor="@color/text"
-        android:textColorHint="@color/text_hint" />
+        android:textColorHint="@color/text_hint" />-->
 
     <Button
         android:id="@+id/button_login"
@@ -46,32 +93,23 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/solid"
+        android:background="@drawable/ripple_card"
         android:text="@string/login"
         android:textColor="@color/text_solid" />
 
-    <TextView
-        android:id="@+id/button_register"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_login"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="33dp"
-        android:padding="16dp"
-        android:text="@string/link_register"
-        android:textAllCaps="true"
-        android:textColor="@color/accent"
-        android:textSize="16sp" />
-
+        android:layout_above="@id/edit_username"
+        android:layout_centerHorizontal="true">
     <ImageView
         android:id="@+id/app_logo"
         android:layout_width="192dp"
         android:layout_height="192dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
+        android:layout_marginBottom="32dp"
         android:baselineAlignBottom="false"
         android:src="@drawable/bunny" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/loading_frame"
@@ -113,9 +151,10 @@
             android:indeterminate="true" />
     </RelativeLayout>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/region"
-        android:layout_width="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp"
@@ -123,6 +162,21 @@
         android:textColor="@color/accent"
         android:textSize="18sp"
         android:text="EU" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_register"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="33dp"
+        android:padding="16dp"
+        android:text="@string/link_register"
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/version"

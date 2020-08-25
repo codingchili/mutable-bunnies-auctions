@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.home
+package com.codingchili.bunneh.ui.search
 
 import java.time.Instant
 

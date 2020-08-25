@@ -1,7 +1,6 @@
-package com.codingchili.bunneh.ui.home
+package com.codingchili.bunneh.ui.search
 
 import java.util.*
-import kotlin.collections.ArrayList
 
 class AuctionItem(
     val icon: String,

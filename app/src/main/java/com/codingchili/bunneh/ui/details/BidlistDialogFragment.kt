@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.ui.bidListAdapter
-import com.codingchili.bunneh.ui.home.AuctionBid
-import com.codingchili.bunneh.ui.home.AuctionItem
+import com.codingchili.bunneh.ui.search.AuctionBid
+import com.codingchili.bunneh.ui.search.AuctionItem
 import com.google.android.material.button.MaterialButton
 import java.util.function.Consumer
 
@@ -27,7 +26,7 @@ class BidlistDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_dialog_bids, container, false)
+        val view = inflater.inflate(R.layout.dialog_bids, container, false)
 
         view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener {
             dialog?.hide()

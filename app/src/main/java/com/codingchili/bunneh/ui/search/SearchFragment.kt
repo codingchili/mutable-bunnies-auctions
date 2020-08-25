@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.home
+package com.codingchili.bunneh.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -77,13 +77,6 @@ class SearchFragment : Fragment() {
         hits.addAll(hits)
     }
 
-    private val onSearchHandler = OnEditorActionListener { v, actionId, event ->
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            return@OnEditorActionListener true
-        }
-        false
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,12 +84,25 @@ class SearchFragment : Fragment() {
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_search, container, false)
         val grid = fragment.findViewById<GridView>(R.id.search_hits)
-        /*val search = root.findViewById<TextView>(R.id.search_text)
-        search.setOnEditorActionListener(onSearchHandler)*/
+
+        fragment.findViewById<View>(R.id.quick_search).setOnClickListener {
+            NavigableTreeDialog("Quick Search", navigableCategoryTree)
+                .show(requireActivity().supportFragmentManager, "foo")
+        }
+
+        fragment.findViewById<View>(R.id.sort).setOnClickListener {
+            NavigableTreeDialog("Sort", searchFilterTree)
+                .show(requireActivity().supportFragmentManager, "foo")
+        }
+
+        fragment.findViewById<View>(R.id.text_query).setOnClickListener {
+            TextSearchDialog()
+                .show(requireActivity().supportFragmentManager, "foo")
+        }
 
         val adapter = itemGridAdapter(this, inflater, Consumer<AuctionItem> {
-            activity!!.title = it.title
-            activity!!.supportFragmentManager.beginTransaction()
+            requireActivity().title = it.title
+            requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.root, DetailFragment().load(it, hits))
                 .addToBackStack("details")

@@ -7,11 +7,11 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.codingchili.bunneh.ui.home.SearchFragment"
+        android:name="com.codingchili.bunneh.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_inventory"
         android:name="com.codingchili.bunneh.ui.dashboard.DashboardFragment"
         tools:layout="@layout/fragment_dashboard" />
 

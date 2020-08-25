@@ -22,7 +22,7 @@
             app:backgroundTint="@color/accent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_arrow_back_white_24dp"
+            app:srcCompat="@drawable/icon_back"
             app:tint="@color/card" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -372,7 +372,7 @@
             android:background="@drawable/ripple_card"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/star_outline"
+            android:src="@drawable/icon_star_outline"
             app:layout_constraintBottom_toTopOf="@+id/layout"
             app:layout_constraintEnd_toEndOf="parent" />
 
