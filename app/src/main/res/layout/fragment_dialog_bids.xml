@@ -24,16 +24,18 @@
         android:layout_marginTop="24dp"
         android:divider="@color/list_divider"
         android:dividerHeight="1.0sp"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="8dp" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/close_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_below="@id/bid_history"
-        android:clickable="true"
         android:text="CLOSE"
-        android:textColor="@color/accent" />
+        android:textColor="@color/accent"/>
+
 </RelativeLayout>

@@ -61,8 +61,10 @@
             android:layout_width="92dp"
             android:layout_margin="8dp"
             android:paddingTop="4dp"
-            android:background="@color/card"
+            android:background="@drawable/ripple_card"
             android:elevation="8dp"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical">
 
             <ImageView
@@ -85,7 +87,9 @@
             android:layout_width="92dp"
             android:layout_margin="8dp"
             android:paddingTop="4dp"
-            android:background="@color/card"
+            android:background="@drawable/ripple_card"
+            android:clickable="true"
+            android:focusable="true"
             android:elevation="8dp"
             android:orientation="vertical">
 
@@ -108,7 +112,9 @@
             android:layout_width="92dp"
             android:layout_margin="8dp"
             android:paddingTop="4dp"
-            android:background="@color/card"
+            android:background="@drawable/ripple_card"
+            android:clickable="true"
+            android:focusable="true"
             android:elevation="8dp"
             android:orientation="vertical">
 

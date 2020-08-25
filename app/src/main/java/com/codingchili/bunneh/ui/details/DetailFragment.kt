@@ -2,16 +2,19 @@ package com.codingchili.bunneh.ui.details
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
+import com.codingchili.bunneh.ui.RecyclerAdapter
 import com.codingchili.bunneh.ui.formatValue
 import com.codingchili.bunneh.ui.home.AuctionItem
 import com.codingchili.bunneh.ui.itemGridAdapter
@@ -71,7 +74,7 @@ class DetailFragment : Fragment() {
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_details, container, false)
 
-        activity!!.title = item.title
+        requireActivity().title = item.title
 
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
         fragment.findViewById<TextView>(R.id.item_stats).text = item.stats
@@ -82,13 +85,13 @@ class DetailFragment : Fragment() {
         fragment.findViewById<RelativeLayout>(R.id.bid_list).setOnClickListener {
             BidlistDialogFragment()
                 .setAuction(item)
-                .show(activity!!.supportFragmentManager, "foo")
+                .show(requireActivity().supportFragmentManager, "foo")
         }
 
         val swipe = fragment.findViewById<SwipeRefreshLayout>(R.id.pull_refresh)
         swipe.setOnRefreshListener {
             // pull item/auction data from server.
-            activity!!.title = "UPDATED FROM PULL-DN"
+            requireActivity().title = "UPDATED FROM PULL-DN"
             swipe.isRefreshing = false
         }
 
@@ -97,6 +100,10 @@ class DetailFragment : Fragment() {
             quantity.text = "x" + item.quantity.toString()
         } else {
             quantity.visibility = View.GONE
+        }
+
+        fragment.findViewById<ImageView>(R.id.auction_favorite).setOnClickListener {
+            it.background = ResourcesCompat.getDrawable(resources, R.drawable.star_icon, null)
         }
 
         val chronometer = fragment.findViewById<Chronometer>(R.id.auction_end)
@@ -113,33 +120,37 @@ class DetailFragment : Fragment() {
             item.rarity.resource
         )
 
-        Glide.with(context!!)
+        Glide.with(requireContext())
             .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
             .into(fragment.findViewById(R.id.item_image))
 
-        val grid = fragment.findViewById<GridView>(R.id.search_related)
-        val adapter = itemGridAdapter(this, inflater, Consumer<AuctionItem> {
-            activity!!.supportFragmentManager.beginTransaction()
+        /*val grid = fragment.findViewById<GridView>(R.id.search_related)
+        var adapter = itemGridAdapter(this, inflater, Consumer<AuctionItem> {
+            requireActivity().supportFragmentManager.beginTransaction()
                 .add(R.id.root, DetailFragment().load(it, hits))
                 .remove(this)
                 .commit()
         })
-        grid.adapter = adapter
+        grid.adapter = adapter*/
 
         val start = hits.indexOf(item)
         var related = hits.subList(Math.abs(start - 8), start + Math.min(16, hits.size - 1))
         related = related.subList(0, Math.min(16, related.size - 1))
-        adapter.addAll(related)
+        //adapter.addAll(related)
 
-        val width = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            (related.size * (96 + 8 + 1)).toFloat(),
-            resources.displayMetrics
-        ).toInt()
+        val recyclerView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        fragment.findViewById<LinearLayout>(R.id.horizontal_scroll).layoutParams.width = width
+        recyclerView.adapter = RecyclerAdapter(this, related, Consumer<AuctionItem> {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.root, DetailFragment().load(it, hits))
+                .remove(this)
+                .commit()
+        })
+
         fragment.findViewById<FloatingActionButton>(R.id.back).setOnClickListener {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         }
         return fragment
     }
@@ -147,7 +158,7 @@ class DetailFragment : Fragment() {
     private fun setLabel(view: TextView, value: String?, color: Int) {
         if (value != null) {
             val background = view.background.mutate() as GradientDrawable
-            background.setColor(ContextCompat.getColor(context!!, color));
+            background.setColor(ContextCompat.getColor(requireContext(), color));
             view.text = value
             view.background = background
         } else {

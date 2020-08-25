@@ -11,6 +11,7 @@ import com.codingchili.bunneh.R
 import com.codingchili.bunneh.ui.bidListAdapter
 import com.codingchili.bunneh.ui.home.AuctionBid
 import com.codingchili.bunneh.ui.home.AuctionItem
+import com.google.android.material.button.MaterialButton
 import java.util.function.Consumer
 
 class BidlistDialogFragment : DialogFragment() {
@@ -27,6 +28,11 @@ class BidlistDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_dialog_bids, container, false)
+
+        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener {
+            dialog?.hide()
+        }
+
         val list = view.findViewById<ListView>(R.id.bid_history)
         val adapter = bidListAdapter(this, inflater, Consumer<AuctionBid> {
             // todo view user profile - sold,bought,funds
