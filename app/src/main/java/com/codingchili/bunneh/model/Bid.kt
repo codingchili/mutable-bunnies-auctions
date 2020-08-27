@@ -1,8 +1,8 @@
-package com.codingchili.bunneh.ui.search
+package com.codingchili.bunneh.model
 
 import java.time.Instant
 
-class AuctionBid(
+class Bid(
     val owner: String,
     val value: Int,
     val date: Long = Instant.now().toEpochMilli()

@@ -6,7 +6,7 @@
     android:layout_height="164dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search_text_container"
+        android:id="@+id/input_text_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -15,17 +15,19 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="12dp"
-        android:hint="Search query"
+        android:hint="Minimum offer"
         android:textColor="@color/text"
         android:textColorHint="@color/text_hint">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_text"
+            android:id="@+id/input_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/card"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
+            android:inputType="number"
+            android:digits="0123456789,"
+            android:drawableEnd="@drawable/icon_eth"
+            android:imeOptions="actionSend"
             android:singleLine="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -36,7 +38,7 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_text_container"
+        android:layout_below="@id/input_text_container"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"

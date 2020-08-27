@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.search
+package com.codingchili.bunneh.ui.dialog
 
 import android.app.Activity
 import android.os.Bundle
@@ -8,19 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 
-
-class TextSearchDialog : DialogFragment() {
+class NumberInputDialog: DialogFragment() {
 
     private fun searchHandler(): TextView.OnEditorActionListener {
         return TextView.OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                dialog?.hide()
-
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                dismiss()
                 return@OnEditorActionListener true
             }
             false
@@ -32,11 +31,13 @@ class TextSearchDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.dialog_text_search, container, false)
-        val search = view.findViewById<EditText>(R.id.search_text)
+        val view = inflater.inflate(R.layout.dialog_number_input, container, false)
+        val search = view.findViewById<TextInputEditText>(R.id.input_text)
 
         search.setOnEditorActionListener(searchHandler())
         search.requestFocus()
+
+        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener { dismiss() }
 
         Handler().postDelayed({
             (requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -45,4 +46,5 @@ class TextSearchDialog : DialogFragment() {
 
         return view
     }
+
 }

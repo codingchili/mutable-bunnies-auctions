@@ -1,12 +1,24 @@
 <resources>
     <string name="app_name">Bunnies Auctions</string>
+
     <string name="title_search">Search</string>
     <string name="title_inventory">Inventory</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_auctions">Auctions</string>
+
     <string name="hint_username">e-mail address</string>
     <string name="hint_password">password</string>
     <string name="login">Login</string>
     <string name="link_register">Create account</string>
     <string name="loading">Loading…</string>
     <string name="resources_host">http://192.168.10.106:8080</string>
+
+
+    <string name="liquidity_title">Liquidity</string>
+    <string name="liquidity_text">Funds are displayed in two categories, total funds and liquidity.
+    When leading an auction the liquidity is reduced by the value of the bid. When placing a bid the
+    liquidity cannot be exceeded.</string>
+    <string name="server_region">EU</string>
+    <string name="location_title">Server region</string>
+    <string name="location_text">The application requires access to location in order to automatically determine server region. This will be selected manually if the permission is not granted.</string>
 </resources>

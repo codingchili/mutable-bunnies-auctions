@@ -13,7 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainFragment: Fragment() {
+class MainFragment : Fragment() {
     private lateinit var navController: NavController
 
     override fun onCreateView(
@@ -28,8 +28,14 @@ class MainFragment: Fragment() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_search, R.id.navigation_inventory, R.id.navigation_notifications))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_search,
+                R.id.navigation_inventory,
+                R.id.navigation_auctions,
+                R.id.navigation_notifications
+            )
+        )
 
         (activity as AppCompatActivity)
             .setupActionBarWithNavController(navController, appBarConfiguration)

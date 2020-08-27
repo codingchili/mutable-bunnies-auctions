@@ -308,45 +308,6 @@
                     android:scrollbars="horizontal">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
-                <!--<HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:id="@+id/horizontal_scroll"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="16dp"
-                            android:orientation="horizontal">
-
-                            <GridView
-                                android:id="@+id/search_related"
-                                android:layout_width="wrap_content"
-
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="20dp"
-                                android:columnWidth="96dp"
-                                android:fillViewport="true"
-                                android:horizontalSpacing="8dp"
-                                android:numColumns="auto_fit"
-                                android:orientation="horizontal"
-                                android:paddingLeft="8dp"
-                                android:paddingRight="8dp"
-
-                                android:scrollbars="horizontal"
-
-                                android:stretchMode="spacingWidthUniform"
-                                android:verticalSpacing="8dp" />
-
-                        </LinearLayout>
-                    </FrameLayout>
-
-                </HorizontalScrollView>-->
             </RelativeLayout>
 
         </RelativeLayout>
@@ -372,7 +333,7 @@
             android:background="@drawable/ripple_card"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/icon_star_outline"
+            android:src="@drawable/icon_heart_outline"
             app:layout_constraintBottom_toTopOf="@+id/layout"
             app:layout_constraintEnd_toEndOf="parent" />
 

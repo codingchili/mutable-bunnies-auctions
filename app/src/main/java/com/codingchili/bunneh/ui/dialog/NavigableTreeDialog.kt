@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.search
+package com.codingchili.bunneh.ui.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,15 +11,20 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
 import com.google.android.material.button.MaterialButton
+import java.util.function.Consumer
 
-class NavigableTreeDialog(var title: String, var tree: List<NavigableTree>) : DialogFragment() {
+class NavigableTreeDialog(
+    var title: String,
+    var tree: List<NavigableTree>,
+    var listener: Consumer<NavigableTree>? = null
+) : DialogFragment() {
 
     private fun adapter(inflater: LayoutInflater, view: View): ArrayAdapter<NavigableTree> {
-        return object : ArrayAdapter<NavigableTree>(requireContext(), R.layout.item_simple) {
+        return object : ArrayAdapter<NavigableTree>(requireContext(), R.layout.item_navigable) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val node = getItem(position)!!
                 val row = convertView ?: inflater.inflate(
-                    R.layout.item_simple,
+                    R.layout.item_navigable,
                     parent,
                     false
                 )
@@ -31,7 +36,8 @@ class NavigableTreeDialog(var title: String, var tree: List<NavigableTree>) : Di
                         this.clear()
                         refresh(this, node.next)
                     } else {
-                        dialog?.hide()
+                        listener?.accept(node)
+                        dismiss()
                     }
                 }
                 return row
@@ -46,11 +52,12 @@ class NavigableTreeDialog(var title: String, var tree: List<NavigableTree>) : Di
     ): View? {
         val view = inflater.inflate(R.layout.dialog_navigable_tree, container, false)
         val up = view.findViewById<RelativeLayout>(R.id.navigate_up)
-        val list = view.findViewById<ListView>(R.id.search_type)
+        val list = view.findViewById<ListView>(R.id.list_view)
         val adapter = adapter(inflater, up)
 
         view.findViewById<TextView>(R.id.dialog_title).text = title
-        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener { dialog?.hide() }
+        view.findViewById<MaterialButton>(R.id.close_button)
+            .setOnClickListener { dialog?.dismiss() }
 
         list.adapter = adapter
         refresh(adapter, tree)

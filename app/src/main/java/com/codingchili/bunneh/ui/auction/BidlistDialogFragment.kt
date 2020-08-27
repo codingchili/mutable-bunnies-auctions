@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.details
+package com.codingchili.bunneh.ui.auction
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.ui.bidListAdapter
-import com.codingchili.bunneh.ui.search.AuctionBid
-import com.codingchili.bunneh.ui.search.AuctionItem
+import com.codingchili.bunneh.ui.transform.bidListAdapter
+import com.codingchili.bunneh.model.Bid
+import com.codingchili.bunneh.model.Auction
 import com.google.android.material.button.MaterialButton
 import java.util.function.Consumer
 
 class BidlistDialogFragment : DialogFragment() {
-    private lateinit var auction: AuctionItem
+    private lateinit var auction: Auction
 
-    fun setAuction(auction: AuctionItem): BidlistDialogFragment {
+    fun setAuction(auction: Auction): BidlistDialogFragment {
         this.auction = auction
         return this
     }
@@ -28,14 +28,15 @@ class BidlistDialogFragment : DialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.dialog_bids, container, false)
 
-        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener {
-            dialog?.hide()
-        }
+        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener { dismiss() }
 
         val list = view.findViewById<ListView>(R.id.bid_history)
-        val adapter = bidListAdapter(this, inflater, Consumer<AuctionBid> {
-            // todo view user profile - sold,bought,funds
-        })
+        val adapter = bidListAdapter(
+            this,
+            inflater,
+            Consumer<Bid> {
+                // todo view user profile - sold,bought,funds
+            })
         list.adapter = adapter
         adapter.addAll(auction.bids.sortedByDescending { it.value })
 
@@ -47,7 +48,5 @@ class BidlistDialogFragment : DialogFragment() {
 
         dialog?.getWindow()
             ?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-        dialog?.setTitle("myFoo")
     }
 }

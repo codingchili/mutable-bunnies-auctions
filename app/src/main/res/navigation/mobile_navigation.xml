@@ -12,8 +12,13 @@
 
     <fragment
         android:id="@+id/navigation_inventory"
-        android:name="com.codingchili.bunneh.ui.dashboard.DashboardFragment"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.codingchili.bunneh.ui.inventory.InventoryFragment"
+        tools:layout="@layout/fragment_inventory" />
+
+    <fragment
+        android:id="@+id/navigation_auctions"
+        android:name="com.codingchili.bunneh.ui.auctions.QuickLinksFragment"
+        tools:layout="@layout/fragment_quick_links" />
 
     <fragment
         android:id="@+id/navigation_notifications"

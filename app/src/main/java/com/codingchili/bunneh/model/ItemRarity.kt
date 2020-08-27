@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.search
+package com.codingchili.bunneh.model
 
 import com.codingchili.bunneh.R
 

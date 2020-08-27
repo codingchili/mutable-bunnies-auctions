@@ -45,6 +45,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    /* need to use the new way of asking for permissions, but not available in stable versions.. */
+    implementation "androidx.activity:activity:1.2.0-alpha08"
+    implementation "androidx.fragment:fragment:1.3.0-alpha08"
+
     implementation 'com.github.bumptech.glide:glide:4.6.1'
 
     testImplementation 'junit:junit:4.12'

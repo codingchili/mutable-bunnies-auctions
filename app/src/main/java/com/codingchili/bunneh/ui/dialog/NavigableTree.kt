@@ -1,6 +1,8 @@
-package com.codingchili.bunneh.ui.search
+package com.codingchili.bunneh.ui.dialog
 
-class NavigableTree(val name: String, val query: String? = null) {
+import com.codingchili.bunneh.R
+
+open class NavigableTree(open val name: String, val query: String? = null, val icon: Int? = null) {
     val next = HashSet<NavigableTree>()
 
     fun isLeaf(): Boolean {
@@ -17,8 +19,28 @@ class NavigableTree(val name: String, val query: String? = null) {
     }
 }
 
-public val searchFilterTree =
+class Divider(override val name: String): NavigableTree(name = "divider") {
+}
+
+val auctionsFilterTree =
     listOf(
+        NavigableTree(name = "Favorites", icon = R.drawable.icon_heart),
+        Divider(name = "Selling"),
+        NavigableTree(name = "Sold", icon = R.drawable.icon_auction_won),
+        NavigableTree(name = "Active", icon = R.drawable.icon_active),
+        NavigableTree(name = "Not Sold", icon = R.drawable.icon_not_sold),
+        Divider(name = "Buying"),
+        NavigableTree(name = "Won", icon = R.drawable.icon_auction_won),
+        NavigableTree(name = "Leading", icon = R.drawable.icon_auction_leading),
+        NavigableTree(name = "Overbid", icon = R.drawable.icon_auction_overbid),
+        NavigableTree(name = "Lost", icon = R.drawable.icon_auction_lost)
+    )
+
+val searchFilterTree =
+    listOf(
+        NavigableTree(name = "Time left")
+            .add(NavigableTree(name = "Ascending"))
+            .add(NavigableTree(name = "Descending")),
         NavigableTree(name = "Name")
             .add(NavigableTree(name = "Ascending"))
             .add(NavigableTree(name = "Descending")),
@@ -30,8 +52,24 @@ public val searchFilterTree =
             .add(NavigableTree(name = "Descending"))
     )
 
-public val navigableCategoryTree = listOf(
-    NavigableTree(name = "Consumables", query = "type = 'consumable'")
+val serverRegionTree = listOf(
+    NavigableTree(name = "BR"),
+    NavigableTree(name = "EUNE"),
+    NavigableTree(name = "LAN"),
+    NavigableTree(name = "LAS"),
+    NavigableTree(name = "NA"),
+    NavigableTree(name = "OCE"),
+    NavigableTree(name = "RU"),
+    NavigableTree(name = "TR"),
+    NavigableTree(name = "JPE"),
+    NavigableTree(name = "EUW")
+)
+
+val navigableCategoryTree = listOf(
+    NavigableTree(
+        name = "Consumables",
+        query = "type = 'consumable'"
+    )
         .add(
             NavigableTree(
                 name = "Leveling",

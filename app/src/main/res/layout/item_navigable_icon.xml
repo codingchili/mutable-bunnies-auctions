@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/ripple_card"
+    android:layout_height="46dp">
+
+    <ImageView
+        android:id="@+id/item_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="12dp"
+        android:alpha="0.32"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_auctions"/>
+
+    <TextView
+        android:id="@+id/item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/item_icon"
+        android:layout_marginLeft="8dp"
+        android:layout_centerVertical="true"
+        android:text="Item" />
+
+    <ImageView
+        android:id="@+id/navigate_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:alpha="0.64"
+        android:src="@drawable/icon_right"/>
+</RelativeLayout>

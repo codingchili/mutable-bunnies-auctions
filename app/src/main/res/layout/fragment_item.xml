@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:clickable="true">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            app:backgroundTint="@color/accent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_back"
+            app:tint="@color/card" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/pull_refresh"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:background="@color/card"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.18">
+
+            <!-- don't include interactive components inside swipe layout, breaks scroll etc. -->
+            <!-- requires at least one child to prevent JNI exception -->
+                <ImageView
+                    android:id="@+id/item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_sell"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ripple_card"
+            android:clickable="false"
+            android:elevation="16dp"
+            android:text="Sell item"
+            android:textColor="@color/text_solid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pull_refresh" />
+
+        <RelativeLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/card"
+            android:elevation="0dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pull_refresh">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_marginTop="48dp"
+                android:background="@color/card"
+                android:elevation="12dp"
+                android:scrollIndicators="end"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/auction_meta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/card"
+                        android:elevation="0dp">
+
+                        <RelativeLayout
+                            android:id="@+id/item_stats_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/item_stats_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="8dp"
+                                android:text="Stats"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/item_stats"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/item_stats_title"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="8dp"
+                                android:text="+4 Wisdom\n+4 Constitution" />
+
+                            <LinearLayout
+                                android:id="@+id/tags"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/item_stats"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingTop="8dp"
+                                android:paddingBottom="8dp">
+
+                                <TextView
+                                    android:id="@+id/item_rarity"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="8dp"
+                                    android:background="@drawable/tag"
+                                    android:elevation="4dp"
+                                    android:padding="6dp"
+                                    android:text="epic"
+                                    android:textColor="@color/text_solid"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/item_slot"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="8dp"
+                                    android:background="@drawable/tag"
+                                    android:padding="6dp"
+                                    android:text="weapon"
+                                    android:textColor="@color/text_solid"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/item_type"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="8dp"
+                                    android:background="@drawable/tag"
+                                    android:padding="6dp"
+                                    android:text="staff"
+                                    android:textColor="@color/text_solid"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/item_description_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/item_stats_container"
+                            android:layout_marginTop="4dp"
+                            android:background="@color/card"
+                            android:elevation="12dp">
+
+                            <TextView
+                                android:id="@+id/item_description_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="8dp"
+                                android:text="Description"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/item_description"
+                                android:layout_width="256dp"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/item_description_title"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="8dp"
+                                android:text="By holding this stick, with a few green leaves weakly attached - you feel closer to nature.\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others\nFoo and the others EPIC MEAL TIME\nbeep bepp bloop" />
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </ScrollView>
+
+        </RelativeLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/item_seller"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:text="EU/Angel Oak/Eternalfoo"
+            android:textColor="@color/accent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/item_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/background_text_overlay"
+            android:elevation="8dp"
+            android:padding="4dp"
+            android:paddingStart="8dp"
+            android:text="x99"
+            app:layout_constraintEnd_toEndOf="@+id/pull_refresh"
+            app:layout_constraintTop_toTopOf="@id/pull_refresh" />
+
+        <!-- change theme colors to match hue; button,quality -->
+        <!-- move title to actionbar -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
