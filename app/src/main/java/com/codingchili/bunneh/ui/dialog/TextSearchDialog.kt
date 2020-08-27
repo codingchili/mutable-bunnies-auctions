@@ -8,20 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import java.util.function.Consumer
 
-
-class TextSearchDialog : DialogFragment() {
+/**
+ * Dialog used to retrieve text from the user.
+ */
+class TextSearchDialog(private val listener: Consumer<String>) : DialogFragment() {
 
     private fun searchHandler(): TextView.OnEditorActionListener {
         return TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                listener.accept(v.text.toString())
                 dismiss()
                 return@OnEditorActionListener true
             }
@@ -42,6 +44,7 @@ class TextSearchDialog : DialogFragment() {
         search.setOnEditorActionListener(searchHandler())
         search.requestFocus()
 
+        // requires a delay otherwise the keyboard will appear then disappear immediately.
         Handler().postDelayed({
             (requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
                 .toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)

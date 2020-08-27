@@ -1,49 +1,118 @@
 package com.codingchili.bunneh.api
 
-import android.util.Log
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Item
-import com.codingchili.bunneh.model.ItemRarity
+import com.codingchili.bunneh.model.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Future
 
+/**
+ * Mock implementation of the auction service.
+ */
 class LocalAuctionService : AuctionService {
-    override fun search(query: String): Flowable<List<Auction>> {
-        return flow(CompletableFuture.supplyAsync {
-            listOf(
-                Auction(
-                    bid = 12, item = Item(
-                        icon = "flaming_stick.png",
-                        rarity = ItemRarity.legendary,
-                        quantity = 1,
-                        name = "Fiery Stick +1",
-                        slot = "weapon",
-                        type = "staff"
-                    )
+    private var hardcodedItems = ArrayList<Item>()
+    private val hardcodedAuctions = ArrayList<Auction>()
+    private var hardcodedInventory: Inventory
+
+    init {
+        hardcodedAuctions.add(
+            Auction(
+                bid = 825000,
+                item = Item(
+                    icon = "flaming_stick.png",
+                    rarity = ItemRarity.legendary,
+                    quantity = 1,
+                    name = "Flaming Stick +4",
+                    slot = "weapon",
+                    type = "staff"
                 )
             )
-        })
+        )
+        hardcodedAuctions.add(
+            Auction(
+                bid = 250,
+                item = Item(
+                    icon = "branch.png",
+                    rarity = ItemRarity.common,
+                    quantity = 1,
+                    name = "Leafy Branch +1",
+                    slot = "weapon",
+                    type = "staff"
+                )
+            )
+        )
+        hardcodedAuctions.add(
+            Auction(
+                bid = 36000000,
+                item = Item(
+                    icon = "ring_1.png",
+                    rarity = ItemRarity.mythic,
+                    quantity = 1,
+                    name = "The Sauring",
+                    slot = "ring"
+                )
+            )
+        )
+        hardcodedAuctions.add(
+            Auction(
+                bid = 45,
+                item = Item(
+                    icon = "apple_green.png",
+                    rarity = ItemRarity.rare,
+                    quantity = 99,
+                    name = "Green Apple",
+                    type = "consumable"
+                )
+            )
+        )
+        hardcodedAuctions.add(
+            Auction(
+                bid = 11500,
+                item = Item(
+                    icon = "wand_1.png",
+                    rarity = ItemRarity.rare,
+                    quantity = 1,
+                    name = "Spacewand +2",
+                    slot = "weapon",
+                    type = "staff"
+                )
+            )
+        )
+        hardcodedAuctions.forEach { hardcodedItems.add(it.item) }
+        hardcodedInventory = Inventory(items = hardcodedItems, currency = 17600000)
     }
 
-    private fun flow(future: Future<List<Auction>>): Flowable<List<Auction>> {
-        return Flowable.fromFuture(future)
+    override fun search(query: String): Single<List<Auction>> {
+        return single<List<Auction>>(CompletableFuture.supplyAsync { hardcodedAuctions })
+    }
+
+    override fun inventory(): Flowable<Inventory> {
+        return flow(CompletableFuture.supplyAsync { hardcodedInventory })
+    }
+
+    override fun auction(item: String, value: Int): Single<Response> {
+        return single(CompletableFuture.supplyAsync { Response(message = "cool", success = true) })
+    }
+
+    override fun bid(value: Int, auctionId: String): Single<Response> {
+        return single(CompletableFuture.supplyAsync { Response(message = "cool", success = true) })
+    }
+
+    override fun alerts(): Flowable<Notification> {
+        return flow(CompletableFuture.supplyAsync { Notification(message = "cool") })
+    }
+
+    private fun <T> single(future: Future<T>): Single<T> {
+        return Single.fromFuture(future)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun inventory() {
-        TODO("Not yet implemented")
+    private fun <T> flow(future: Future<T>): Flowable<T> {
+        return Flowable.fromFuture(future)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
     }
-
-    override fun auction() {
-        TODO("Not yet implemented")
-    }
-
-    override fun bid() {
-        TODO("Not yet implemented")
-    }
-
 }

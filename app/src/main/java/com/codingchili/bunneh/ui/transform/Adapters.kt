@@ -129,7 +129,7 @@ fun itemGridAdapter(
     }
 }
 
-private fun renderItemThumbnail(
+fun renderItemThumbnail(
     fragment: Fragment,
     listener: Consumer<Any>,
     view: View,

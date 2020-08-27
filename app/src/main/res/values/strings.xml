@@ -21,4 +21,9 @@
     <string name="server_region">EU</string>
     <string name="location_title">Server region</string>
     <string name="location_text">The application requires access to location in order to automatically determine server region. This will be selected manually if the permission is not granted.</string>
+    <string name="sort_bid">Current bid</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_end">Time left</string>
+    <string name="sort_rarity">Rarity</string>
+    <string name="sort_ascending">Ascending</string>
 </resources>

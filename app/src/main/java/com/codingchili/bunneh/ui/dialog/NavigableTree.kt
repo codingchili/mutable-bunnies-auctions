@@ -4,6 +4,7 @@ import com.codingchili.bunneh.R
 
 open class NavigableTree(open val name: String, val query: String? = null, val icon: Int? = null) {
     val next = HashSet<NavigableTree>()
+    var parent : NavigableTree? = null
 
     fun isLeaf(): Boolean {
         return next.isEmpty()
@@ -15,6 +16,7 @@ open class NavigableTree(open val name: String, val query: String? = null, val i
 
     fun add(option: NavigableTree): NavigableTree {
         next.add(option)
+        option.parent = this
         return this
     }
 }

@@ -138,9 +138,8 @@ class AuctionFragment : Fragment() {
             .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
             .into(fragment.findViewById(R.id.item_image))
 
-        val start = hits.indexOf<Auction>(auction)
-        var related = hits.subList(Math.abs(start - 8), start + Math.min(16, hits.size - 1))
-        related = related.subList(0, Math.min(16, related.size - 1))
+        //val start = hits.indexOf<Auction>(auction)
+        var related = hits.subList(0, Math.min(hits.size - 1, 16)).filter { it != auction }
 
         val recyclerView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
         recyclerView.layoutManager =

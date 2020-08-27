@@ -32,7 +32,7 @@
             android:horizontalSpacing="8dp"
             android:numColumns="auto_fit"
             android:orientation="horizontal"
-            android:stretchMode="spacingWidthUniform"
+            android:stretchMode="spacingWidth"
             android:verticalSpacing="8dp"/>
         </RelativeLayout>
     </ScrollView>

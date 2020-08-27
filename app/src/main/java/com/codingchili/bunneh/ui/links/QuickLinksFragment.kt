@@ -75,8 +75,9 @@ class QuickLinksFragment : Fragment() {
                             )
                         )
                         row.setOnClickListener {
+                            requireActivity().title = node.name
                             requireActivity().supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
+                                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                                 .add(R.id.root, AuctionListFragment(auctions))
                                 .addToBackStack(AuctionListFragment.TAG)
                                 .commit()

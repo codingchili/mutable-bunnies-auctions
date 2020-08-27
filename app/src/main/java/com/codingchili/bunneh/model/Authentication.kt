@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
 
 class Authentication(
     var token: String,
-    var message: String?
+    var message: String? = null
 ) {
     fun success(): Boolean {
         return message != null

@@ -8,13 +8,15 @@
     android:clickable="true"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/counter"
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/auction_list"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:stateListAnimator="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
