@@ -18,6 +18,10 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
         const val TAG = "auction.list"
     }
 
+    init {
+        retainInstance = true
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,7 +45,7 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
             }
         }
         list.adapter = adapter
-        adapter.addAll(auctions.sortedByDescending { it.end })
+        adapter.addAll(auctions.sortedBy { it.end })
         return fragment
     }
 }

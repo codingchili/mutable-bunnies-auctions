@@ -14,6 +14,7 @@ import com.codingchili.bunneh.api.LocalAuctionService
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.*
+import com.codingchili.bunneh.ui.transform.Sorter
 import com.codingchili.bunneh.ui.transform.auctionGridAdapter
 import java.util.function.Consumer
 
@@ -23,8 +24,11 @@ import java.util.function.Consumer
 class SearchFragment : Fragment() {
     private val service = LocalAuctionService()
     private val hits = MutableLiveData<List<Auction>>(ArrayList())
-    private var sorter = this::sortByEnd
-    private var ascending = false
+    private var sorter = Sorter()
+
+    init {
+        retainInstance = true
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,11 +52,11 @@ class SearchFragment : Fragment() {
                     .commit()
             })
         grid.adapter = adapter
-        adapter.addAll(this.hits.value!!)
+        adapter.addAll(sorter.sort(this.hits.value!!))
 
         this.hits.observe(viewLifecycleOwner, Observer {
             adapter.clear()
-            adapter.addAll(it)
+            adapter.addAll(sorter.sort(it))
             adapter.notifyDataSetChanged()
         })
         return fragment
@@ -76,15 +80,9 @@ class SearchFragment : Fragment() {
                 "Sort",
                 searchFilterTree,
                 Consumer<NavigableTree> { leaf ->
-                    ascending = leaf.name == getString(R.string.sort_ascending)
-
-                    when (leaf.parent!!.name) {
-                        getString(R.string.sort_bid) -> sorter = this::sortByBid
-                        getString(R.string.sort_name) -> sorter = this::sortByName
-                        getString(R.string.sort_end) -> sorter = this::sortByEnd
-                        getString(R.string.sort_rarity) -> sorter = this::sortByRarity
-                    }
-                    hits.value = sorter(hits.value!!)
+                    sorter.ascending = leaf.name == getString(R.string.sort_ascending)
+                    sorter.setMethodByName(requireContext(), leaf.parent!!.name)
+                    hits.value = sorter.sort(hits.value!!)
                 }
             ).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
@@ -96,22 +94,6 @@ class SearchFragment : Fragment() {
                 }
             }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
-    }
-
-    private fun sortByBid(list: List<Auction>): List<Auction> {
-        return if (ascending) list.sortedBy { it.bid } else list.sortedByDescending { it.bid }
-    }
-
-    private fun sortByName(list: List<Auction>): List<Auction> {
-        return if (ascending) list.sortedBy { it.item.name } else list.sortedByDescending { it.item.name }
-    }
-
-    private fun sortByEnd(list: List<Auction>): List<Auction> {
-        return if (ascending) list.sortedBy { it.end } else list.sortedByDescending { it.end }
-    }
-
-    private fun sortByRarity(list: List<Auction>): List<Auction> {
-        return if (ascending) list.sortedBy { it.item.rarity } else list.sortedByDescending { it.item.rarity }
     }
 
     private fun update(auctions: List<Auction>, e: Throwable?) {

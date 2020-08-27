@@ -1,5 +1,6 @@
 package com.codingchili.bunneh.api
 
+import android.util.Log
 import com.codingchili.bunneh.model.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
@@ -12,7 +13,7 @@ import java.util.concurrent.Future
  * Mock implementation of the auction service.
  */
 class LocalAuctionService : AuctionService {
-    private var hardcodedItems = ArrayList<Item>()
+    private var hardcodedItems: List<Item>
     private val hardcodedAuctions = ArrayList<Auction>()
     private var hardcodedInventory: Inventory
 
@@ -80,8 +81,9 @@ class LocalAuctionService : AuctionService {
                 )
             )
         )
-        hardcodedAuctions.forEach { hardcodedItems.add(it.item) }
-        hardcodedInventory = Inventory(items = hardcodedItems, currency = 17600000)
+        hardcodedItems = hardcodedAuctions.map { it.item }
+        hardcodedInventory =
+            Inventory(items = hardcodedItems, liquidity = 7600000, funds = 17600000)
     }
 
     override fun search(query: String): Single<List<Auction>> {

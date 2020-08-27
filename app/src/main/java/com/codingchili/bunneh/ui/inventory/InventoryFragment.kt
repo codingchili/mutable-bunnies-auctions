@@ -5,36 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.ui.auction.AuctionFragment
-import com.codingchili.bunneh.ui.item.ItemFragment
-import com.codingchili.bunneh.ui.transform.itemGridAdapter
+import com.codingchili.bunneh.api.LocalAuctionService
+import com.codingchili.bunneh.model.Inventory
 import com.codingchili.bunneh.model.Item
-import com.codingchili.bunneh.model.ItemRarity
-import com.codingchili.bunneh.ui.dialog.Dialogs
-import com.codingchili.bunneh.ui.dialog.InformationDialog
-import com.codingchili.bunneh.ui.dialog.NavigableTreeDialog
-import com.codingchili.bunneh.ui.dialog.searchFilterTree
+import com.codingchili.bunneh.ui.auction.AuctionFragment
+import com.codingchili.bunneh.ui.dialog.*
+import com.codingchili.bunneh.ui.item.ItemFragment
+import com.codingchili.bunneh.ui.transform.Sorter
+import com.codingchili.bunneh.ui.transform.formatValue
+import com.codingchili.bunneh.ui.transform.itemGridAdapter
 import java.util.function.Consumer
 
 class InventoryFragment() : Fragment() {
-    private var items = ArrayList<Item>()
+    private val service = LocalAuctionService()
+    private var inventory = MutableLiveData<Inventory>(Inventory())
+    private val sorter = Sorter()
 
     init {
-        items.add(
-            Item(
-                icon = "dagger.png",
-                rarity = ItemRarity.mythic,
-                quantity = 1,
-                name = "Icicle of Doom +5",
-                slot = "weapon",
-                type = "staff"
-            )
-        )
-        for (i in 0..8) {
-            items.addAll(items)
-        }
+        retainInstance = true
     }
 
     override fun onCreateView(
@@ -44,22 +37,23 @@ class InventoryFragment() : Fragment() {
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_inventory, container, false)
         val grid = fragment.findViewById<GridView>(R.id.inventory_items)
+        val funds = fragment.findViewById<TextView>(R.id.currency_total)
+        val liquidity = fragment.findViewById<TextView>(R.id.currency_available)
 
         fragment.findViewById<View>(R.id.currency_container).setOnClickListener {
             InformationDialog(R.string.liquidity_title, R.string.liquidity_text)
                 .show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
 
-        /*val swipe = fragment.findViewById<SwipeRefreshLayout>(R.id.pull_refresh)
-        swipe.setProgressViewOffset(true, swipe.progressViewStartOffset, swipe.progressViewEndOffset)
-        swipe.setOnRefreshListener {
-            swipe.isRefreshing = false
-        }*/
-
         fragment.findViewById<View>(R.id.sort).setOnClickListener {
             NavigableTreeDialog(
                 "Sort",
-                searchFilterTree
+                searchFilterTree,
+                Consumer<NavigableTree> { leaf ->
+                    sorter.ascending = leaf.name == getString(R.string.sort_ascending)
+                    sorter.setMethodByName(requireContext(), leaf.parent!!.name)
+                    inventory.value = applySort(inventory.value!!)
+                }
             ).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
 
@@ -75,8 +69,25 @@ class InventoryFragment() : Fragment() {
                     .commit()
             })
         grid.adapter = adapter
-        adapter.addAll(items)
 
+        inventory.observe(viewLifecycleOwner, Observer {
+            funds.text = formatValue(it.funds)
+            liquidity.text = formatValue(it.liquidity)
+
+            adapter.clear()
+            adapter.addAll(applySort(inventory.value!!).items)
+            adapter.notifyDataSetChanged()
+        })
+
+        service.inventory().subscribe { inventory.value = it }
         return fragment
+    }
+
+    private fun applySort(inventory: Inventory): Inventory {
+        return Inventory(
+            items = sorter.sortItems(inventory.items),
+            funds = inventory.funds,
+            liquidity = inventory.liquidity
+        )
     }
 }
