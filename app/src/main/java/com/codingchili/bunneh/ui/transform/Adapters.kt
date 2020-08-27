@@ -144,7 +144,7 @@ private fun renderItemThumbnail(
 
     view.setOnClickListener { listener.accept((auction ?: item)) }
 
-    view.findViewById<TextView>(R.id.item_title).text = item.title
+    view.findViewById<TextView>(R.id.item_title).text = item.name
     view.findViewById<View>(R.id.item_rarity)
         .setBackgroundColor(fragment.resources.getColor(item.rarity.resource, null))
 

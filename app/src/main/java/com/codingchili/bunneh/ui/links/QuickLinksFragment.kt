@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.ui.auctions
+package com.codingchili.bunneh.ui.links
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,6 @@ import com.codingchili.bunneh.R
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.model.ItemRarity
-import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.Divider
 import com.codingchili.bunneh.ui.dialog.NavigableTree
 import com.codingchili.bunneh.ui.dialog.auctionsFilterTree
@@ -30,7 +29,7 @@ class QuickLinksFragment : Fragment() {
                     icon = "flaming_stick.png",
                     rarity = ItemRarity.legendary,
                     quantity = 1,
-                    title = "Flaming Stick +4",
+                    name = "Flaming Stick +4",
                     slot = "weapon",
                     type = "staff"
                 )

@@ -87,7 +87,7 @@ class AuctionFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.fragment_auction, container, false)
 
         val item = auction.item
-        requireActivity().title = item.title
+        requireActivity().title = item.name
 
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
         fragment.findViewById<TextView>(R.id.item_stats).text = item.stats

@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_auctions"
-        android:name="com.codingchili.bunneh.ui.auctions.QuickLinksFragment"
+        android:name="com.codingchili.bunneh.ui.links.QuickLinksFragment"
         tools:layout="@layout/fragment_quick_links" />
 
     <fragment

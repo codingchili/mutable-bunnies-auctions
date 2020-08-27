@@ -27,7 +27,7 @@ class SearchFragment : Fragment() {
                     icon = "flaming_stick.png",
                     rarity = ItemRarity.legendary,
                     quantity = 1,
-                    title = "Flaming Stick +4",
+                    name = "Flaming Stick +4",
                     slot = "weapon",
                     type = "staff"
                 )
@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
                     icon = "branch.png",
                     rarity = ItemRarity.common,
                     quantity = 1,
-                    title = "Leafy Branch +1",
+                    name = "Leafy Branch +1",
                     slot = "weapon",
                     type = "staff"
                 )
@@ -53,7 +53,7 @@ class SearchFragment : Fragment() {
                     icon = "ring_1.png",
                     rarity = ItemRarity.mythic,
                     quantity = 1,
-                    title = "The Sauring",
+                    name = "The Sauring",
                     slot = "ring"
                 )
             )
@@ -65,7 +65,7 @@ class SearchFragment : Fragment() {
                     icon = "apple_green.png",
                     rarity = ItemRarity.rare,
                     quantity = 99,
-                    title = "Green Apple",
+                    name = "Green Apple",
                     type = "consumable"
                 )
             )
@@ -77,7 +77,7 @@ class SearchFragment : Fragment() {
                     icon = "wand_1.png",
                     rarity = ItemRarity.rare,
                     quantity = 1,
-                    title = "Spacewand +2",
+                    name = "Spacewand +2",
                     slot = "weapon",
                     type = "staff"
                 )
@@ -102,7 +102,7 @@ class SearchFragment : Fragment() {
             this,
             inflater,
             Consumer<Auction> {
-                requireActivity().title = it.item.title
+                requireActivity().title = it.item.name
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .add(R.id.root, AuctionFragment().load(it, hits))

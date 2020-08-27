@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
 import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.item.ItemFragment
@@ -28,7 +27,7 @@ class InventoryFragment() : Fragment() {
                 icon = "dagger.png",
                 rarity = ItemRarity.mythic,
                 quantity = 1,
-                title = "Icicle of Doom +5",
+                name = "Icicle of Doom +5",
                 slot = "weapon",
                 type = "staff"
             )
@@ -68,7 +67,7 @@ class InventoryFragment() : Fragment() {
             this,
             inflater,
             Consumer<Item> { item ->
-                requireActivity().title = item.title
+                requireActivity().title = item.name
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .add(R.id.root, ItemFragment().load(item))
