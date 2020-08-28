@@ -86,7 +86,7 @@
                 android:background="@color/auction_lead"
                 android:clickable="false"
                 android:elevation="8dp"
-                android:text="auction won"
+                android:text="leading auction"
                 android:textColor="@color/text_solid" />
 
             <ScrollView
@@ -161,6 +161,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
+                            android:alpha="0.64"
                             android:layout_marginRight="8dp" />
                     </RelativeLayout>
 
@@ -212,6 +213,7 @@
                                     android:layout_centerVertical="true"
                                     android:layout_marginRight="8dp"
                                     android:background="@drawable/tag"
+                                    android:clickable="true"
                                     android:padding="6dp"
                                     android:text="epic"
                                     android:textColor="@color/text_solid"
@@ -333,7 +335,7 @@
             android:background="@drawable/ripple_card"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/icon_heart_outline"
+            android:src="@drawable/icon_star_outline"
             app:layout_constraintBottom_toTopOf="@+id/layout"
             app:layout_constraintEnd_toEndOf="parent" />
 

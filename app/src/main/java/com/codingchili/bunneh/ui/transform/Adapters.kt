@@ -34,9 +34,8 @@ fun bidListAdapter(
                 false
             )
 
-            view.findViewById<TextView>(R.id.bid_value).text =
-                formatValue(bid.value)
-            view.findViewById<TextView>(R.id.bid_owner).text = bid.owner
+            view.findViewById<TextView>(R.id.item_bid_value).text = formatValue(bid.value)
+            view.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner
             view.findViewById<TextView>(R.id.bid_date).text = LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(bid.date), ZoneId.systemDefault())
                 .format(DATE_FORMAT)
@@ -76,8 +75,8 @@ class RecyclerAdapter(
         // inefficient use of RecyclerAdapter, allows sharing code with Grid adapter.
         renderItemThumbnail(
             fragment,
-            listener,
             view,
+            listener = listener,
             auction = item
         )
     }
@@ -98,10 +97,10 @@ fun auctionGridAdapter(
             val view = convertView ?: inflater.inflate(R.layout.item_thumbnail, parent, false)
             return renderItemThumbnail(
                 fragment,
-                Consumer<Any> {
+                view,
+                listener = Consumer<Any> {
                     listener.accept(it as Auction)
                 },
-                view,
                 auction = auction
             )
         }
@@ -119,10 +118,10 @@ fun itemGridAdapter(
             val view = convertView ?: inflater.inflate(R.layout.item_thumbnail, parent, false)
             return renderItemThumbnail(
                 fragment,
-                Consumer<Any> {
+                view,
+                listener = Consumer<Any> {
                     listener.accept(it as Item)
                 },
-                view,
                 item = item
             )
         }
@@ -131,8 +130,8 @@ fun itemGridAdapter(
 
 fun renderItemThumbnail(
     fragment: Fragment,
-    listener: Consumer<Any>,
     view: View,
+    listener: Consumer<Any>? = null,
     auction: Auction? = null,
     item: Item? = null
 ): View {
@@ -142,7 +141,11 @@ fun renderItemThumbnail(
         .load(fragment.getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
         .into(view.findViewById(R.id.item_image))
 
-    view.setOnClickListener { listener.accept((auction ?: item)) }
+    if (listener != null) {
+        view.setOnClickListener { listener.accept((auction ?: item)) }
+    } else {
+        view.isClickable = false
+    }
 
     view.findViewById<TextView>(R.id.item_title).text = item.name
     view.findViewById<View>(R.id.item_rarity)

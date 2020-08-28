@@ -26,7 +26,7 @@ class Divider(override val name: String): NavigableTree(name = "divider") {
 
 val auctionsFilterTree =
     listOf(
-        NavigableTree(name = "Favorites", icon = R.drawable.icon_heart),
+        NavigableTree(name = "Favorites", icon = R.drawable.icon_star),
         Divider(name = "Selling"),
         NavigableTree(name = "Sold", icon = R.drawable.icon_auction_won),
         NavigableTree(name = "Active", icon = R.drawable.icon_active),

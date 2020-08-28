@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Chronometer
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -15,19 +18,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.ui.transform.RecyclerAdapter
-import com.codingchili.bunneh.ui.transform.formatValue
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.ui.dialog.Dialogs
+import com.codingchili.bunneh.ui.transform.RecyclerAdapter
+import com.codingchili.bunneh.ui.transform.formatValue
+import com.codingchili.bunneh.ui.transform.setupChronometerFromAuction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
-import java.util.*
 import java.util.function.Consumer
-import java.util.stream.Stream
-import kotlin.collections.ArrayList
 
 
 /*1. quick action buttons on search, categories/search dialog/recent LinLay*/
@@ -46,37 +43,15 @@ class AuctionFragment : Fragment() {
         const val TAG = "details"
     }
 
-    fun loac(item: Auction) {
-
-    }
-
-    fun load(auction: Auction, hits: List<Auction>): Fragment {
+    fun load(auction: Auction): AuctionFragment {
         this.auction = auction
-        this.hits = hits
         return this
     }
 
-    private val chronoCountdownHandler = Chronometer.OnChronometerTickListener { chronometer ->
-        val now = ZonedDateTime.now()
-        var then =
-            ZonedDateTime.ofInstant(
-                Instant.ofEpochMilli(chronometer!!.base),
-                ZoneId.systemDefault()
-            )
-
-        chronometer.text =
-            Stream.of(ChronoUnit.DAYS, ChronoUnit.HOURS, ChronoUnit.MINUTES, ChronoUnit.SECONDS)
-                .map {
-                    val diff = it.between(now, then)
-                    then = it.addTo(then, -diff)
-                    Pair<Long, ChronoUnit>(diff, it)
-                }
-                .filter { it.first > 0 }
-                .map {
-                    " ${it.first} ${it.second.name.toLowerCase(Locale.getDefault())}"
-                }
-                .toArray()
-                .joinToString(",")
+    fun load(auction: Auction, hits: List<Auction>): AuctionFragment {
+        this.auction = auction
+        this.hits = hits
+        return this
     }
 
     override fun onCreateView(
@@ -117,14 +92,11 @@ class AuctionFragment : Fragment() {
         }
 
         fragment.findViewById<ImageView>(R.id.auction_favorite).setOnClickListener {
-            it.background = ResourcesCompat.getDrawable(resources, R.drawable.icon_heart, null)
+            it.background = ResourcesCompat.getDrawable(resources, R.drawable.icon_star, null)
         }
 
         val chronometer = fragment.findViewById<Chronometer>(R.id.auction_end)
-        chronometer.base = auction.end
-        chronometer.isCountDown = true
-        chronometer.onChronometerTickListener = chronoCountdownHandler
-        chronometer.start()
+        setupChronometerFromAuction(chronometer, auction)
 
         setLabel(fragment.findViewById(R.id.item_slot), item.slot, getColorForItemType())
         setLabel(fragment.findViewById(R.id.item_type), item.type, R.color.type_default)
@@ -138,28 +110,31 @@ class AuctionFragment : Fragment() {
             .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
             .into(fragment.findViewById(R.id.item_image))
 
-        //val start = hits.indexOf<Auction>(auction)
-        var related = hits.subList(0, Math.min(hits.size - 1, 16)).filter { it != auction }
+        val relatedView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
 
-        val recyclerView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
-        recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        if (hits.isEmpty()) {
+            relatedView.visibility = View.GONE
+        } else {
+            val related = hits.subList(0, Math.min(hits.size - 1, 16)).filter { it != auction }
+            relatedView.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        recyclerView.adapter =
-            RecyclerAdapter(
-                this,
-                related,
-                Consumer<Any> {
-                    it as Auction
-                    requireActivity().supportFragmentManager.popBackStack(
-                        TAG,
-                        FragmentManager.POP_BACK_STACK_INCLUSIVE
-                    );
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.root, AuctionFragment().load(it, hits))
-                        .addToBackStack(TAG)
-                        .commit()
-                })
+            relatedView.adapter =
+                RecyclerAdapter(
+                    this,
+                    related,
+                    Consumer<Any> {
+                        it as Auction
+                        requireActivity().supportFragmentManager.popBackStack(
+                            TAG,
+                            FragmentManager.POP_BACK_STACK_INCLUSIVE
+                        );
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.root, AuctionFragment().load(it, hits))
+                            .addToBackStack(TAG)
+                            .commit()
+                    })
+        }
 
         fragment.findViewById<FloatingActionButton>(R.id.back).setOnClickListener {
             requireActivity().onBackPressed()

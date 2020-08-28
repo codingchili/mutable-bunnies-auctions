@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -15,28 +16,114 @@
         android:background="@drawable/ripple_card"
         android:elevation="8dp">
 
-        <TextView
+        <Chronometer
+            android:id="@+id/auction_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:text="chrono:countdown" />
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"/>
 
-        <include
-            android:id="@+id/item_thumbnail"
-            layout="@layout/item_thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <RelativeLayout
+            android:id="@+id/card"
+            android:layout_width="96dp"
+            android:layout_height="108dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/ripple_card"
+            android:clickable="false"
+            android:elevation="4dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
+
+            <View
+                android:id="@+id/item_rarity"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/quality_mythic" />
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/item_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="4dp"
+                android:padding="2dp"
+                android:text="x99"
+                android:textColor="@color/accent" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/card"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="Stick of Truth +5"
+            android:textColor="@color/text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/item_seller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_title"
+            android:layout_marginBottom="6dp"
+            android:layout_marginStart="112dp"
+            android:alpha="0.64"
+            android:background="@color/background_text_overlay"
+            android:text="Hazel Dream/GoblinDart"
+            android:textAlignment="center"
+            android:textColor="@color/text"/>
+
+        <TextView
+            android:id="@+id/item_bid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/item_bid_owner"
+            android:layout_marginStart="112dp"
+            android:text="3,600,000 Ξ"
+            android:textAlignment="center"
+            android:textColor="@color/text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item_bid_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="112dp"
+            android:layout_marginBottom="8dp"
+            android:layout_alignParentBottom="true"
+            android:alpha="0.64"
+            android:text="by Hazel Dream/Ethermeow"
+            android:textColor="@color/text"/>
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/status_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:alpha="0.64"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            app:srcCompat="@drawable/icon_hourglass" />
+            app:srcCompat="@drawable/icon_auction_overbid" />
     </RelativeLayout>
 
 </RelativeLayout>

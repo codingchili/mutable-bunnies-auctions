@@ -31,5 +31,5 @@ class Auction(
                 value = 36000000
             )
         )
-    val end: Long = Date().time + 72 * 60 * 60 * 1000 // 72 hours
+    val end: Long = Date().time + 60 * 60 * 1000 // 1 hour
 }

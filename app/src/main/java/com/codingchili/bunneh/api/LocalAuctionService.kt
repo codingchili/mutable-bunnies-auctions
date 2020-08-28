@@ -97,7 +97,7 @@ class LocalAuctionService : AuctionService {
             }
             else -> {
                 single<List<Auction>>(CompletableFuture.supplyAsync {
-                    Thread.sleep(2000)
+                    Thread.sleep(1500)
                     hardcodedAuctions
                 })
             }
