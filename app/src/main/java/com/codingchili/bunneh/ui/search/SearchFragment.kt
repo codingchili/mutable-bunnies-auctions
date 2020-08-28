@@ -1,11 +1,11 @@
 package com.codingchili.bunneh.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -25,10 +25,6 @@ class SearchFragment : Fragment() {
     private val service = LocalAuctionService()
     private val hits = MutableLiveData<List<Auction>>(ArrayList())
     private var sorter = Sorter()
-
-    init {
-        retainInstance = true
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,9 +48,15 @@ class SearchFragment : Fragment() {
                     .commit()
             })
         grid.adapter = adapter
-        adapter.addAll(sorter.sort(this.hits.value!!))
 
         this.hits.observe(viewLifecycleOwner, Observer {
+            fragment.findViewById<ProgressBar>(R.id.progress_search).visibility = View.GONE
+
+            if (it.size > 0) {
+                fragment.findViewById<View>(R.id.progress_container).visibility = View.GONE
+            } else {
+                fragment.findViewById<TextView>(R.id.progress_text).text = "No auctions here, try searching."
+            }
             adapter.clear()
             adapter.addAll(sorter.sort(it))
             adapter.notifyDataSetChanged()
@@ -68,9 +70,7 @@ class SearchFragment : Fragment() {
                 "Quick Search",
                 navigableCategoryTree,
                 Consumer<NavigableTree> {
-                    service.search(it.query ?: "").subscribe { auction, e ->
-                        update(auction, e)
-                    }
+                    search(it.name ?: "", view)
                 }
             ).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
@@ -89,22 +89,28 @@ class SearchFragment : Fragment() {
 
         view.findViewById<View>(R.id.text_query).setOnClickListener {
             TextSearchDialog(Consumer<String> {
-                service.search(it).subscribe { auction, e ->
-                    update(auction, e)
-                }
+                search(it, view)
             }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
     }
 
-    private fun update(auctions: List<Auction>, e: Throwable?) {
-        if (e == null) {
-            hits.value = auctions
-        } else {
-            showError(e.message!!)
-        }
-    }
+    private fun search(query: String, view: View) {
+        view.findViewById<View>(R.id.progress_container).visibility = View.VISIBLE
+        val text = view.findViewById<TextView>(R.id.progress_text)
+        val progress = view.findViewById<ProgressBar>(R.id.progress_search)
 
-    private fun showError(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        text.text = "Searching for '${query}' .."
+        progress.visibility = View.VISIBLE
+
+        service.search(query).subscribe { auctions, e ->
+            if (e == null) {
+                hits.value = auctions
+            } else {
+                val adapter = view.findViewById<GridView>(R.id.search_hits).adapter as ArrayAdapter<Auction>
+                adapter.clear()
+                text.text = e.message
+                progress.visibility = View.GONE
+            }
+        }
     }
 }

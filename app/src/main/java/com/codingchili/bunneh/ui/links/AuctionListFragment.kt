@@ -18,10 +18,6 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
         const val TAG = "auction.list"
     }
 
-    init {
-        retainInstance = true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

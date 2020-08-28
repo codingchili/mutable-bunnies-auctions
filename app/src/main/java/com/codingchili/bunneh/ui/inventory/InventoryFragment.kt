@@ -26,10 +26,6 @@ class InventoryFragment() : Fragment() {
     private var inventory = MutableLiveData<Inventory>(Inventory())
     private val sorter = Sorter()
 
-    init {
-        retainInstance = true
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

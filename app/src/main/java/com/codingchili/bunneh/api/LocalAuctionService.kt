@@ -1,6 +1,5 @@
 package com.codingchili.bunneh.api
 
-import android.util.Log
 import com.codingchili.bunneh.model.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
@@ -87,7 +86,22 @@ class LocalAuctionService : AuctionService {
     }
 
     override fun search(query: String): Single<List<Auction>> {
-        return single<List<Auction>>(CompletableFuture.supplyAsync { hardcodedAuctions })
+        return when (query) {
+            "null" -> {
+                single(CompletableFuture.supplyAsync { listOf<Auction>() })
+            }
+            "error" -> {
+                val future = CompletableFuture<List<Auction>>()
+                future.completeExceptionally(Exception("Foo"))
+                single<List<Auction>>(future)
+            }
+            else -> {
+                single<List<Auction>>(CompletableFuture.supplyAsync {
+                    Thread.sleep(2000)
+                    hardcodedAuctions
+                })
+            }
+        }
     }
 
     override fun inventory(): Flowable<Inventory> {
