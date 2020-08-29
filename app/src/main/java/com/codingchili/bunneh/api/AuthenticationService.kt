@@ -1,7 +1,7 @@
 package com.codingchili.bunneh.api
 
 import com.codingchili.bunneh.model.Authentication
-import java.util.concurrent.Future
+import io.reactivex.rxjava3.core.Single
 
 /**
  * Performs authentication of users.
@@ -14,5 +14,15 @@ interface AuthenticationService {
      * @param username used for authentication.
      * @param password used for authentication.
      */
-    fun authenticate(username: String, password: String): Future<Authentication>
+    fun authenticate(username: String, password: String): Single<Authentication>
+
+    /**
+     * Return current login state.
+     */
+    fun current(): Authentication?
+
+    /**
+     * Clear login state.
+     */
+    fun logout()
 }

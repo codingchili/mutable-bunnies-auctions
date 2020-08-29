@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,14 +20,17 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.codingchili.bunneh.MainFragment
 import com.codingchili.bunneh.R
+import com.codingchili.bunneh.api.LocalAuthenticationService
 import com.codingchili.bunneh.ui.dialog.*
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 import java.util.function.Consumer
 
 
 class LoginFragment : Fragment() {
     val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.server_region)) }
+    val authentication = LocalAuthenticationService.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,8 +55,8 @@ class LoginFragment : Fragment() {
             .load(R.drawable.bunny)
             .into(fragment.findViewById(R.id.app_logo))
 
-        fragment.findViewById<Button>(R.id.button_login).setOnClickListener { done() }
-
+        fragment.findViewById<Button>(R.id.button_login)
+            .setOnClickListener { authenticate(fragment) }
 
         region.observe(viewLifecycleOwner, Observer { regionSelector.text = it })
         region.value = "onCreateView"
@@ -105,10 +109,25 @@ class LoginFragment : Fragment() {
     }
 
 
-    private fun done() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.root, MainFragment())
-            .addToBackStack("main")
-            .commit()
+    private fun authenticate(fragment: View) {
+        val username = fragment.findViewById<TextInputLayout>(R.id.edit_username)
+            .editText!!.text.toString()
+        val password = fragment.findViewById<TextInputLayout>(R.id.edit_password)
+            .editText!!.text.toString()
+
+        val overlay = fragment.findViewById<View>(R.id.overlay)
+        overlay.visibility = View.VISIBLE
+
+        authentication.authenticate(username, password).subscribe { authentication, error ->
+            if (error == null) {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.root, MainFragment())
+                    .addToBackStack("main")
+                    .commit()
+                overlay.visibility = View.GONE
+            } else {
+                Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
