@@ -35,11 +35,11 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                 val auction = getItem(position)!!
                 val entry = convertView ?: inflater.inflate(R.layout.item_auction, parent, false)
 
-                entry.findViewById<TextView>(R.id.item_seller).text = auction.seller
+                entry.findViewById<TextView>(R.id.item_seller).text = auction.seller.name
                 renderItemThumbnail(this@AuctionListFragment, entry, auction = auction)
 
                 val bid = auction.bids.maxBy { it.value }!!
-                entry.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner
+                entry.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner.name
                 entry.findViewById<ImageView>(R.id.status_icon).setImageResource(icon)
 
                 val chronometer = entry.findViewById<Chronometer>(R.id.auction_end)

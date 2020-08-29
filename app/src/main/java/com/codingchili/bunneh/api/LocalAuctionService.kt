@@ -85,6 +85,10 @@ class LocalAuctionService : AuctionService {
             Inventory(items = hardcodedItems, liquidity = 7600000, funds = 17600000)
     }
 
+    companion object {
+        var instance = LocalAuctionService()
+    }
+
     override fun search(query: String): Single<List<Auction>> {
         return when (query) {
             "null" -> {
@@ -118,17 +122,5 @@ class LocalAuctionService : AuctionService {
 
     override fun alerts(): Flowable<Notification> {
         return flow(CompletableFuture.supplyAsync { Notification(message = "cool") })
-    }
-
-    private fun <T> single(future: Future<T>): Single<T> {
-        return Single.fromFuture(future)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    private fun <T> flow(future: Future<T>): Flowable<T> {
-        return Flowable.fromFuture(future)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 }

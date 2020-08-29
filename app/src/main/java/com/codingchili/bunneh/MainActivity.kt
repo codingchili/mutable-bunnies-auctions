@@ -4,21 +4,21 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.codingchili.bunneh.ui.login.LoginFragment
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var main: MainFragment
+    private lateinit var main: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        main = MainFragment()
+        main = LoginFragment()
         supportFragmentManager.beginTransaction()
-            .add(R.id.root, main)
-            .addToBackStack("main")
+            .replace(R.id.root, main)
             .commit()
     }
 

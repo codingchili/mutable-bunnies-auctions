@@ -24,7 +24,7 @@ import java.util.function.Consumer
  * Fragment used to search for auctions.
  */
 class SearchFragment : Fragment() {
-    private val service = LocalAuctionService()
+    private val service = LocalAuctionService.instance
     private val hits = MutableLiveData<List<Auction>>(ArrayList())
     private var sorter = Sorter()
 

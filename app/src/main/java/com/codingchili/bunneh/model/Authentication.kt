@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
 
 class Authentication(
     var token: String,
+    var user: User,
     var message: String? = null
 ) {
     fun success(): Boolean {

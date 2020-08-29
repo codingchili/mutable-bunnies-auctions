@@ -7,29 +7,29 @@ class Auction(
     val item: Item
 ) {
     val id = 0
-    val seller = "Hazel Dream/Ethercat"
+    val seller = User("y", "Ethercat")
     val bids =
         listOf(
             Bid(
-                owner = "Gloomville/Dr.Foo",
+                owner = User("x", "Birthcake"),
                 value = 41
             ),
             Bid(
-                owner = "Hazel Dream/Birthcake",
+                owner = User("y", "Ethercat"),
                 value = 1200
             ),
             Bid(
-                owner = "Angel Oak/Etherbloom",
+                owner = User("x", "Birthcake"),
                 value = 1201
             ),
             Bid(
-                owner = "Angel Oak/Foowoo",
+                owner = User("y", "Ethercat"),
                 value = 1800
             ),
             Bid(
-                owner = "Hazel Dream/Birthcake",
+                owner = User("x", "Birthcake"),
                 value = 36000000
             )
         )
-    val end: Long = Date().time + 60 * 60 * 1000 // 1 hour
+    val end: Long = Date().time + 60 * 1000 // 1 minute
 }

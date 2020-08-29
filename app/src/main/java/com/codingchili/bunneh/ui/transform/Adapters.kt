@@ -35,7 +35,7 @@ fun bidListAdapter(
             )
 
             view.findViewById<TextView>(R.id.item_bid_value).text = formatValue(bid.value)
-            view.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner
+            view.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner.name
             view.findViewById<TextView>(R.id.bid_date).text = LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(bid.date), ZoneId.systemDefault())
                 .format(DATE_FORMAT)

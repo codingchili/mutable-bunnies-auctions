@@ -22,7 +22,7 @@ import com.codingchili.bunneh.ui.transform.itemGridAdapter
 import java.util.function.Consumer
 
 class InventoryFragment() : Fragment() {
-    private val service = LocalAuctionService()
+    private val service = LocalAuctionService.instance
     private var inventory = MutableLiveData<Inventory>(Inventory())
     private val sorter = Sorter()
 

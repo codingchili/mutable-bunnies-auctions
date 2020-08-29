@@ -17,7 +17,7 @@ import com.codingchili.bunneh.ui.dialog.auctionsFilterTree
  * Fragment used to show a list of links to a set of auctions.
  */
 class QuickLinksFragment : Fragment() {
-    private var service = LocalAuctionService()
+    private var service = LocalAuctionService.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,

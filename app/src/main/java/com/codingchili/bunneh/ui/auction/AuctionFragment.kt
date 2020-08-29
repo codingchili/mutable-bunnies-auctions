@@ -68,7 +68,7 @@ class AuctionFragment : Fragment() {
         fragment.findViewById<TextView>(R.id.item_stats).text = item.stats
         fragment.findViewById<TextView>(R.id.item_bid).text =
             formatValue(auction.bid)
-        fragment.findViewById<TextView>(R.id.item_seller).text = auction.seller
+        fragment.findViewById<TextView>(R.id.item_seller).text = auction.seller.name
         fragment.findViewById<TextView>(R.id.auction_bid_count).text = auction.bids.size.toString()
 
         fragment.findViewById<RelativeLayout>(R.id.bid_list).setOnClickListener {
