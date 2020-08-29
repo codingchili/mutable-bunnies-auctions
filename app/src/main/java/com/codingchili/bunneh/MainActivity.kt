@@ -11,6 +11,12 @@ import com.codingchili.bunneh.ui.login.LoginFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var main: Fragment
+    private var region : String? = null
+
+    fun setRegion(region: String) {
+        this.region = region
+        updateTitle()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logout() {
-        title = resources.getString(R.string.app_name)
+        updateTitle()
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -44,10 +50,18 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    private fun updateTitle() {
+        title = if (region == null) {
+            resources.getString(R.string.app_name)
+        } else {
+            "${resources.getString(R.string.app_name)} - $region"
+        }
+    }
+
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStack()
-            title = resources.getString(R.string.app_name)
+            updateTitle()
         } else {
             finish()
         }

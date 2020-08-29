@@ -26,4 +26,5 @@
     <string name="sort_end">Time left</string>
     <string name="sort_rarity">Rarity</string>
     <string name="sort_ascending">Ascending</string>
+    <string name="server_region_default">EU</string>
 </resources>

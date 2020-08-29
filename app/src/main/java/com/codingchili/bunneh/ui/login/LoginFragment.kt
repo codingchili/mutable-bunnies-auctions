@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.codingchili.bunneh.MainActivity
 import com.codingchili.bunneh.MainFragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.LocalAuthenticationService
@@ -58,7 +59,10 @@ class LoginFragment : Fragment() {
         fragment.findViewById<Button>(R.id.button_login)
             .setOnClickListener { authenticate(fragment) }
 
-        region.observe(viewLifecycleOwner, Observer { regionSelector.text = it })
+        region.observe(viewLifecycleOwner, Observer {
+            (activity as MainActivity).setRegion(it)
+            regionSelector.text = it
+        })
         region.value = "onCreateView"
         attemptLocationAccess()
 
@@ -66,7 +70,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun attemptLocationAccess() {
-        region.value = "update"
+        region.value = getString(R.string.server_region_default)
         val permission = android.Manifest.permission.ACCESS_COARSE_LOCATION
 
         when {
