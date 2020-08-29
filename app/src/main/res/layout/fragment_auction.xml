@@ -87,37 +87,28 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/status"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="4dp"
                     android:backgroundTint="@color/auction_active"
                     android:clickable="false"
+                    android:elevation="12dp"
                     android:enabled="false"
-                    android:elevation="8dp"
-                    android:layout_marginTop="4dp"
                     android:text="leading auction"
                     android:textColor="@color/text_solid"
+                    app:cornerRadius="0dp"
                     android:visibility="visible" />
 
-                <!-- wrap in card as cornerRadius is broken on button. -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/button_container"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_centerHorizontal="true"
-                    app:cardCornerRadius="12dp"
-                    android:visibility="gone">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/button"
-                        android:layout_width="164dp"
-                        android:layout_height="36dp"
-                        android:clickable="true"
-                        android:elevation="8dp"
-                        android:background="@drawable/ripple_card"
-                        android:text="Place bid"
-                        android:textColor="@color/text_solid"/>
-                </androidx.cardview.widget.CardView>
+                    android:layout_centerInParent="true"
+                    android:backgroundTint="@color/auction_active"
+                    android:clickable="true"
+                    android:elevation="12dp"
+                    android:text="Place bid"
+                    android:textColor="@color/text_solid"
+                    app:cornerRadius="16dp" />
             </RelativeLayout>
 
             <ScrollView

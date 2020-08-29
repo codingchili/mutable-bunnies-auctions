@@ -16,7 +16,6 @@ import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
-import com.codingchili.bunneh.ui.inventory.InventoryFragment
 import com.codingchili.bunneh.ui.transform.ServerResource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton

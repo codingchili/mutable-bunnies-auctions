@@ -13,7 +13,6 @@ import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.model.Inventory
 import com.codingchili.bunneh.model.Item
-import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.*
 import com.codingchili.bunneh.ui.item.ItemFragment
 import com.codingchili.bunneh.ui.transform.Sorter

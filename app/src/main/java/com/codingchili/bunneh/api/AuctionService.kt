@@ -1,6 +1,9 @@
 package com.codingchili.bunneh.api
 
-import com.codingchili.bunneh.model.*
+import com.codingchili.bunneh.model.Auction
+import com.codingchili.bunneh.model.Inventory
+import com.codingchili.bunneh.model.Item
+import com.codingchili.bunneh.model.Notification
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 

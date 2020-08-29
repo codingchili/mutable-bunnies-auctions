@@ -158,7 +158,6 @@ class AuctionFragment : Fragment() {
 
     private fun updateAuctionState(fragment: View) {
         val state = AuctionState.fromAuction(auction, authentication.current()!!.user)
-        val container = fragment.findViewById<View>(R.id.button_container)
         val button = fragment.findViewById<MaterialButton>(R.id.button)
         val status = fragment.findViewById<MaterialButton>(R.id.status)
 
@@ -166,8 +165,9 @@ class AuctionFragment : Fragment() {
 
         if (state.interative()) {
             status.visibility = View.GONE
-            container.visibility = View.VISIBLE
+            button.visibility = View.VISIBLE
             button.text = getString(state.string)
+            button.backgroundTintList = ColorStateList.valueOf(requireContext().getColor(state.color))
 
             button.setOnClickListener {
                 NumberInputDialog()
@@ -183,7 +183,7 @@ class AuctionFragment : Fragment() {
                     }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
             }
         } else {
-            container.visibility = View.GONE
+            button.visibility = View.GONE
             status.visibility = View.VISIBLE
             status.text = getString(state.string)
             status.backgroundTintList = ColorStateList.valueOf(requireContext().getColor(state.color))

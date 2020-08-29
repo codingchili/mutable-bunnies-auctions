@@ -5,7 +5,6 @@ import com.codingchili.bunneh.model.User
 import com.codingchili.bunneh.model.single
 import io.reactivex.rxjava3.core.Single
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Future
 
 /**
  * Mock implementation of the authentication service.

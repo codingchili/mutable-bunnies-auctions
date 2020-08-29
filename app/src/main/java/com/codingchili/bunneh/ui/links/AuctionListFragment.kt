@@ -8,7 +8,6 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuthenticationService
-import com.codingchili.bunneh.api.LocalAuthenticationService
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.AuctionState
 import com.codingchili.bunneh.ui.auction.AuctionFragment
@@ -42,14 +41,11 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                     entry.findViewById<TextView>(R.id.item_bid_owner).text = ""
                 }
 
-                val state = AuctionState.fromAuction(
-                    auction,
-                    AuthenticationService.instance.current()!!.user
-                )
+                val user = AuthenticationService.instance.current()!!.user
+                var state = AuctionState.fromAuction(auction, user)
                 entry.findViewById<ImageView>(R.id.status_icon).setImageResource(state.icon)
 
                 val chronometer = entry.findViewById<Chronometer>(R.id.auction_end)
-                setupChronometerFromAuction(chronometer, auction)
 
                 entry.setOnClickListener {
                     requireActivity().title = auction.item.name
@@ -59,6 +55,12 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                         .addToBackStack(AuctionFragment.TAG)
                         .commit()
                 }
+
+                setupChronometerFromAuction(chronometer, auction, listener = Runnable{
+                    state = AuctionState.fromAuction(auction, user)
+                    entry.findViewById<ImageView>(R.id.status_icon).setImageResource(state.icon)
+                })
+
                 return entry
             }
         }

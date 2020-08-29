@@ -14,7 +14,7 @@ class LocalAuctionService : AuctionService {
     private var inventory: Inventory = Inventory(
         items = listOf(AuctionMock.branch, AuctionMock.flamingStick, AuctionMock.spacewand),
         liquidity = 7600000,
-        funds = 17600000
+        funds = 7600000
     )
 
     override fun search(query: String): Single<List<Auction>> {
