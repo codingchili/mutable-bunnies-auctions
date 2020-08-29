@@ -8,7 +8,7 @@ import android.widget.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.api.LocalAuctionService
+import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.ui.dialog.Divider
 import com.codingchili.bunneh.ui.dialog.NavigableTree
 import com.codingchili.bunneh.ui.dialog.auctionsFilterTree
@@ -17,7 +17,7 @@ import com.codingchili.bunneh.ui.dialog.auctionsFilterTree
  * Fragment used to show a list of links to a set of auctions.
  */
 class QuickLinksFragment : Fragment() {
-    private var service = LocalAuctionService.instance
+    private var service = AuctionService.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +51,7 @@ class QuickLinksFragment : Fragment() {
                                 android.R.anim.fade_in,
                                 android.R.anim.fade_out
                             )
-                            .add(R.id.root, AuctionListFragment(auctions).icon(leaf.icon!!))
+                            .add(R.id.root, AuctionListFragment(auctions))
                             .addToBackStack(AuctionListFragment.TAG)
                             .commit()
                     } else {
@@ -85,6 +85,7 @@ class QuickLinksFragment : Fragment() {
                     listOf(image, next).forEach { it.visibility = View.GONE }
                     title.text = leaf.name
                     row.background = null
+                    row.isClickable = false
                 } else {
                     title.text = leaf.name
                     image.setImageDrawable(

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.api.LocalAuctionService
+import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.model.Inventory
 import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.ui.auction.AuctionFragment
@@ -22,7 +22,7 @@ import com.codingchili.bunneh.ui.transform.itemGridAdapter
 import java.util.function.Consumer
 
 class InventoryFragment() : Fragment() {
-    private val service = LocalAuctionService.instance
+    private val service = AuctionService.instance
     private var inventory = MutableLiveData<Inventory>(Inventory())
     private val sorter = Sorter()
 
@@ -61,7 +61,7 @@ class InventoryFragment() : Fragment() {
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .add(R.id.root, ItemFragment().load(item))
-                    .addToBackStack(AuctionFragment.TAG)
+                    .addToBackStack(ItemFragment.TAG)
                     .commit()
             })
         grid.adapter = adapter

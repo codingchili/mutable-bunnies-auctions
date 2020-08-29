@@ -13,18 +13,14 @@ import java.util.concurrent.Future
 class LocalAuthenticationService : AuthenticationService {
     private var authenticated: Authentication? = null
 
-    companion object {
-        var instance = LocalAuthenticationService()
-    }
-
     override fun authenticate(username: String, password: String): Single<Authentication> {
-        val authentication = Authentication(
+        authenticated = Authentication(
             token = "foo",
             user = User(username.toLowerCase(), username)
         )
         return single(CompletableFuture.supplyAsync {
             Thread.sleep(1500)
-            authentication
+            authenticated!!
         })
     }
 

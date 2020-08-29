@@ -1,9 +1,6 @@
 package com.codingchili.bunneh.api
 
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Inventory
-import com.codingchili.bunneh.model.Notification
-import com.codingchili.bunneh.model.Response
+import com.codingchili.bunneh.model.*
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
@@ -11,6 +8,11 @@ import io.reactivex.rxjava3.core.Single
  * Interface for the auction service.
  */
 interface AuctionService {
+
+    companion object {
+        var instance = LocalAuctionService()
+    }
+
     /**
      * Retrieves a list of auctions given a query string.
      */
@@ -24,12 +26,12 @@ interface AuctionService {
     /**
      * Puts an item up for auction with the given initial value.
      */
-    fun auction(item: String, value: Int): Single<Response>
+    fun auction(item: Item, value: Int): Single<Auction>
 
     /**
      * Places a bid on the given auction.
      */
-    fun bid(value: Int, auctionId: String): Single<Response>
+    fun bid(value: Int, auction: Auction): Single<Auction>
 
     /**
      * Subscribes to notifications from the server.

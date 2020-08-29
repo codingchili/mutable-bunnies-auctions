@@ -7,20 +7,17 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
+import com.codingchili.bunneh.api.AuthenticationService
+import com.codingchili.bunneh.api.LocalAuthenticationService
 import com.codingchili.bunneh.model.Auction
+import com.codingchili.bunneh.model.AuctionState
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.transform.renderItemThumbnail
 import com.codingchili.bunneh.ui.transform.setupChronometerFromAuction
 
 class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
-    private var icon = R.drawable.icon_active
     companion object {
         const val TAG = "auction.list"
-    }
-
-    fun icon(icon: Int): AuctionListFragment {
-        this.icon = icon
-        return this
     }
 
     override fun onCreateView(
@@ -35,12 +32,21 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                 val auction = getItem(position)!!
                 val entry = convertView ?: inflater.inflate(R.layout.item_auction, parent, false)
 
-                entry.findViewById<TextView>(R.id.item_seller).text = auction.seller.name
+                entry.findViewById<TextView>(R.id.item_seller).text = "Sold by ${auction.seller!!.name}"
                 renderItemThumbnail(this@AuctionListFragment, entry, auction = auction)
 
-                val bid = auction.bids.maxBy { it.value }!!
-                entry.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner.name
-                entry.findViewById<ImageView>(R.id.status_icon).setImageResource(icon)
+                val bid = auction.bids.firstOrNull()
+                if (bid != null) {
+                    entry.findViewById<TextView>(R.id.item_bid_owner).text = "by ${bid.owner.name}"
+                } else {
+                    entry.findViewById<TextView>(R.id.item_bid_owner).text = ""
+                }
+
+                val state = AuctionState.fromAuction(
+                    auction,
+                    AuthenticationService.instance.current()!!.user
+                )
+                entry.findViewById<ImageView>(R.id.status_icon).setImageResource(state.icon)
 
                 val chronometer = entry.findViewById<Chronometer>(R.id.auction_end)
                 setupChronometerFromAuction(chronometer, auction)

@@ -1,35 +1,41 @@
 package com.codingchili.bunneh.model
 
 import java.util.*
+import kotlin.math.max
 
 class Auction(
-    val bid: Int,
-    val item: Item
+    val initial: Int = 0,
+    val item: Item,
+    val seller : User? = User("ethercat", "Ethercat"),
+    val end: Long = Date().time + 60 * 1000
 ) {
-    val id = 0
-    val seller = User("y", "Ethercat")
-    val bids =
+    val id = "0xFF"
+
+    fun high(): Int {
+        return max(initial, bids.first().value)
+    }
+
+    var bids =
         listOf(
             Bid(
-                owner = User("x", "Birthcake"),
-                value = 41
+                owner = User("birthcake", "Birthcake"),
+                value = 1295
             ),
             Bid(
-                owner = User("y", "Ethercat"),
-                value = 1200
-            ),
-            Bid(
-                owner = User("x", "Birthcake"),
+                owner = User("ethercat", "Ethercat"),
                 value = 1201
             ),
             Bid(
-                owner = User("y", "Ethercat"),
+                owner = User("birthcake", "Birthcake"),
+                value = 1200
+            ),
+            Bid(
+                owner = User("ethercat", "Ethercat"),
                 value = 1800
             ),
             Bid(
-                owner = User("x", "Birthcake"),
-                value = 36000000
+                owner = User("birthcake", "Birthcake"),
+                value = 50
             )
         )
-    val end: Long = Date().time + 60 * 1000 // 1 minute
 }

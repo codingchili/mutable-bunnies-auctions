@@ -21,7 +21,7 @@ class Sorter {
     fun sortItems(list: List<Item>): List<Item> {
         // wrap in auction to support sort code reuse, after sort unwrap.
         return sort(list.map {
-            Auction(bid = 0, item = it)
+            Auction(initial = 0, item = it)
         }).map {
             it.item
         }
@@ -32,7 +32,7 @@ class Sorter {
     }
 
     fun sortByBid(ascending: Boolean, list: List<Auction>): List<Auction> {
-        return if (ascending) list.sortedBy { it.bid } else list.sortedByDescending { it.bid }
+        return if (ascending) list.sortedBy { it.initial } else list.sortedByDescending { it.initial }
     }
 
     private fun sortByName(ascending: Boolean, list: List<Auction>): List<Auction> {

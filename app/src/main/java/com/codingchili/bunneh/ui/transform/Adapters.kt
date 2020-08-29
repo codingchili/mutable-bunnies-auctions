@@ -7,7 +7,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.Bid
@@ -137,9 +136,7 @@ fun renderItemThumbnail(
 ): View {
     val item = (auction?.item ?: item)!!
 
-    Glide.with(fragment.requireActivity())
-        .load(fragment.getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
-        .into(view.findViewById(R.id.item_image))
+    ServerResource.icon(view.findViewById(R.id.item_image), item.icon)
 
     if (listener != null) {
         view.setOnClickListener { listener.accept((auction ?: item)) }
@@ -153,7 +150,7 @@ fun renderItemThumbnail(
 
     if (auction != null) {
         view.findViewById<TextView>(R.id.item_bid).text =
-            formatValue(auction.bid)
+            formatValue(auction.high())
     } else {
         view.findViewById<TextView>(R.id.item_bid).visibility = View.GONE
     }

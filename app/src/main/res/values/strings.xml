@@ -27,4 +27,10 @@
     <string name="sort_rarity">Rarity</string>
     <string name="sort_ascending">Ascending</string>
     <string name="server_region_default">EU</string>
+    <string name="auction_leading">Leading</string>
+    <string name="auction_active">Place bid</string>
+    <string name="auction_overbid">Increase bid</string>
+    <string name="auction_lost">Auction lost</string>
+    <string name="auction_won">Auction won</string>
+    <string name="auction_end">Ended</string>
 </resources>

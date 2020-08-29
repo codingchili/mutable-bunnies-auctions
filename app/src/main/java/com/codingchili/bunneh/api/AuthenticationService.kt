@@ -7,6 +7,10 @@ import io.reactivex.rxjava3.core.Single
  * Performs authentication of users.
  */
 interface AuthenticationService {
+    companion object {
+        val instance = LocalAuthenticationService()
+    }
+
     /**
      * Attempts to authenticate the given user, returns an error message should the
      * authentication attempt fail.

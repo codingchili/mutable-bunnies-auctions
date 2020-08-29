@@ -79,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@id/pull_refresh">
 
             <RelativeLayout
-                android:id="@+id/button_container"
+                android:id="@+id/status_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="0dp">
@@ -88,18 +88,22 @@
                     android:id="@+id/status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/auction_lead"
+                    android:backgroundTint="@color/auction_active"
                     android:clickable="false"
+                    android:enabled="false"
                     android:elevation="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="leading auction"
                     android:textColor="@color/text_solid"
                     android:visibility="visible" />
 
                 <!-- wrap in card as cornerRadius is broken on button. -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/button_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
                     android:layout_centerHorizontal="true"
                     app:cardCornerRadius="12dp"
                     android:visibility="gone">
@@ -120,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/related_items"
-                android:layout_below="@id/button_container"
+                android:layout_below="@id/status_container"
                 android:layout_marginTop="2dp"
                 android:background="@color/card"
                 android:elevation="12dp"
@@ -131,7 +135,7 @@
                     android:id="@+id/auction_meta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/button_container"
+                    android:layout_below="@id/status_container"
                     android:orientation="vertical">
 
                     <RelativeLayout

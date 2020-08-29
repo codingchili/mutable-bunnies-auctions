@@ -38,7 +38,7 @@ class BidlistDialogFragment : DialogFragment() {
                 // todo view user profile - sold,bought,funds
             })
         list.adapter = adapter
-        adapter.addAll(auction.bids.sortedByDescending { it.value })
+        adapter.addAll(auction.bids)
 
         return view
     }

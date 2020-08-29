@@ -9,10 +9,13 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.stream.Stream
 
-fun setupChronometerFromAuction(chronometer: Chronometer, auction: Auction) {
+fun setupChronometerFromAuction(chronometer: Chronometer, auction: Auction, listener: Runnable? = null) {
     chronometer.base = auction.end
     chronometer.isCountDown = true
-    chronometer.onChronometerTickListener = chronoCountdownHandler
+    chronometer.onChronometerTickListener = Chronometer.OnChronometerTickListener {
+        chronoCountdownHandler.onChronometerTick(it)
+        listener?.run()
+    }
     chronometer.start()
 }
 

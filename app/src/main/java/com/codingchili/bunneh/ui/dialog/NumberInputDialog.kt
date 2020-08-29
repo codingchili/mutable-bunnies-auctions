@@ -13,13 +13,21 @@ import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import java.util.function.Consumer
 
 class NumberInputDialog: DialogFragment() {
+    private var listener: Consumer<Int>? = null
+
+    fun onResponse(listener: Consumer<Int>): DialogFragment {
+        this.listener = listener
+        return this
+    }
 
     private fun searchHandler(): TextView.OnEditorActionListener {
         return TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 dismiss()
+                listener?.accept(Integer.parseInt(v.text.replace(Regex(","), "")))
                 return@OnEditorActionListener true
             }
             false

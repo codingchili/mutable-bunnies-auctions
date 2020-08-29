@@ -1,14 +1,13 @@
 package com.codingchili.bunneh.ui.auction
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Chronometer
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -16,13 +15,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
 import com.codingchili.bunneh.R
+import com.codingchili.bunneh.api.AuctionService
+import com.codingchili.bunneh.api.AuthenticationService
 import com.codingchili.bunneh.model.Auction
+import com.codingchili.bunneh.model.AuctionState
+import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.ui.dialog.Dialogs
+import com.codingchili.bunneh.ui.dialog.NumberInputDialog
 import com.codingchili.bunneh.ui.transform.RecyclerAdapter
+import com.codingchili.bunneh.ui.transform.ServerResource
 import com.codingchili.bunneh.ui.transform.formatValue
 import com.codingchili.bunneh.ui.transform.setupChronometerFromAuction
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.function.Consumer
 
@@ -36,6 +41,8 @@ import java.util.function.Consumer
 
 
 class AuctionFragment : Fragment() {
+    private var authentication = AuthenticationService.instance
+    private var auctions = AuctionService.instance
     private lateinit var auction: Auction
     private var hits: List<Auction> = ArrayList()
 
@@ -60,28 +67,31 @@ class AuctionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_auction, container, false)
+        val swipe = fragment.findViewById<SwipeRefreshLayout>(R.id.pull_refresh)
+        swipe.setOnRefreshListener { swipe.isRefreshing = false }
 
+        update(auction, fragment)
+
+        fragment.findViewById<FloatingActionButton>(R.id.back)
+            .setOnClickListener { requireActivity().onBackPressed() }
+        return fragment
+    }
+
+    private fun update(auction: Auction, fragment: View) {
+        this.auction = auction
         val item = auction.item
         requireActivity().title = item.name
 
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
-        fragment.findViewById<TextView>(R.id.item_stats).text = item.stats
-        fragment.findViewById<TextView>(R.id.item_bid).text =
-            formatValue(auction.bid)
-        fragment.findViewById<TextView>(R.id.item_seller).text = auction.seller.name
+        fragment.findViewById<TextView>(R.id.item_stats).text = item.stats.toString()
+        fragment.findViewById<TextView>(R.id.item_bid).text = formatValue(auction.high())
+        fragment.findViewById<TextView>(R.id.item_seller).text = auction.seller!!.name
         fragment.findViewById<TextView>(R.id.auction_bid_count).text = auction.bids.size.toString()
 
         fragment.findViewById<RelativeLayout>(R.id.bid_list).setOnClickListener {
             BidlistDialogFragment()
                 .setAuction(auction)
                 .show(requireActivity().supportFragmentManager, Dialogs.TAG)
-        }
-
-        val swipe = fragment.findViewById<SwipeRefreshLayout>(R.id.pull_refresh)
-        swipe.setOnRefreshListener {
-            // pull item/auction data from server.
-            requireActivity().title = "UPDATED FROM PULL-DN"
-            swipe.isRefreshing = false
         }
 
         val quantity = fragment.findViewById<TextView>(R.id.item_quantity)
@@ -96,8 +106,17 @@ class AuctionFragment : Fragment() {
         }
 
         val chronometer = fragment.findViewById<Chronometer>(R.id.auction_end)
-        setupChronometerFromAuction(chronometer, auction)
+        setupChronometerFromAuction(chronometer, auction, listener = Runnable {
+            updateAuctionState(fragment)
+        })
 
+        ServerResource.icon(fragment.findViewById(R.id.item_image), item.icon)
+        updateLabels(fragment, item)
+        updateRelatedHits(fragment)
+        updateAuctionState(fragment)
+    }
+
+    private fun updateLabels(fragment: View, item: Item) {
         setLabel(fragment.findViewById(R.id.item_slot), item.slot, getColorForItemType())
         setLabel(fragment.findViewById(R.id.item_type), item.type, R.color.type_default)
         setLabel(
@@ -105,11 +124,9 @@ class AuctionFragment : Fragment() {
             item.rarity.toString(),
             item.rarity.resource
         )
+    }
 
-        Glide.with(requireContext())
-            .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
-            .into(fragment.findViewById(R.id.item_image))
-
+    private fun updateRelatedHits(fragment: View) {
         val relatedContainer = fragment.findViewById<View>(R.id.related_items)
         val relatedListView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
 
@@ -137,11 +154,40 @@ class AuctionFragment : Fragment() {
                             .commit()
                     })
         }
+    }
 
-        fragment.findViewById<FloatingActionButton>(R.id.back).setOnClickListener {
-            requireActivity().onBackPressed()
+    private fun updateAuctionState(fragment: View) {
+        val state = AuctionState.fromAuction(auction, authentication.current()!!.user)
+        val container = fragment.findViewById<View>(R.id.button_container)
+        val button = fragment.findViewById<MaterialButton>(R.id.button)
+        val status = fragment.findViewById<MaterialButton>(R.id.status)
+
+        Log.e("foo", "state = ${state.name}")
+
+        if (state.interative()) {
+            status.visibility = View.GONE
+            container.visibility = View.VISIBLE
+            button.text = getString(state.string)
+
+            button.setOnClickListener {
+                NumberInputDialog()
+                    .onResponse(Consumer<Int> {
+                        auctions.bid(it, auction).subscribe { response, error ->
+                            if (error == null) {
+                                update(response, fragment)
+                            } else {
+                                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                    }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
+            }
+        } else {
+            container.visibility = View.GONE
+            status.visibility = View.VISIBLE
+            status.text = getString(state.string)
+            status.backgroundTintList = ColorStateList.valueOf(requireContext().getColor(state.color))
         }
-        return fragment
     }
 
     private fun setLabel(view: TextView, value: String?, color: Int) {

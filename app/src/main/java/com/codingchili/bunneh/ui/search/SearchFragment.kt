@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.api.LocalAuctionService
+import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.*
@@ -24,7 +24,7 @@ import java.util.function.Consumer
  * Fragment used to search for auctions.
  */
 class SearchFragment : Fragment() {
-    private val service = LocalAuctionService.instance
+    private val service = AuctionService.instance
     private val hits = MutableLiveData<List<Auction>>(ArrayList())
     private var sorter = Sorter()
 

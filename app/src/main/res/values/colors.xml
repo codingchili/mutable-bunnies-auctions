@@ -11,9 +11,13 @@
     <color name="accent">#29B6F6</color>
 
     <!-- auction status -->
-    <color name="auction_end">#EF5350</color>
+    <color name="auction_won">#66BB6A</color>
+    <color name="auction_active">@color/accent</color>
+    <color name="auction_end">#FFCA28</color>
+
     <color name="auction_lead">#66BB6A</color>
-    <color name="auction_wait">#FFEE58</color>
+    <color name="auction_lost">#EF5350</color>
+    <color name="auction_overbid">#FF7043</color>
 
     <!-- item rarities -->
     <color name="quality_mythic">#FFCA28</color>

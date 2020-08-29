@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide
 import com.codingchili.bunneh.MainActivity
 import com.codingchili.bunneh.MainFragment
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.api.LocalAuthenticationService
+import com.codingchili.bunneh.api.AuthenticationService
 import com.codingchili.bunneh.ui.dialog.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
@@ -31,7 +31,7 @@ import java.util.function.Consumer
 
 class LoginFragment : Fragment() {
     val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.server_region)) }
-    val authentication = LocalAuthenticationService.instance
+    val authentication = AuthenticationService.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,

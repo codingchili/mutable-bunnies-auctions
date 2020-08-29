@@ -6,18 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+import androidx.fragment.app.FragmentManager
 import com.codingchili.bunneh.R
+import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.model.Item
+import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
+import com.codingchili.bunneh.ui.inventory.InventoryFragment
+import com.codingchili.bunneh.ui.transform.ServerResource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.function.Consumer
 
-class ItemFragment: Fragment() {
+class ItemFragment : Fragment() {
+    private var service = AuctionService.instance
     private lateinit var item: Item
+
+    companion object {
+        val TAG = "item.fragment"
+    }
 
     fun load(item: Item): Fragment {
         this.item = item
@@ -33,11 +44,37 @@ class ItemFragment: Fragment() {
 
         requireActivity().title = item.name
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
-        fragment.findViewById<TextView>(R.id.item_stats).text = item.stats
+        fragment.findViewById<TextView>(R.id.item_stats).text = item.stats.toString()
 
         fragment.findViewById<MaterialButton>(R.id.button_sell).setOnClickListener {
             NumberInputDialog()
-                .show(requireActivity().supportFragmentManager, Dialogs.TAG)
+                .onResponse(Consumer<Int> {
+
+                    service.auction(item, it).subscribe { response, e ->
+                        // pop backstack?
+                        if (e == null) {
+                            requireActivity().supportFragmentManager.popBackStack(
+                                ItemFragment.TAG,
+                                FragmentManager.POP_BACK_STACK_INCLUSIVE
+                            )
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(
+                                    android.R.anim.fade_in,
+                                    android.R.anim.fade_out
+                                )
+                                .remove(this)
+                                .replace(R.id.root, AuctionFragment().load(response))
+                                .addToBackStack(AuctionFragment.TAG)
+                                .commit()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Error: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
 
         val quantity = fragment.findViewById<TextView>(R.id.item_quantity)
@@ -47,13 +84,11 @@ class ItemFragment: Fragment() {
             quantity.visibility = View.GONE
         }
 
-        Glide.with(requireContext())
-            .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
-            .into(fragment.findViewById(R.id.item_image))
-
         fragment.findViewById<FloatingActionButton>(R.id.back).setOnClickListener {
             requireActivity().onBackPressed()
         }
+
+        ServerResource.icon(fragment.findViewById(R.id.item_image), item.icon)
 
         setLabel(fragment.findViewById(R.id.item_slot), item.slot, getColorForItemType())
         setLabel(fragment.findViewById(R.id.item_type), item.type, R.color.type_default)
