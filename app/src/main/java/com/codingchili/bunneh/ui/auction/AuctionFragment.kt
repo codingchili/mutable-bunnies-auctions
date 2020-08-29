@@ -110,16 +110,18 @@ class AuctionFragment : Fragment() {
             .load(getString(R.string.resources_host) + "/resources/gui/item/icon/${item.icon}")
             .into(fragment.findViewById(R.id.item_image))
 
-        val relatedView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
+        val relatedContainer = fragment.findViewById<View>(R.id.related_items)
+        val relatedListView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
 
         if (hits.isEmpty()) {
-            relatedView.visibility = View.GONE
+            relatedContainer.layoutParams.height = 0
+            relatedContainer.visibility = View.INVISIBLE
         } else {
             val related = hits.subList(0, Math.min(hits.size - 1, 16)).filter { it != auction }
-            relatedView.layoutManager =
+            relatedListView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-            relatedView.adapter =
+            relatedListView.adapter =
                 RecyclerAdapter(
                     this,
                     related,

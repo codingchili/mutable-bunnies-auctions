@@ -36,14 +36,14 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.12" >
+            app:layout_constraintVertical_bias="0.12">
 
             <!-- don't include interactive components inside swipe layout, breaks scroll etc. -->
             <!-- requires at least one child to prevent JNI exception -->
             <ImageView
                 android:id="@+id/item_image"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -71,7 +71,6 @@
             android:layout_height="0dp"
             android:layout_marginTop="76dp"
             android:background="@color/card"
-            android:elevation="16dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,21 +78,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pull_refresh">
 
-            <Button
-                android:id="@+id/button"
+            <RelativeLayout
+                android:id="@+id/button_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/auction_lead"
-                android:clickable="false"
-                android:elevation="8dp"
-                android:text="leading auction"
-                android:textColor="@color/text_solid" />
+                android:elevation="0dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/auction_lead"
+                    android:clickable="false"
+                    android:elevation="8dp"
+                    android:text="leading auction"
+                    android:textColor="@color/text_solid"
+                    android:visibility="visible" />
+
+                <!-- wrap in card as cornerRadius is broken on button. -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_centerHorizontal="true"
+                    app:cardCornerRadius="12dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button"
+                        android:layout_width="164dp"
+                        android:layout_height="36dp"
+                        android:clickable="true"
+                        android:elevation="8dp"
+                        android:background="@drawable/ripple_card"
+                        android:text="Place bid"
+                        android:textColor="@color/text_solid"/>
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/related_items"
-                android:layout_below="@id/button"
+                android:layout_below="@id/button_container"
                 android:layout_marginTop="2dp"
                 android:background="@color/card"
                 android:elevation="12dp"
@@ -104,7 +131,7 @@
                     android:id="@+id/auction_meta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/button"
+                    android:layout_below="@id/button_container"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -161,8 +188,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:alpha="0.64"
-                            android:layout_marginRight="8dp" />
+                            android:layout_marginRight="8dp"
+                            android:alpha="0.64" />
                     </RelativeLayout>
 
                     <RelativeLayout
