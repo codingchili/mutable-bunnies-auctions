@@ -1,6 +1,7 @@
 package com.codingchili.bunneh.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import android.widget.GridView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
@@ -25,7 +26,7 @@ import java.util.function.Consumer
  */
 class SearchFragment : Fragment() {
     private val service = AuctionService.instance
-    private val hits = MutableLiveData<List<Auction>>(ArrayList())
+    private val hits by activityViewModels<SearchViewModel>()
     private var sorter = Sorter()
 
     override fun onCreateView(
@@ -45,24 +46,29 @@ class SearchFragment : Fragment() {
                 requireActivity().title = it.item.name
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .add(R.id.root, AuctionFragment().load(it, hits.value!!))
+                    .add(R.id.root, AuctionFragment().load(it, hits.auctions.value!!))
                     .addToBackStack(AuctionFragment.TAG)
                     .commit()
             })
         grid.adapter = adapter
 
-        this.hits.observe(viewLifecycleOwner, Observer {
+        hits.auctions.observe(viewLifecycleOwner, Observer {
             fragment.findViewById<ProgressBar>(R.id.progress_search).visibility = View.GONE
 
             if (it.size > 0) {
                 fragment.findViewById<View>(R.id.progress_container).visibility = View.GONE
             } else {
-                fragment.findViewById<TextView>(R.id.progress_text).text = "No auctions here, try searching."
+                fragment.findViewById<TextView>(R.id.progress_text).text =
+                    "No auctions here, try searching."
             }
             adapter.clear()
             adapter.addAll(sorter.sort(it))
             adapter.notifyDataSetChanged()
         })
+
+        if (hits.auctions.value == null) {
+            search("ending soon", fragment)
+        }
         return fragment
     }
 
@@ -84,7 +90,7 @@ class SearchFragment : Fragment() {
                 Consumer<NavigableTree> { leaf ->
                     sorter.ascending = leaf.name == getString(R.string.sort_ascending)
                     sorter.setMethodByName(requireContext(), leaf.parent!!.name)
-                    hits.value = sorter.sort(hits.value!!)
+                    hits.auctions.value = sorter.sort(hits.auctions.value!!)
                 }
             ).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
@@ -106,9 +112,10 @@ class SearchFragment : Fragment() {
 
         service.search(query).subscribe { auctions, e ->
             if (e == null) {
-                hits.value = auctions
+                hits.auctions.value = auctions
             } else {
-                val adapter = view.findViewById<GridView>(R.id.search_hits).adapter as ArrayAdapter<Auction>
+                val adapter =
+                    view.findViewById<GridView>(R.id.search_hits).adapter as ArrayAdapter<Auction>
                 adapter.clear()
                 text.text = e.message
                 progress.visibility = View.GONE
