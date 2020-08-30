@@ -2,9 +2,12 @@ package com.codingchili.bunneh.ui.dialog
 
 import com.codingchili.bunneh.R
 
-open class NavigableTree(open val name: String, val query: String? = null, val icon: Int? = null) {
+open class NavigableTree(
+    open val name: String,
+    val resource: Int? = null
+) {
     val next = HashSet<NavigableTree>()
-    var parent : NavigableTree? = null
+    var parent: NavigableTree? = null
 
     fun isLeaf(): Boolean {
         return next.isEmpty()
@@ -21,21 +24,21 @@ open class NavigableTree(open val name: String, val query: String? = null, val i
     }
 }
 
-class Divider(override val name: String): NavigableTree(name = "divider") {
+class Divider(override val name: String) : NavigableTree(name = "divider") {
 }
 
 val auctionsFilterTree =
     listOf(
-        NavigableTree(name = "Favorites", icon = R.drawable.icon_star),
+        NavigableTree(name = "Favorites", resource = R.drawable.icon_star),
         Divider(name = "Selling"),
-        NavigableTree(name = "Sold", icon = R.drawable.icon_auction_won),
-        NavigableTree(name = "Active", icon = R.drawable.icon_active),
-        NavigableTree(name = "Not Sold", icon = R.drawable.icon_not_sold),
+        NavigableTree(name = "Sold", resource = R.drawable.icon_auction_won),
+        NavigableTree(name = "Active", resource = R.drawable.icon_active),
+        NavigableTree(name = "Not Sold", resource = R.drawable.icon_not_sold),
         Divider(name = "Buying"),
-        NavigableTree(name = "Won", icon = R.drawable.icon_auction_won),
-        NavigableTree(name = "Leading", icon = R.drawable.icon_auction_leading),
-        NavigableTree(name = "Overbid", icon = R.drawable.icon_auction_overbid),
-        NavigableTree(name = "Lost", icon = R.drawable.icon_auction_lost)
+        NavigableTree(name = "Won", resource = R.drawable.icon_auction_won),
+        NavigableTree(name = "Leading", resource = R.drawable.icon_auction_leading),
+        NavigableTree(name = "Overbid", resource = R.drawable.icon_auction_overbid),
+        NavigableTree(name = "Lost", resource = R.drawable.icon_auction_lost)
     )
 
 val searchFilterTree =
@@ -55,41 +58,20 @@ val searchFilterTree =
     )
 
 val serverRegionTree = listOf(
-    NavigableTree(name = "BR"),
-    NavigableTree(name = "EUNE"),
-    NavigableTree(name = "LAN"),
-    NavigableTree(name = "LAS"),
-    NavigableTree(name = "NA"),
-    NavigableTree(name = "OCE"),
-    NavigableTree(name = "RU"),
-    NavigableTree(name = "TR"),
-    NavigableTree(name = "JPE"),
-    NavigableTree(name = "EUW")
+    NavigableTree(name = "AF", resource = R.string.server_af),
+    NavigableTree(name = "AN", resource = R.string.server_an),
+    NavigableTree(name = "AS", resource = R.string.server_as),
+    NavigableTree(name = "EU", resource = R.string.server_eu),
+    NavigableTree(name = "NA", resource = R.string.server_na),
+    NavigableTree(name = "OC", resource = R.string.server_oc),
+    NavigableTree(name = "SA", resource = R.string.server_sa)
 )
 
 val navigableCategoryTree = listOf(
-    NavigableTree(
-        name = "Consumables",
-        query = "type = 'consumable'"
-    )
-        .add(
-            NavigableTree(
-                name = "Leveling",
-                query = "type = 'consumable' and title like 'apple'"
-            )
-        )
-        .add(
-            NavigableTree(
-                name = "Food",
-                query = "type = 'consumable' and title like 'apple'"
-            )
-        )
-        .add(
-            NavigableTree(
-                name = "Potions",
-                query = "type = 'consumable' and title like 'apple'"
-            )
-        ),
+    NavigableTree(name = "Consumables")
+        .add(NavigableTree(name = "Leveling"))
+        .add(NavigableTree(name = "Food"))
+        .add(NavigableTree(name = "Potions")),
     NavigableTree(name = "Weapons")
         .add(NavigableTree(name = "Staff"))
         .add(NavigableTree(name = "Bow"))

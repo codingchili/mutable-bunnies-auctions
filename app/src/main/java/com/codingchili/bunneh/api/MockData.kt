@@ -3,9 +3,11 @@ package com.codingchili.bunneh.api
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.model.ItemRarity
+import com.codingchili.bunneh.ui.transform.Type
 
-class AuctionMock {
+class MockData {
     companion object {
+        const val delay = 1200L
         val auctions = ArrayList<Auction>()
         val spacewand = Item(
             icon = "wand_1.png",
@@ -13,7 +15,7 @@ class AuctionMock {
             quantity = 1,
             name = "Spacewand +2",
             slot = "weapon",
-            type = "staff"
+            type = Type.weapon
         )
 
         val greenApple = Item(
@@ -21,7 +23,7 @@ class AuctionMock {
             rarity = ItemRarity.rare,
             quantity = 99,
             name = "Green Apple",
-            type = "consumable"
+            type = Type.consumable
         )
 
         val flamingStick = Item(
@@ -30,7 +32,7 @@ class AuctionMock {
             quantity = 1,
             name = "Flaming Stick +4",
             slot = "weapon",
-            type = "staff"
+            type = Type.weapon
         )
 
         val sauring = Item(
@@ -38,7 +40,8 @@ class AuctionMock {
             rarity = ItemRarity.mythic,
             quantity = 1,
             name = "The Sauring",
-            slot = "ring"
+            slot = "ring",
+            type = Type.armor
         )
 
         val branch = Item(
@@ -47,7 +50,7 @@ class AuctionMock {
             quantity = 1,
             name = "Leafy Branch +1",
             slot = "weapon",
-            type = "staff"
+            type = Type.weapon
         )
 
         init {

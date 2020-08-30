@@ -15,7 +15,7 @@ class ServerResource {
          *
          */
         fun icon(view: ImageView, resource: String) {
-            val host = view.context.getString(R.string.resources_host)
+            val host = view.context.getString(R.string.resources_cdn)
             Glide.with(view.context)
                 .load("$host/resources/gui/item/icon/${resource}")
                 .transition(DrawableTransitionOptions.withCrossFade())

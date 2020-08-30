@@ -12,11 +12,11 @@ class Auction(
     val id = "0xFF"
 
     fun high(): Int {
-        return max(initial, bids.first().value)
+        return max(initial, bids.firstOrNull()?.value ?: 0)
     }
 
-    var bids =
-        listOf(
+    var bids = listOf<Bid>()
+        /*listOf(
             Bid(
                 owner = User("birthcake", "Birthcake"),
                 value = 1295
@@ -37,5 +37,5 @@ class Auction(
                 owner = User("birthcake", "Birthcake"),
                 value = 50
             )
-        )
+        )*/
 }

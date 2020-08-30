@@ -1,14 +1,12 @@
 package com.codingchili.bunneh.ui.auction
 
 import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -20,7 +18,8 @@ import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.api.AuthenticationService
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.AuctionState
-import com.codingchili.bunneh.model.Item
+import com.codingchili.bunneh.ui.transform.Type
+import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
 import com.codingchili.bunneh.ui.transform.RecyclerAdapter
@@ -30,14 +29,6 @@ import com.codingchili.bunneh.ui.transform.setupChronometerFromAuction
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.function.Consumer
-
-
-/*1. quick action buttons on search, categories/search dialog/recent LinLay*/
-/*2. inventory workspace, current balance - usable balance, tap to create sell auction*/
-/*3. active orders: selling buying / tab switcher*/
-/*4. notifications workspace: show when someone bids higher/auction ends etc. - event log on server per account.*/
-/*5. connect data to layout, related items etc.*/
-/*6. connect data to server - bidirectional flow*/
 
 
 class AuctionFragment : Fragment() {
@@ -111,19 +102,9 @@ class AuctionFragment : Fragment() {
         })
 
         ServerResource.icon(fragment.findViewById(R.id.item_image), item.icon)
-        updateLabels(fragment, item)
+        Type.updateLabels(fragment, item)
         updateRelatedHits(fragment)
         updateAuctionState(fragment)
-    }
-
-    private fun updateLabels(fragment: View, item: Item) {
-        setLabel(fragment.findViewById(R.id.item_slot), item.slot, getColorForItemType())
-        setLabel(fragment.findViewById(R.id.item_type), item.type, R.color.type_default)
-        setLabel(
-            fragment.findViewById(R.id.item_rarity),
-            item.rarity.toString(),
-            item.rarity.resource
-        )
     }
 
     private fun updateRelatedHits(fragment: View) {
@@ -156,56 +137,40 @@ class AuctionFragment : Fragment() {
         }
     }
 
+    private fun onBidHandler(fragment: View): Consumer<Int> {
+        return Consumer<Int> {
+            auctions.bid(it, auction).subscribe { response, error ->
+                if (error == null) {
+                    update(response, fragment)
+                } else {
+                    AppToast.show(requireContext(), error.message!!)
+                }
+            }
+        }
+    }
+
     private fun updateAuctionState(fragment: View) {
-        val state = AuctionState.fromAuction(auction, authentication.current()!!.user)
+        val state = AuctionState.fromAuction(auction, authentication.user()!!)
         val button = fragment.findViewById<MaterialButton>(R.id.button)
         val status = fragment.findViewById<MaterialButton>(R.id.status)
-
-        Log.e("foo", "state = ${state.name}")
 
         if (state.interative()) {
             status.visibility = View.GONE
             button.visibility = View.VISIBLE
             button.text = getString(state.string)
-            button.backgroundTintList = ColorStateList.valueOf(requireContext().getColor(state.color))
+            button.backgroundTintList =
+                ColorStateList.valueOf(requireContext().getColor(state.color))
 
             button.setOnClickListener {
-                NumberInputDialog()
-                    .onResponse(Consumer<Int> {
-                        auctions.bid(it, auction).subscribe { response, error ->
-                            if (error == null) {
-                                update(response, fragment)
-                            } else {
-                                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                    }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
+                NumberInputDialog(onBidHandler(fragment))
+                    .show(requireActivity().supportFragmentManager, Dialogs.TAG)
             }
         } else {
             button.visibility = View.GONE
             status.visibility = View.VISIBLE
             status.text = getString(state.string)
-            status.backgroundTintList = ColorStateList.valueOf(requireContext().getColor(state.color))
+            status.backgroundTintList =
+                ColorStateList.valueOf(requireContext().getColor(state.color))
         }
-    }
-
-    private fun setLabel(view: TextView, value: String?, color: Int) {
-        if (value != null) {
-            val background = view.background.mutate() as GradientDrawable
-            background.setColor(ContextCompat.getColor(requireContext(), color));
-            view.text = value
-            view.background = background
-        } else {
-            view.visibility = View.GONE
-        }
-    }
-
-    private fun getColorForItemType() = when (auction.item.slot) {
-        "consumable" -> R.color.type_consumable
-        "weapon" -> R.color.type_weapon
-        "armor" -> R.color.type_armor
-        "quest" -> R.color.type_quest
-        else -> R.color.type_default
     }
 }

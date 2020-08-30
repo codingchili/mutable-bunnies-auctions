@@ -11,14 +11,25 @@
     <string name="login">Login</string>
     <string name="link_register">Create account</string>
     <string name="loading">Loading…</string>
-    <string name="resources_host">http://192.168.10.106:8080</string>
+
+    <!-- uses thirdparty cdn for game resource distribution, same for all regions. -->
+    <string name="resources_cdn">http://192.168.10.106:8080</string>
+
+    <!-- list of game servers. -->
+    <string name="server_af">af-server.mutable.com</string>
+    <string name="server_an">an-server.mutable.com</string>
+    <string name="server_as">as-server.mutable.com</string>
+    <string name="server_eu">192.168.10.106</string>
+    <string name="server_na">na-server.mutable.com</string>
+    <string name="server_oc">oc-server.mutable.com</string>
+    <string name="server_sa">sa-server.mutable.com</string>
 
 
     <string name="liquidity_title">Liquidity</string>
     <string name="liquidity_text">Funds are displayed in two categories, total funds and liquidity.
     When leading an auction the liquidity is reduced by the value of the bid. When placing a bid the
     liquidity cannot be exceeded.</string>
-    <string name="server_region">EU</string>
+    <string name="unset">…</string>
     <string name="location_title">Server region</string>
     <string name="location_text">The application requires access to location in order to automatically determine server region. This will be selected manually if the permission is not granted.</string>
     <string name="sort_bid">Current bid</string>
@@ -32,5 +43,9 @@
     <string name="auction_overbid">Increase bid</string>
     <string name="auction_lost">Auction lost</string>
     <string name="auction_won">Auction won</string>
-    <string name="auction_end">Ended</string>
+    <string name="auction_end">Finished</string>
+
+
+    <string name="no_auctions_in_category">No auctions in that category.</string>
+    <string name="no_region_selected">Please select a server region</string>
 </resources>

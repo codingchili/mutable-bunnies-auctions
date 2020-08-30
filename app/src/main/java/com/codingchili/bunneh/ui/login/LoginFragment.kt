@@ -18,10 +18,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.codingchili.bunneh.MainActivity
 import com.codingchili.bunneh.MainFragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuthenticationService
+import com.codingchili.bunneh.api.Connector
+import com.codingchili.bunneh.model.ContinentMapper
+import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
@@ -30,7 +34,7 @@ import java.util.function.Consumer
 
 
 class LoginFragment : Fragment() {
-    val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.server_region)) }
+    val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.unset)) }
     val authentication = AuthenticationService.instance
 
     override fun onCreateView(
@@ -41,12 +45,12 @@ class LoginFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.fragment_login, container, false)
         val regionSelector = fragment.findViewById<MaterialButton>(R.id.server_region)
 
-        regionSelector.text = region.value
         regionSelector.setOnClickListener {
             NavigableTreeDialog(
                 "Server region",
                 serverRegionTree,
                 listener = Consumer<NavigableTree> {
+                    Connector.server = getString(it.resource!!)
                     region.value = it.name
                 }
             ).show(requireActivity().supportFragmentManager, Dialogs.TAG)
@@ -54,41 +58,53 @@ class LoginFragment : Fragment() {
 
         Glide.with(requireContext())
             .load(R.drawable.bunny)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(fragment.findViewById(R.id.app_logo))
 
         fragment.findViewById<Button>(R.id.button_login)
-            .setOnClickListener { authenticate(fragment) }
+            .setOnClickListener {
+                if (Connector.server != null) {
+                    authenticate(fragment)
+                } else {
+                    AppToast.show(requireContext(), getString(R.string.no_region_selected))
+                }
+            }
 
         region.observe(viewLifecycleOwner, Observer {
             (activity as MainActivity).setRegion(it)
             regionSelector.text = it
         })
-        region.value = "onCreateView"
         attemptLocationAccess()
 
         return fragment
     }
 
     private fun attemptLocationAccess() {
-        region.value = getString(R.string.server_region_default)
         val permission = android.Manifest.permission.ACCESS_COARSE_LOCATION
+        val request =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                if (granted) {
+                    retrieveServerRegionFromLocation()
+                } else {
+                    //region.value = getString(R.string.server_region_default)
+                }
+            }
 
         when {
             ContextCompat.checkSelfPermission(requireContext(), permission) ==
-                    PackageManager.PERMISSION_GRANTED -> retrieveServerRegionFromLocation()
-
+                    PackageManager.PERMISSION_GRANTED -> {
+                retrieveServerRegionFromLocation()
+            }
             shouldShowRequestPermissionRationale(permission) -> {
-                // triggered when not granted
+                InformationDialog(
+                    R.string.location_title,
+                    R.string.location_text,
+                    listener = Runnable {
+                        request.launch(permission)
+                    }).show(requireActivity().supportFragmentManager, Dialogs.TAG)
             }
             else -> {
-                registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-                    if (granted) {
-                        retrieveServerRegionFromLocation()
-                    } else {
-                        InformationDialog(R.string.location_title, R.string.location_text)
-                            .show(requireActivity().supportFragmentManager, Dialogs.TAG)
-                    }
-                }.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                request.launch(permission)
             }
         }
     }
@@ -104,10 +120,25 @@ class LoginFragment : Fragment() {
                 if (location != null) {
                     val address =
                         coder.getFromLocation(location.latitude, location.longitude, 1);
-                    region.postValue(address.first().countryName)
+                    val code = address.firstOrNull()?.countryCode
+                    val continent = ContinentMapper.fromCountryCode(code)
+
+                    if (continent != null) {
+                        Log.i(javaClass.name, "Resolved continent $continent from country $code")
+                        Connector.server = getString(
+                            resources.getIdentifier(
+                                "server_${continent.toLowerCase(Locale.ROOT)}",
+                                "string",
+                                requireActivity().packageName
+                            )
+                        )
+                        region.postValue(continent)
+                    } else {
+                        Log.e(javaClass.name, "No country code mapping from $code to continent.")
+                    }
                 }
             } catch (e: Throwable) {
-                Log.e("foo", e.message!!)
+                AppToast.show(requireContext(), e.message!!)
             }
         }.run()
     }
@@ -126,12 +157,12 @@ class LoginFragment : Fragment() {
             if (error == null) {
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.root, MainFragment())
-                    .addToBackStack("main")
+                    .addToBackStack(MainFragment.TAG)
                     .commit()
-                overlay.visibility = View.GONE
             } else {
-                Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
+                AppToast.show(requireContext(), error.message!!, Toast.LENGTH_LONG)
             }
+            overlay.visibility = View.GONE
         }
     }
 }

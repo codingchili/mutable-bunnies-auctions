@@ -41,7 +41,7 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                     entry.findViewById<TextView>(R.id.item_bid_owner).text = ""
                 }
 
-                val user = AuthenticationService.instance.current()!!.user
+                val user = AuthenticationService.instance.user()!!
                 var state = AuctionState.fromAuction(auction, user)
                 entry.findViewById<ImageView>(R.id.status_icon).setImageResource(state.icon)
 

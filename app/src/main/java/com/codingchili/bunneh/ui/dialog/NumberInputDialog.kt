@@ -15,13 +15,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.function.Consumer
 
-class NumberInputDialog: DialogFragment() {
-    private var listener: Consumer<Int>? = null
-
-    fun onResponse(listener: Consumer<Int>): DialogFragment {
-        this.listener = listener
-        return this
-    }
+class NumberInputDialog(var listener: Consumer<Int>? = null) : DialogFragment() {
 
     private fun searchHandler(): TextView.OnEditorActionListener {
         return TextView.OnEditorActionListener { v, actionId, event ->

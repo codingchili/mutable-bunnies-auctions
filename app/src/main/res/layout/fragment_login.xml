@@ -143,7 +143,7 @@
         android:layout_marginRight="12dp"
         android:textColor="@color/accent"
         android:textSize="18sp"
-        android:text="EU" />
+        android:text="..." />
 
 
     <com.google.android.material.button.MaterialButton

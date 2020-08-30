@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
 import com.google.android.material.button.MaterialButton
 
-class InformationDialog(var title: Int, var text: Int): DialogFragment() {
+class InformationDialog(var title: Int, var text: Int, var listener : Runnable? = null): DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,7 +21,10 @@ class InformationDialog(var title: Int, var text: Int): DialogFragment() {
         view.findViewById<TextView>(R.id.dialog_title).text = getString(title)
         view.findViewById<TextView>(R.id.text).text = getString(text)
 
-        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener { dismiss() }
+        view.findViewById<MaterialButton>(R.id.close_button).setOnClickListener {
+            dismiss()
+            listener?.run()
+        }
 
         return view
     }

@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
+import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.Divider
 import com.codingchili.bunneh.ui.dialog.NavigableTree
 import com.codingchili.bunneh.ui.dialog.auctionsFilterTree
@@ -55,10 +56,10 @@ class QuickLinksFragment : Fragment() {
                             .addToBackStack(AuctionListFragment.TAG)
                             .commit()
                     } else {
-                        toast("No auctions in category.")
+                        AppToast.show(requireContext(), getString(R.string.no_auctions_in_category))
                     }
                 } else {
-                    toast("Error: " + e.message)
+                    AppToast.show(requireContext(), e.message!!)
                 }
             }
         }
@@ -91,7 +92,7 @@ class QuickLinksFragment : Fragment() {
                     image.setImageDrawable(
                         ResourcesCompat.getDrawable(
                             resources,
-                            leaf.icon!!,
+                            leaf.resource!!,
                             null
                         )
                     )
@@ -103,11 +104,7 @@ class QuickLinksFragment : Fragment() {
     }
 
     private fun toast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
+
     }
 
     private fun refresh(

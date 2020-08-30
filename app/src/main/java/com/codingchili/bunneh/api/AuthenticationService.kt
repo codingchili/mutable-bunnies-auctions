@@ -1,6 +1,7 @@
 package com.codingchili.bunneh.api
 
 import com.codingchili.bunneh.model.Authentication
+import com.codingchili.bunneh.model.User
 import io.reactivex.rxjava3.core.Single
 
 /**
@@ -29,4 +30,5 @@ interface AuthenticationService {
      * Clear login state.
      */
     fun logout()
+    fun user(): User?
 }

@@ -18,9 +18,17 @@ class LocalAuthenticationService : AuthenticationService {
             user = User(username.toLowerCase(), username)
         )
         return single(CompletableFuture.supplyAsync {
-            Thread.sleep(1500)
-            authenticated!!
+            Thread.sleep(MockData.delay)
+            if (password != "wrong") {
+                authenticated!!
+            } else {
+                throw Exception("Wrong password.")
+            }
         })
+    }
+
+    override fun user(): User? {
+        return authenticated?.user
     }
 
     override fun current(): Authentication? {

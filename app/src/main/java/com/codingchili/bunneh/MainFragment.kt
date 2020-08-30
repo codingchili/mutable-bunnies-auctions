@@ -16,6 +16,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainFragment : Fragment() {
     private lateinit var navController: NavController
 
+    companion object {
+        const val TAG = "main"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
