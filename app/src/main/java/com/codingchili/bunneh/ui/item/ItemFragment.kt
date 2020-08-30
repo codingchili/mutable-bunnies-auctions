@@ -57,11 +57,6 @@ class ItemFragment : Fragment() {
                                 FragmentManager.POP_BACK_STACK_INCLUSIVE
                             )
                             requireActivity().supportFragmentManager.beginTransaction()
-                                .setCustomAnimations(
-                                    android.R.anim.fade_in,
-                                    android.R.anim.fade_out
-                                )
-                                .remove(this)
                                 .replace(R.id.root, AuctionFragment().load(response))
                                 .addToBackStack(AuctionFragment.TAG)
                                 .commit()

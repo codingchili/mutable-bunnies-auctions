@@ -60,7 +60,6 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                     state = AuctionState.fromAuction(auction, user)
                     entry.findViewById<ImageView>(R.id.status_icon).setImageResource(state.icon)
                 })
-
                 return entry
             }
         }
