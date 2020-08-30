@@ -14,8 +14,8 @@ class MockData {
             rarity = ItemRarity.rare,
             quantity = 1,
             name = "Spacewand +2",
-            slot = "weapon",
-            type = Type.weapon
+            slot = Type.weapon,
+            type = "staff"
         )
 
         val greenApple = Item(
@@ -23,7 +23,7 @@ class MockData {
             rarity = ItemRarity.rare,
             quantity = 99,
             name = "Green Apple",
-            type = Type.consumable
+            slot = Type.consumable
         )
 
         val flamingStick = Item(
@@ -31,8 +31,8 @@ class MockData {
             rarity = ItemRarity.legendary,
             quantity = 1,
             name = "Flaming Stick +4",
-            slot = "weapon",
-            type = Type.weapon
+            slot = Type.weapon,
+            type = "staff"
         )
 
         val sauring = Item(
@@ -50,17 +50,17 @@ class MockData {
             quantity = 1,
             name = "Leafy Branch +1",
             slot = "weapon",
-            type = Type.weapon
+            type = "staff"
         )
 
         init {
             auctions.addAll(
                 listOf(
-                    Auction(initial = 25, item = flamingStick),
-                    Auction(initial = 25, item = branch),
-                    Auction(initial = 25, item = sauring),
-                    Auction(initial = 25, item = greenApple),
-                    Auction(initial = 25, item = spacewand)
+                    Auction(id = "1", initial = 25, item = flamingStick),
+                    Auction(id = "2", initial = 25, item = branch),
+                    Auction(id = "3", initial = 25, item = sauring),
+                    Auction(id = "4", initial = 25, item = greenApple),
+                    Auction(id = "5", initial = 25, item = spacewand)
                 )
             )
         }

@@ -39,5 +39,10 @@ interface AuctionService {
     /**
      * Subscribes to notifications from the server.
      */
-    fun alerts(): Flowable<Notification>
+    fun notifications(): Single<List<Notification>>
+
+    /**
+     * Retrieve an auction by its id.
+     */
+    fun findById(auctionId: String): Single<Auction>
 }

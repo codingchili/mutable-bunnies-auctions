@@ -2,11 +2,13 @@ package com.codingchili.bunneh.ui.auction
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Chronometer
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -18,14 +20,10 @@ import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.api.AuthenticationService
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.AuctionState
-import com.codingchili.bunneh.ui.transform.Type
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
-import com.codingchili.bunneh.ui.transform.RecyclerAdapter
-import com.codingchili.bunneh.ui.transform.ServerResource
-import com.codingchili.bunneh.ui.transform.formatValue
-import com.codingchili.bunneh.ui.transform.setupChronometerFromAuction
+import com.codingchili.bunneh.ui.transform.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.function.Consumer
@@ -102,7 +100,6 @@ class AuctionFragment : Fragment() {
         })
 
         ServerResource.icon(fragment.findViewById(R.id.item_image), item.icon)
-        Type.updateLabels(fragment, item)
         updateRelatedHits(fragment)
         updateAuctionState(fragment)
     }
@@ -155,15 +152,21 @@ class AuctionFragment : Fragment() {
         val status = fragment.findViewById<MaterialButton>(R.id.status)
 
         if (state.interative()) {
-            status.visibility = View.GONE
-            button.visibility = View.VISIBLE
-            button.text = getString(state.string)
-            button.backgroundTintList =
-                ColorStateList.valueOf(requireContext().getColor(state.color))
+            status.visibility = View.INVISIBLE
 
-            button.setOnClickListener {
-                NumberInputDialog(onBidHandler(fragment))
-                    .show(requireActivity().supportFragmentManager, Dialogs.TAG)
+            // hide bid button if its the users own auction.
+            if (auction.seller != authentication.user()) {
+                button.visibility = View.VISIBLE
+                button.text = getString(state.string)
+                button.backgroundTintList =
+                    ColorStateList.valueOf(requireContext().getColor(state.color))
+
+                button.setOnClickListener {
+                    NumberInputDialog(onBidHandler(fragment))
+                        .show(requireActivity().supportFragmentManager, Dialogs.TAG)
+                }
+            } else {
+                button.visibility = View.GONE
             }
         } else {
             button.visibility = View.GONE

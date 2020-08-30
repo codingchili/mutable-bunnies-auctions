@@ -23,9 +23,7 @@ class Type {
                 view.context,
                 view.findViewById(R.id.item_slot),
                 item.slot,
-                getColorForItemType(
-                    item
-                )
+                getColorForItemSlot(item)
             )
             setLabel(
                 view.context,
@@ -41,7 +39,7 @@ class Type {
             )
         }
 
-        private fun getColorForItemType(item: Item) = when (item.type) {
+        private fun getColorForItemSlot(item: Item) = when (item.slot) {
             consumable -> R.color.type_consumable
             weapon -> R.color.type_weapon
             armor -> R.color.type_armor

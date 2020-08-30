@@ -15,11 +15,13 @@ import kotlin.math.max
  */
 class LocalAuctionService : AuctionService {
     private var auctions = ArrayList<Auction>()
+    private var notifications = ArrayList<Notification>()
     private lateinit var inventory: Inventory
 
     init {
         val authentication = AuthenticationService.instance
         val user = authentication.user()
+        notifications.add(Notification("This is notification without any link."))
 
         // temporary authentication as another user to mock some auctions.
         authentication.authenticate("Dr.Meow", "").subscribe { response, error ->
@@ -27,7 +29,7 @@ class LocalAuctionService : AuctionService {
             MockData.auctions.forEach { auction -> auction(auction.item, auction.initial) }
 
             // switch back to original user.
-            Handler(Looper.getMainLooper()).postDelayed({
+            Handler().postDelayed({
                 authentication.authenticate(user!!.name, "").subscribe { _, _ ->
                     resetInventory()
                 }
@@ -80,6 +82,13 @@ class LocalAuctionService : AuctionService {
                 inventory.funds -= high.value
             }
         }
+        notifications.add(
+            Notification(
+                message = "Auction for item <b>${auction.item.name}</b> finished at <b>${high?.value ?: auction.initial}</b>",
+                auctionId = auction.id,
+                icon = auction.item.icon
+            )
+        )
     }
 
     override fun auction(item: Item, value: Int): Single<Auction> {
@@ -135,7 +144,16 @@ class LocalAuctionService : AuctionService {
     // auction end sim = post value and item to inventory
     // auction end sim = update liquidity
 
-    override fun alerts(): Flowable<Notification> {
-        return flow(CompletableFuture.supplyAsync { Notification(message = "cool") })
+    override fun notifications(): Single<List<Notification>> {
+        return single<List<Notification>>(CompletableFuture.supplyAsync {
+            Thread.sleep(MockData.delay)
+            notifications
+        })
+    }
+
+    override fun findById(auctionId: String): Single<Auction> {
+        return single(CompletableFuture.supplyAsync {
+            auctions.find { it.id == auctionId } ?: throw Exception("Auction not found.")
+        })
     }
 }

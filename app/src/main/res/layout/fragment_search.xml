@@ -9,6 +9,7 @@
         android:id="@+id/progress_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="192dp"
         android:background="@color/card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,12 +17,21 @@
         app:layout_constraintTop_toTopOf="parent"
         android:elevation="10dp">
 
+        <ImageView
+            android:id="@+id/container_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_search"
+            android:layout_marginTop="8dp"
+            android:layout_centerHorizontal="true"/>
+
         <TextView
             android:id="@+id/progress_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="No content here, try searching."/>
+            android:layout_below="@id/container_icon"
+            android:layout_centerHorizontal="true"
+            android:padding="12dp"/>
 
         <ProgressBar
             android:id="@+id/progress_search"

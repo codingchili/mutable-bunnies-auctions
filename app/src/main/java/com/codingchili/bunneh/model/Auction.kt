@@ -7,10 +7,9 @@ class Auction(
     val initial: Int = 0,
     val item: Item,
     val seller : User? = User("ethercat", "Ethercat"),
-    val end: Long = Date().time + 60 * 1000
+    val end: Long = Date().time + 60 * 1000,
+    val id: String? = UUID.randomUUID().toString()
 ) {
-    val id = "0xFF"
-
     fun high(): Int {
         return max(initial, bids.firstOrNull()?.value ?: 0)
     }

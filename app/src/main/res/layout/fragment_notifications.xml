@@ -7,18 +7,56 @@
     tools:context=".ui.notifications.NotificationsFragment">
 
     <RelativeLayout
-        android:layout_width="391dp"
-        android:layout_height="381dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/header"
+        <RelativeLayout
+            android:id="@+id/no_hits_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notifications"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textSize="22sp"/>
+            android:minWidth="192dp"
+            android:background="@color/card"
+            android:layout_centerInParent="true"
+            android:elevation="10dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/container_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_auction_overbid"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/container_icon"
+                android:layout_centerHorizontal="true"
+                android:padding="12dp"
+                android:text="No notifications found."/>
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/accent"
+            android:elevation="32dp"
+            android:visibility="gone"/>
+
+        <ListView
+            android:id="@+id/notification_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

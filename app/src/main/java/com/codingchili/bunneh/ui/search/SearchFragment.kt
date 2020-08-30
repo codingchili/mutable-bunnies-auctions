@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.model.Auction
+import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.*
 import com.codingchili.bunneh.ui.transform.Sorter
@@ -103,22 +104,27 @@ class SearchFragment : Fragment() {
     }
 
     private fun search(query: String, view: View) {
-        view.findViewById<View>(R.id.progress_container).visibility = View.VISIBLE
+        val container = view.findViewById<View>(R.id.progress_container)
         val text = view.findViewById<TextView>(R.id.progress_text)
         val progress = view.findViewById<ProgressBar>(R.id.progress_search)
 
         text.text = "Searching for '${query}' .."
         progress.visibility = View.VISIBLE
+        container.visibility = View.VISIBLE
 
         service.search(query).subscribe { auctions, e ->
             if (e == null) {
                 hits.auctions.value = auctions
             } else {
-                val adapter =
-                    view.findViewById<GridView>(R.id.search_hits).adapter as ArrayAdapter<Auction>
-                adapter.clear()
-                text.text = e.message
+                AppToast.show(requireContext(), e.message!!)
                 progress.visibility = View.GONE
+
+                if (hits.auctions.value!!.isNotEmpty()) {
+                    container.visibility = View.GONE
+                } else {
+                    // trigger reset.
+                    hits.auctions.value = hits.auctions.value
+                }
             }
         }
     }
