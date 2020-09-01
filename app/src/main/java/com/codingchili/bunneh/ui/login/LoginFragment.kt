@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,13 +28,14 @@ import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 import java.util.*
 import java.util.function.Consumer
 
 
 class LoginFragment : Fragment() {
-    val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.unset)) }
-    val authentication = AuthenticationService.instance
+    private val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.unset)) }
+    private val authentication = AuthenticationService.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +66,7 @@ class LoginFragment : Fragment() {
                 if (Connector.server != null) {
                     authenticate(fragment)
                 } else {
-                    AppToast.show(requireContext(), getString(R.string.no_region_selected))
+                    AppToast.show(context, getString(R.string.no_region_selected))
                 }
             }
 
@@ -138,7 +138,7 @@ class LoginFragment : Fragment() {
                     }
                 }
             } catch (e: Throwable) {
-                AppToast.show(requireContext(), e.message!!)
+                AppToast.show(context, e.message)
             }
         }.run()
     }
@@ -153,16 +153,17 @@ class LoginFragment : Fragment() {
         val overlay = fragment.findViewById<View>(R.id.overlay)
         overlay.visibility = View.VISIBLE
 
-        authentication.authenticate(username, password).subscribe { authentication, error ->
-            if (error == null) {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.root, MainFragment())
-                    .addToBackStack(MainFragment.TAG)
-                    .commit()
-            } else {
-                AppToast.show(requireContext(), error.message!!, Toast.LENGTH_LONG)
+        authentication.authenticate(username, password).bindToLifecycle(fragment)
+            .subscribe { authentication, e ->
+                if (e == null) {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.root, MainFragment())
+                        .addToBackStack(MainFragment.TAG)
+                        .commit()
+                } else {
+                    AppToast.show(context, e.message)
+                }
+                overlay.visibility = View.GONE
             }
-            overlay.visibility = View.GONE
-        }
     }
 }

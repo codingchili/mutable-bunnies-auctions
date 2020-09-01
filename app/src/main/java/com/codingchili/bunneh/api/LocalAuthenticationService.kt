@@ -4,6 +4,7 @@ import com.codingchili.bunneh.model.Authentication
 import com.codingchili.bunneh.model.User
 import com.codingchili.bunneh.model.single
 import io.reactivex.rxjava3.core.Single
+import java.util.*
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -14,12 +15,12 @@ class LocalAuthenticationService : AuthenticationService {
 
     override fun authenticate(username: String, password: String): Single<Authentication> {
         authenticated = Authentication(
-            token = "foo",
-            user = User(username.toLowerCase(), username)
+            token = "#!foo$",
+            user = User(username.toLowerCase(Locale.getDefault()), username)
         )
         return single(CompletableFuture.supplyAsync {
             Thread.sleep(MockData.delay)
-            if (password != "wrong") {
+            if (password == username) {
                 authenticated!!
             } else {
                 throw Exception("Wrong password.")

@@ -3,13 +3,16 @@ package com.codingchili.bunneh
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.codingchili.bunneh.model.ContinentMapper
 import com.codingchili.bunneh.ui.login.LoginFragment
+import com.codingchili.bunneh.ui.search.SearchViewModel
 
 class MainActivity : AppCompatActivity() {
+    private val hits by viewModels<SearchViewModel>()
     private lateinit var main: Fragment
     private var region : String? = null
 

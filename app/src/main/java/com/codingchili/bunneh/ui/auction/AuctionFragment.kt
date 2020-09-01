@@ -23,15 +23,17 @@ import com.codingchili.bunneh.model.AuctionState
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
+import com.codingchili.bunneh.ui.links.AuctionListFragment
 import com.codingchili.bunneh.ui.transform.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 import java.util.function.Consumer
 
 
 class AuctionFragment : Fragment() {
     private var authentication = AuthenticationService.instance
-    private var auctions = AuctionService.instance
+    private var service = AuctionService.instance
     private lateinit var auction: Auction
     private var hits: List<Auction> = ArrayList()
 
@@ -48,6 +50,31 @@ class AuctionFragment : Fragment() {
         this.auction = auction
         this.hits = hits
         return this
+    }
+
+    private fun handleSellerClick(fragment: View): View.OnClickListener {
+        return View.OnClickListener {
+            service.search("seller=${auction.seller.name}}").bindToLifecycle(fragment)
+                .subscribe { response, e ->
+                    if (e == null) {
+                        if (response.isEmpty()) {
+                            AppToast.show(context, "No auctions found.")
+                        } else {
+                            requireActivity().title = "Auctions by ${auction.seller.name}"
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .setCustomAnimations(
+                                    android.R.anim.fade_in,
+                                    android.R.anim.fade_out
+                                )
+                                .add(R.id.root, AuctionListFragment(response))
+                                .addToBackStack(AuctionListFragment.TAG)
+                                .commit()
+                        }
+                    } else {
+                        AppToast.show(context, e.message)
+                    }
+                }
+        }
     }
 
     override fun onCreateView(
@@ -71,10 +98,15 @@ class AuctionFragment : Fragment() {
         val item = auction.item
         requireActivity().title = item.name
 
+        val seller = fragment.findViewById<TextView>(R.id.item_seller)
+        seller.text = auction.seller.name
+
+        // list sellers other auctions if available.
+        seller.setOnClickListener(handleSellerClick(fragment))
+
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
         fragment.findViewById<TextView>(R.id.item_stats).text = item.stats.toString()
         fragment.findViewById<TextView>(R.id.item_bid).text = formatValue(auction.high())
-        fragment.findViewById<TextView>(R.id.item_seller).text = auction.seller!!.name
         fragment.findViewById<TextView>(R.id.auction_bid_count).text = auction.bids.size.toString()
 
         fragment.findViewById<RelativeLayout>(R.id.bid_list).setOnClickListener {
@@ -90,8 +122,34 @@ class AuctionFragment : Fragment() {
             quantity.visibility = View.GONE
         }
 
+        var favorited = false
+
+        // hide until favorite status is loaded.
+        val favorite = fragment.findViewById<ImageView>(R.id.auction_favorite)
+        favorite.visibility = View.GONE
+
+        service.favorites().bindToLifecycle(fragment).subscribe { favorites, e ->
+            if (e == null) {
+                fragment.findViewById<ImageView>(R.id.auction_favorite).visibility = View.VISIBLE
+                favorited = (favorites.contains(auction))
+                updateFavorite(favorite, favorited)
+            }
+        }
+
         fragment.findViewById<ImageView>(R.id.auction_favorite).setOnClickListener {
-            it.background = ResourcesCompat.getDrawable(resources, R.drawable.icon_star, null)
+            // immediate feedback to improve responsiveness.
+            favorited = !favorited
+            updateFavorite(it as ImageView, favorited)
+
+            service.favorite(auction, favorited).bindToLifecycle(fragment)
+                .subscribe { response, e ->
+                    if (e != null) {
+                        // reverse on error
+                        favorited = !favorited
+                        updateFavorite(it, favorited)
+                        AppToast.show(context, e.message)
+                    }
+                }
         }
 
         val chronometer = fragment.findViewById<Chronometer>(R.id.auction_end)
@@ -100,8 +158,29 @@ class AuctionFragment : Fragment() {
         })
 
         ServerResource.icon(fragment.findViewById(R.id.item_image), item.icon)
+        Type.updateLabels(fragment, item)
         updateRelatedHits(fragment)
         updateAuctionState(fragment)
+    }
+
+    private fun updateFavorite(view: ImageView, favorite: Boolean) {
+        if (favorite) {
+            view.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.icon_star,
+                    null
+                )
+            )
+        } else {
+            view.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.icon_star_outline,
+                    null
+                )
+            )
+        }
     }
 
     private fun updateRelatedHits(fragment: View) {
@@ -136,37 +215,38 @@ class AuctionFragment : Fragment() {
 
     private fun onBidHandler(fragment: View): Consumer<Int> {
         return Consumer<Int> {
-            auctions.bid(it, auction).subscribe { response, error ->
-                if (error == null) {
+            service.bid(it, auction).bindToLifecycle(fragment).subscribe { response, e ->
+                if (e == null) {
                     update(response, fragment)
                 } else {
-                    AppToast.show(requireContext(), error.message!!)
+                    AppToast.show(context, e.message)
                 }
             }
         }
     }
 
     private fun updateAuctionState(fragment: View) {
-        val state = AuctionState.fromAuction(auction, authentication.user()!!)
+        val user = authentication.user()!!
+        val state = AuctionState.fromAuction(auction, user)
         val button = fragment.findViewById<MaterialButton>(R.id.button)
         val status = fragment.findViewById<MaterialButton>(R.id.status)
 
-        if (state.interative()) {
+        if (state.interative() && user != auction.seller) {
             status.visibility = View.INVISIBLE
+            button.visibility = View.VISIBLE
 
-            // hide bid button if its the users own auction.
-            if (auction.seller != authentication.user()) {
-                button.visibility = View.VISIBLE
-                button.text = getString(state.string)
-                button.backgroundTintList =
-                    ColorStateList.valueOf(requireContext().getColor(state.color))
-
-                button.setOnClickListener {
-                    NumberInputDialog(onBidHandler(fragment))
-                        .show(requireActivity().supportFragmentManager, Dialogs.TAG)
-                }
+            // check if user already has bid once.
+            if (auction.bids.find { it.owner == user } == null) {
+                button.text = getString(R.string.auction_bid)
             } else {
-                button.visibility = View.GONE
+                button.text = getString(R.string.auction_overbid)
+            }
+            button.backgroundTintList =
+                ColorStateList.valueOf(requireContext().getColor(state.color))
+
+            button.setOnClickListener {
+                NumberInputDialog(onBidHandler(fragment))
+                    .show(requireActivity().supportFragmentManager, Dialogs.TAG)
             }
         } else {
             button.visibility = View.GONE

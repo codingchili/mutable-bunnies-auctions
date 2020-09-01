@@ -10,13 +10,11 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
-import com.codingchili.bunneh.api.MockData
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.model.Notification
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.transform.ServerResource
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 
 class NotificationsFragment : Fragment() {
     private val service = AuctionService.instance
@@ -49,17 +47,21 @@ class NotificationsFragment : Fragment() {
                     if (notification.auctionId != null) {
                         row.setOnClickListener {
                             progress.visibility = View.VISIBLE
-                            service.findById(notification.auctionId!!).subscribe { response, e ->
-                                if (e == null) {
-                                    requireActivity().supportFragmentManager.beginTransaction()
-                                        .add(R.id.root, AuctionFragment().load(response, listOf()))
-                                        .addToBackStack(AuctionFragment.TAG)
-                                        .commit()
-                                } else {
-                                    AppToast.show(requireContext(), e.message!!)
+                            service.findById(notification.auctionId!!).bindToLifecycle(fragment)
+                                .subscribe { response, e ->
+                                    if (e == null) {
+                                        requireActivity().supportFragmentManager.beginTransaction()
+                                            .add(
+                                                R.id.root,
+                                                AuctionFragment().load(response, listOf())
+                                            )
+                                            .addToBackStack(AuctionFragment.TAG)
+                                            .commit()
+                                    } else {
+                                        AppToast.show(context, e.message)
+                                    }
+                                    progress.visibility = View.GONE
                                 }
-                                progress.visibility = View.GONE
-                            }
                         }
                     } else {
                         row.findViewById<View>(R.id.navigate_next).visibility = View.INVISIBLE
@@ -78,7 +80,7 @@ class NotificationsFragment : Fragment() {
         val noHitsContainer = fragment.findViewById<View>(R.id.no_hits_container)
 
         progress.visibility = View.VISIBLE
-        service.notifications().subscribe { response, e ->
+        service.notifications().bindToLifecycle(fragment).subscribe { response, e ->
             progress.visibility = View.GONE
             if (e == null) {
                 if (response.isEmpty()) {
@@ -89,7 +91,7 @@ class NotificationsFragment : Fragment() {
                     adapter.addAll(response)
                 }
             } else {
-                AppToast.show(requireContext(), e.message!!)
+                AppToast.show(context, e.message)
             }
         }
 

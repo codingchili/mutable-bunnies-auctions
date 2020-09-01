@@ -2,48 +2,24 @@ package com.codingchili.bunneh.api
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.codingchili.bunneh.model.*
-import io.reactivex.rxjava3.core.Flowable
+import com.codingchili.bunneh.ui.transform.formatValue
 import io.reactivex.rxjava3.core.Single
 import java.time.Instant
 import java.util.concurrent.CompletableFuture
 import kotlin.math.max
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 /**
  * Mock implementation of the auction service.
  */
 class LocalAuctionService : AuctionService {
     private var auctions = ArrayList<Auction>()
-    private var notifications = ArrayList<Notification>()
-    private lateinit var inventory: Inventory
-
-    init {
-        val authentication = AuthenticationService.instance
-        val user = authentication.user()
-        notifications.add(Notification("This is notification without any link."))
-
-        // temporary authentication as another user to mock some auctions.
-        authentication.authenticate("Dr.Meow", "").subscribe { response, error ->
-            resetInventory()
-            MockData.auctions.forEach { auction -> auction(auction.item, auction.initial) }
-
-            // switch back to original user.
-            Handler().postDelayed({
-                authentication.authenticate(user!!.name, "").subscribe { _, _ ->
-                    resetInventory()
-                }
-            }, 500)
-        }
-    }
-
-    private fun resetInventory() {
-        inventory = Inventory(
-            items = listOf(MockData.branch, MockData.flamingStick, MockData.spacewand),
-            liquidity = 7600000,
-            funds = 7600000
-        )
-    }
+    private var notifications = HashMap<User, ArrayList<Notification>>()
+    private var inventory = HashMap<User, Inventory>()
+    private var authentication = AuthenticationService.instance
+    private var favorites = HashMap<User, MutableSet<Auction>>()
 
     override fun search(query: String): Single<List<Auction>> {
         return when (query) {
@@ -64,37 +40,135 @@ class LocalAuctionService : AuctionService {
         }
     }
 
-    override fun inventory(): Flowable<Inventory> {
-        return flow(CompletableFuture.supplyAsync { inventory })
+    private fun userFavorites(): MutableSet<Auction> {
+        return favorites.computeIfAbsent(authentication.user()!!) { HashSet<Auction>() }
+    }
+
+    private fun userNotifications(): MutableList<Notification> {
+        return userNotifications(authentication.user()!!)
+    }
+
+    private fun userNotifications(user: User): MutableList<Notification> {
+        return notifications.computeIfAbsent(user) { ArrayList() }
+    }
+
+    private fun userInventory(): Inventory {
+        return userInventory(authentication.user()!!)
+    }
+
+    private fun userInventory(user: User): Inventory {
+        return inventory.computeIfAbsent(user) {
+            val funds = Random.nextInt(100_000..24_000_000)
+            Inventory(
+                funds = funds,
+                liquidity = funds,
+                items = listOf(
+                    MockData.randomItem(),
+                    MockData.randomItem(),
+                    MockData.randomItem()
+                )
+            )
+        }
+    }
+
+    override fun favorite(auction: Auction, add: Boolean): Single<Response> {
+        return single(CompletableFuture.supplyAsync {
+            Thread.sleep(MockData.delay)
+            if (add) {
+                userFavorites().add(auction)
+            } else {
+                userFavorites().remove(auction)
+            }
+            Response(success = true, message = "ok")
+        })
+    }
+
+    override fun favorites(): Single<Set<Auction>> {
+        return single<Set<Auction>>(CompletableFuture.supplyAsync {
+            Thread.sleep(MockData.delay)
+            userFavorites()
+        })
+    }
+
+    override fun inventory(): Single<Inventory> {
+        return single(CompletableFuture.supplyAsync {
+            Thread.sleep(MockData.delay)
+            userInventory()
+        })
     }
 
     private fun handleAuctionEnd(auction: Auction) {
-        val currentUser = AuthenticationService.instance.user()
         val high = auction.bids.firstOrNull()
+        val seller = userInventory(auction.seller)
 
-        // mock only active user
-        if (currentUser == auction.seller || high?.owner == currentUser) {
-            // return the item to inventory if currentUser won the auction or is author of high bid.
-            inventory.items = inventory.items.plus(auction.item)
+        if (high != null) {
+            val buyer = userInventory(high.owner)
+            buyer.items = buyer.items.plus(auction.item)
 
-            if (high != null) {
-                // currentUser has won another users auction, remove funds to balance liquidity.
-                inventory.funds -= high.value
+            buyer.funds -= high.value
+            seller.funds += high.value
+
+            notify(
+                auction.seller,
+                auction,
+                "<b>${auction.item.name}</b> was sold for <b>${formatValue(high.value)}</b>."
+            )
+            notify(
+                high.owner,
+                auction,
+                "Won auction for <b>${auction.item.name}</b> at <b>${formatValue(high.value)}</b>"
+            )
+
+            // notify all other losing bidders.
+            auction.bids.filterNot { it.owner == high.owner }
+                .sortedByDescending { it.value }
+                .distinctBy { it.owner }
+                .forEach { bid ->
+                    userInventory(bid.owner).liquidity += bid.value
+                    notify(
+                        bid.owner,
+                        auction,
+                        "Lost auction for <b>${auction.item.name}</b>, winning bid was <b>${formatValue(
+                            high.value
+                        )}</b>"
+                    )
+                }
+        } else {
+            seller.items = seller.items.plus(auction.item)
+            notify(
+                auction.seller,
+                auction,
+                "<b>${auction.item.name}</b> was not sold and returned to inventory."
+            )
+        }
+
+        // notify all users that favorited the auction but did not place any bids.
+        favorites.forEach { (user, favorites) ->
+            if (auction in favorites && auction.bids.find { it.owner == user } == null) {
+                notify(
+                    user,
+                    auction,
+                    "Auction for <b>${auction.item.name}</b> finished at <b>${formatValue(high?.value ?: auction.initial)}</b>"
+                )
             }
         }
-        notifications.add(
+    }
+
+    private fun notify(user: User, auction: Auction, message: String) {
+        userNotifications(user).add(
             Notification(
-                message = "Auction for item <b>${auction.item.name}</b> finished at <b>${high?.value ?: auction.initial}</b>",
+                icon = auction.item.icon,
                 auctionId = auction.id,
-                icon = auction.item.icon
+                message = message
             )
         )
     }
 
     override fun auction(item: Item, value: Int): Single<Auction> {
         return single(CompletableFuture.supplyAsync {
-            val seller = AuthenticationService.instance.user()
+            val seller = AuthenticationService.instance.user()!!
             val auction = Auction(item = item, initial = value, seller = seller)
+            val inventory = userInventory()
 
             Handler(Looper.getMainLooper()).postDelayed({
                 handleAuctionEnd(auction)
@@ -112,6 +186,7 @@ class LocalAuctionService : AuctionService {
         return single(CompletableFuture.supplyAsync {
             val owner = AuthenticationService.instance.user()!!
             val highestBid = auction.bids.firstOrNull()?.value ?: 0
+            val inventory = userInventory()
 
             if (owner == auction.seller) {
                 throw Exception("Cannot bid on own auction.")
@@ -141,13 +216,10 @@ class LocalAuctionService : AuctionService {
         })
     }
 
-    // auction end sim = post value and item to inventory
-    // auction end sim = update liquidity
-
     override fun notifications(): Single<List<Notification>> {
         return single<List<Notification>>(CompletableFuture.supplyAsync {
             Thread.sleep(MockData.delay)
-            notifications
+            userNotifications()
         })
     }
 

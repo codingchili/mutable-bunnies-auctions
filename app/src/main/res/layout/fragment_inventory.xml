@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progress_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="32dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/accent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="76dp"
@@ -30,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:gravity="right"
-                    android:text="11,800,000 Ξ"
+                    android:text="… Ξ"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -42,7 +56,7 @@
                     android:layout_marginLeft="16dp"
                     android:alpha="0.64"
                     android:gravity="right"
-                    android:text="7,800,000 Ξ"
+                    android:text="… Ξ"
                     android:textSize="16sp" />
             </RelativeLayout>
 

@@ -106,7 +106,7 @@
                                 android:id="@+id/item_stats_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
+                                android:layout_marginLeft="16dp"
                                 android:layout_marginTop="8dp"
                                 android:text="Stats"
                                 android:textStyle="bold" />
@@ -185,7 +185,7 @@
                                 android:id="@+id/item_description_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
+                                android:layout_marginLeft="16dp"
                                 android:layout_marginTop="8dp"
                                 android:text="Description"
                                 android:textStyle="bold" />
@@ -212,8 +212,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:clickable="false"
+            android:enabled="false"
             android:layout_marginRight="4dp"
-            android:text="@string/unset"
+            android:text="Inventory"
             android:textColor="@color/accent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

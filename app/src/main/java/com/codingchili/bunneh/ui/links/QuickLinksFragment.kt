@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
@@ -13,6 +16,7 @@ import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.Divider
 import com.codingchili.bunneh.ui.dialog.NavigableTree
 import com.codingchili.bunneh.ui.dialog.auctionsFilterTree
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 
 /**
  * Fragment used to show a list of links to a set of auctions.
@@ -35,12 +39,10 @@ class QuickLinksFragment : Fragment() {
 
     private fun onRowClickListener(leaf: NavigableTree, fragment: View): View.OnClickListener {
         return View.OnClickListener {
-
             fragment.findViewById<View>(R.id.progress_search).visibility =
                 View.VISIBLE
 
-            service.search(leaf.name).subscribe { auctions, e ->
-
+            service.search(leaf.name).bindToLifecycle(fragment).subscribe { auctions, e ->
                 fragment.findViewById<View>(R.id.progress_search).visibility =
                     View.GONE
 
@@ -56,10 +58,10 @@ class QuickLinksFragment : Fragment() {
                             .addToBackStack(AuctionListFragment.TAG)
                             .commit()
                     } else {
-                        AppToast.show(requireContext(), getString(R.string.no_auctions_in_category))
+                        AppToast.show(context, getString(R.string.no_auctions_in_category))
                     }
                 } else {
-                    AppToast.show(requireContext(), e.message!!)
+                    AppToast.show(context, e.message)
                 }
             }
         }
@@ -101,10 +103,6 @@ class QuickLinksFragment : Fragment() {
                 return row
             }
         }
-    }
-
-    private fun toast(message: String) {
-
     }
 
     private fun refresh(

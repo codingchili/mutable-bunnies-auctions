@@ -1,11 +1,9 @@
 package com.codingchili.bunneh.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.GridView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -20,6 +18,7 @@ import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.*
 import com.codingchili.bunneh.ui.transform.Sorter
 import com.codingchili.bunneh.ui.transform.auctionGridAdapter
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 import java.util.function.Consumer
 
 /**
@@ -56,7 +55,7 @@ class SearchFragment : Fragment() {
         hits.auctions.observe(viewLifecycleOwner, Observer {
             fragment.findViewById<ProgressBar>(R.id.progress_search).visibility = View.GONE
 
-            if (it.size > 0) {
+            if (it.isNotEmpty()) {
                 fragment.findViewById<View>(R.id.progress_container).visibility = View.GONE
             } else {
                 fragment.findViewById<TextView>(R.id.progress_text).text =
@@ -87,7 +86,7 @@ class SearchFragment : Fragment() {
         view.findViewById<View>(R.id.sort).setOnClickListener {
             NavigableTreeDialog(
                 "Sort",
-                searchFilterTree,
+                sortAuctionsTree,
                 Consumer<NavigableTree> { leaf ->
                     sorter.ascending = leaf.name == getString(R.string.sort_ascending)
                     sorter.setMethodByName(requireContext(), leaf.parent!!.name)
@@ -112,11 +111,11 @@ class SearchFragment : Fragment() {
         progress.visibility = View.VISIBLE
         container.visibility = View.VISIBLE
 
-        service.search(query).subscribe { auctions, e ->
+        service.search(query).bindToLifecycle(view).subscribe { auctions, e ->
             if (e == null) {
                 hits.auctions.value = auctions
             } else {
-                AppToast.show(requireContext(), e.message!!)
+                AppToast.show(context, e.message)
                 progress.visibility = View.GONE
 
                 if (hits.auctions.value!!.isNotEmpty()) {

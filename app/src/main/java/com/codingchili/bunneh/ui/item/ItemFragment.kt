@@ -1,7 +1,6 @@
 package com.codingchili.bunneh.ui.item
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,15 @@ import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.api.AuthenticationService
 import com.codingchili.bunneh.model.Item
-import com.codingchili.bunneh.ui.transform.Type
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
 import com.codingchili.bunneh.ui.transform.ServerResource
+import com.codingchili.bunneh.ui.transform.Type
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 import java.util.function.Consumer
 
 class ItemFragment : Fragment() {
@@ -36,22 +36,21 @@ class ItemFragment : Fragment() {
         return this
     }
 
-    private val onAuctionHandler = Consumer<Int> { initialValue ->
-        Log.e("foo", "ON AUCTION?")
-        service.auction(item, initialValue).subscribe { response, e ->
-            Log.e("foo", "AUCTION CALL RETURN")
-
-            if (e == null) {
-                requireActivity().supportFragmentManager.popBackStack(
-                    ItemFragment.TAG,
-                    FragmentManager.POP_BACK_STACK_INCLUSIVE
-                )
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.root, AuctionFragment().load(response))
-                    .addToBackStack(AuctionFragment.TAG)
-                    .commit()
-            } else {
-                AppToast.show(requireContext(), e.message!!)
+    private fun auctionHandler(view: View): Consumer<Int> {
+        return Consumer<Int> { initialValue ->
+            service.auction(item, initialValue).bindToLifecycle(view).subscribe { response, e ->
+                if (e == null) {
+                    requireActivity().supportFragmentManager.popBackStack(
+                        ItemFragment.TAG,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.root, AuctionFragment().load(response))
+                        .addToBackStack(AuctionFragment.TAG)
+                        .commit()
+                } else {
+                    AppToast.show(context, e.message)
+                }
             }
         }
     }
@@ -66,12 +65,11 @@ class ItemFragment : Fragment() {
         requireActivity().title = item.name
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
         fragment.findViewById<TextView>(R.id.item_stats).text = item.stats.toString()
-        fragment.findViewById<TextView>(R.id.item_owner).text =
-            authentication.user()?.name
-
+        /*fragment.findViewById<TextView>(R.id.item_owner).text =
+            authentication.user()?.name*/
 
         fragment.findViewById<MaterialButton>(R.id.button_sell).setOnClickListener {
-            NumberInputDialog(onAuctionHandler)
+            NumberInputDialog(auctionHandler(fragment))
                 .show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
 

@@ -13,6 +13,7 @@ import com.codingchili.bunneh.model.AuctionState
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.transform.renderItemThumbnail
 import com.codingchili.bunneh.ui.transform.setupChronometerFromAuction
+import java.time.Instant
 
 class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
     companion object {
@@ -64,7 +65,13 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
             }
         }
         list.adapter = adapter
-        adapter.addAll(auctions.sortedBy { it.end })
+        adapter.addAll(auctions.sortedBy {
+            if (it.finished()) {
+                it.end
+            } else {
+                it.end - Instant.now().toEpochMilli()
+            }
+        })
         return fragment
     }
 }

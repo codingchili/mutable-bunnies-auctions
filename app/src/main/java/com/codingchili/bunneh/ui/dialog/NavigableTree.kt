@@ -41,7 +41,17 @@ val auctionsFilterTree =
         NavigableTree(name = "Lost", resource = R.drawable.icon_auction_lost)
     )
 
-val searchFilterTree =
+val sortItemsTree =
+    listOf(
+        NavigableTree(name = "Name")
+            .add(NavigableTree(name = "Ascending"))
+            .add(NavigableTree(name = "Descending")),
+        NavigableTree(name = "Rarity")
+            .add(NavigableTree(name = "Ascending"))
+            .add(NavigableTree(name = "Descending"))
+    )
+
+val sortAuctionsTree =
     listOf(
         NavigableTree(name = "Time left")
             .add(NavigableTree(name = "Ascending"))

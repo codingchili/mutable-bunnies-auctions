@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -13,16 +14,18 @@ import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.model.Inventory
 import com.codingchili.bunneh.model.Item
+import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.*
 import com.codingchili.bunneh.ui.item.ItemFragment
 import com.codingchili.bunneh.ui.transform.Sorter
 import com.codingchili.bunneh.ui.transform.formatValue
 import com.codingchili.bunneh.ui.transform.itemGridAdapter
+import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 import java.util.function.Consumer
 
-class InventoryFragment() : Fragment() {
+class InventoryFragment : Fragment() {
     private val service = AuctionService.instance
-    private var inventory = MutableLiveData<Inventory>(Inventory())
+    private var inventory = MutableLiveData<Inventory>()
     private val sorter = Sorter()
 
     override fun onCreateView(
@@ -34,6 +37,7 @@ class InventoryFragment() : Fragment() {
         val grid = fragment.findViewById<GridView>(R.id.inventory_items)
         val funds = fragment.findViewById<TextView>(R.id.currency_total)
         val liquidity = fragment.findViewById<TextView>(R.id.currency_available)
+        val progress = fragment.findViewById<ProgressBar>(R.id.progress_search)
 
         fragment.findViewById<View>(R.id.currency_container).setOnClickListener {
             InformationDialog(R.string.liquidity_title, R.string.liquidity_text)
@@ -43,11 +47,14 @@ class InventoryFragment() : Fragment() {
         fragment.findViewById<View>(R.id.sort).setOnClickListener {
             NavigableTreeDialog(
                 "Sort",
-                searchFilterTree,
+                sortItemsTree,
                 Consumer<NavigableTree> { leaf ->
                     sorter.ascending = leaf.name == getString(R.string.sort_ascending)
                     sorter.setMethodByName(requireContext(), leaf.parent!!.name)
-                    inventory.value = applySort(inventory.value!!)
+
+                    if (inventory.value != null) {
+                        inventory.value = applySort(inventory.value!!)
+                    }
                 }
             ).show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
@@ -74,7 +81,15 @@ class InventoryFragment() : Fragment() {
             adapter.notifyDataSetChanged()
         })
 
-        service.inventory().subscribe { inventory.value = it }
+        progress.visibility = View.VISIBLE
+        service.inventory().bindToLifecycle(fragment).subscribe { response, e ->
+            if (e == null) {
+                inventory.value = response
+            } else {
+                AppToast.show(context, e.message)
+            }
+            progress.visibility = View.GONE
+        }
         return fragment
     }
 

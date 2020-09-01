@@ -1,10 +1,6 @@
 package com.codingchili.bunneh.api
 
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Inventory
-import com.codingchili.bunneh.model.Item
-import com.codingchili.bunneh.model.Notification
-import io.reactivex.rxjava3.core.Flowable
+import com.codingchili.bunneh.model.*
 import io.reactivex.rxjava3.core.Single
 
 /**
@@ -24,7 +20,7 @@ interface AuctionService {
     /**
      * Returns the current users bank inventory.
      */
-    fun inventory(): Flowable<Inventory>
+    fun inventory(): Single<Inventory>
 
     /**
      * Puts an item up for auction with the given initial value.
@@ -45,4 +41,14 @@ interface AuctionService {
      * Retrieve an auction by its id.
      */
     fun findById(auctionId: String): Single<Auction>
+
+    /**
+     *
+     */
+    fun favorite(auction: Auction, add: Boolean): Single<Response>
+
+    /**
+     *
+     */
+    fun favorites(): Single<Set<Auction>>
 }

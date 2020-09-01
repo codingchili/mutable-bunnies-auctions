@@ -3,11 +3,12 @@ package com.codingchili.bunneh.api
 import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.model.ItemRarity
+import com.codingchili.bunneh.model.User
 import com.codingchili.bunneh.ui.transform.Type
 
 class MockData {
     companion object {
-        const val delay = 1200L
+        const val delay = 950L
         val auctions = ArrayList<Auction>()
         val spacewand = Item(
             icon = "wand_1.png",
@@ -53,14 +54,20 @@ class MockData {
             type = "staff"
         )
 
+        fun randomItem(): Item {
+            return listOf(branch, sauring, spacewand, flamingStick, greenApple).random()
+        }
+
+        val seller = User("admin", "admin")
+
         init {
             auctions.addAll(
                 listOf(
-                    Auction(id = "1", initial = 25, item = flamingStick),
-                    Auction(id = "2", initial = 25, item = branch),
-                    Auction(id = "3", initial = 25, item = sauring),
-                    Auction(id = "4", initial = 25, item = greenApple),
-                    Auction(id = "5", initial = 25, item = spacewand)
+                    Auction(id = "1", initial = 25, item = flamingStick, seller = seller),
+                    Auction(id = "2", initial = 25, item = branch, seller = seller),
+                    Auction(id = "3", initial = 25, item = sauring, seller = seller),
+                    Auction(id = "4", initial = 25, item = greenApple, seller = seller),
+                    Auction(id = "5", initial = 25, item = spacewand, seller = seller)
                 )
             )
         }
