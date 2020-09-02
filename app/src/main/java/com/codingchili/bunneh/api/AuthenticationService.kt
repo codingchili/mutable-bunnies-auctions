@@ -1,6 +1,6 @@
 package com.codingchili.bunneh.api
 
-import com.codingchili.core.security.Account
+import com.codingchili.bunneh.api.protocol.AuthenticationResponse
 import com.codingchili.core.security.Token
 import io.reactivex.rxjava3.core.Single
 

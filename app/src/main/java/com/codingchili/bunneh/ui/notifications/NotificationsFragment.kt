@@ -10,7 +10,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
-import com.codingchili.bunneh.model.Notification
+import com.codingchili.banking.model.Notification
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.transform.ServerResource

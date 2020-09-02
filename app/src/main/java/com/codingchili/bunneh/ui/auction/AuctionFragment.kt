@@ -142,7 +142,7 @@ class AuctionFragment : Fragment() {
             updateFavorite(it as ImageView, favorited)
 
             service.favorite(auction, favorited).bindToLifecycle(fragment)
-                .subscribe { response, e ->
+                .subscribe { _, e ->
                     if (e != null) {
                         // reverse on error
                         favorited = !favorited

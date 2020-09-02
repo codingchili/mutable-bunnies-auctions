@@ -1,5 +1,7 @@
-package com.codingchili.bunneh.api
+package com.codingchili.bunneh.api.mock
 
+import com.codingchili.bunneh.api.protocol.AuthenticationResponse
+import com.codingchili.bunneh.api.AuthenticationService
 import com.codingchili.bunneh.model.single
 import com.codingchili.core.security.Account
 import com.codingchili.core.security.Token
@@ -9,11 +11,13 @@ import java.util.concurrent.CompletableFuture
 /**
  * Mock implementation of the authentication service.
  */
-class LocalAuthenticationService : AuthenticationService {
+class LocalAuthenticationService :
+    AuthenticationService {
     private var authenticated: AuthenticationResponse? = null
 
     override fun authenticate(username: String, password: String): Single<AuthenticationResponse> {
-        authenticated = AuthenticationResponse()
+        authenticated =
+            AuthenticationResponse()
         authenticated!!.account = Account(username, password)
 
         return single(CompletableFuture.supplyAsync {

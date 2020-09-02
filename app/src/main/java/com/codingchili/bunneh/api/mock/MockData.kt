@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.api
+package com.codingchili.bunneh.api.mock
 
 import com.codingchili.banking.model.Item
 import com.codingchili.banking.model.ItemRarity
@@ -57,7 +57,13 @@ class MockData {
         )
 
         fun randomItem(): Item {
-            return listOf(branch, sauring, spacewand, flamingStick, greenApple).random()
+            return listOf(
+                branch,
+                sauring,
+                spacewand,
+                flamingStick,
+                greenApple
+            ).random()
         }
     }
 }

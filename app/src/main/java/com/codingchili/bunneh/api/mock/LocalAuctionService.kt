@@ -1,4 +1,4 @@
-package com.codingchili.bunneh.api
+package com.codingchili.bunneh.api.mock
 
 import android.os.Handler
 import android.os.Looper
@@ -6,10 +6,13 @@ import com.codingchili.banking.model.Auction
 import com.codingchili.banking.model.Bid
 import com.codingchili.banking.model.Inventory
 import com.codingchili.banking.model.Item
-import com.codingchili.bunneh.model.Notification
-import com.codingchili.bunneh.model.Response
+import com.codingchili.banking.model.Notification
+import com.codingchili.bunneh.api.AuctionService
+import com.codingchili.bunneh.api.AuthenticationService
+import com.codingchili.bunneh.api.protocol.ServerResponse
 import com.codingchili.bunneh.model.single
 import com.codingchili.bunneh.ui.transform.formatValue
+import com.codingchili.core.protocol.ResponseStatus
 import io.reactivex.rxjava3.core.Single
 import java.time.Instant
 import java.util.concurrent.CompletableFuture
@@ -24,7 +27,8 @@ class LocalAuctionService : AuctionService {
     private var auctions = ArrayList<Auction>()
     private var notifications = HashMap<String, ArrayList<Notification>>()
     private var inventory = HashMap<String, Inventory>()
-    private var authentication = AuthenticationService.instance
+    private var authentication =
+        AuthenticationService.instance
     private var favorites = HashMap<String, MutableSet<Auction>>()
 
     override fun search(query: String): Single<List<Auction>> {
@@ -77,7 +81,7 @@ class LocalAuctionService : AuctionService {
         }
     }
 
-    override fun favorite(auction: Auction, add: Boolean): Single<Response> {
+    override fun favorite(auction: Auction, add: Boolean): Single<ServerResponse> {
         return single(CompletableFuture.supplyAsync {
             Thread.sleep(MockData.delay)
             if (add) {
@@ -85,7 +89,10 @@ class LocalAuctionService : AuctionService {
             } else {
                 userFavorites().remove(auction)
             }
-            Response(success = true, message = "ok")
+            ServerResponse(
+                status = ResponseStatus.ACCEPTED,
+                message = "ok"
+            )
         })
     }
 
