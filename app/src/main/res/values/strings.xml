@@ -24,6 +24,11 @@
     <string name="server_oc">oc-server.mutable.com</string>
     <string name="server_sa">sa-server.mutable.com</string>
 
+    <!-- change to https. -->
+    <string name="server_http">http://</string>
+    <string name="api_port">1443</string>
+    <string name="web_port">8080</string>
+
 
     <string name="liquidity_title">Liquidity</string>
     <string name="liquidity_text">Funds are displayed in two categories, total funds and liquidity.

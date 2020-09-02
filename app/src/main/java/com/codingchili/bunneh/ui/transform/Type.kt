@@ -6,7 +6,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.model.Item
+import com.codingchili.banking.model.Item
+import com.codingchili.bunneh.model.Rarity
 
 /**
  * Handles display of item types as tags.
@@ -35,7 +36,7 @@ class Type {
                 view.context,
                 view.findViewById(R.id.item_rarity),
                 item.rarity.toString(),
-                item.rarity.resource
+                Rarity.resource(item)
             )
         }
 

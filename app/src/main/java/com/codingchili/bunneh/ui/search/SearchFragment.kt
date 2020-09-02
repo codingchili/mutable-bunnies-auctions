@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
-import com.codingchili.bunneh.model.Auction
+import com.codingchili.banking.model.Auction
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.*

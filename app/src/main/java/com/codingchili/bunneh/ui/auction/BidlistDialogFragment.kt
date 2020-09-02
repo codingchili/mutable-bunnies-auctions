@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.DialogFragment
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Bid
+import com.codingchili.banking.model.Auction
+import com.codingchili.banking.model.Bid
 import com.codingchili.bunneh.ui.transform.bidListAdapter
 import com.google.android.material.button.MaterialButton
 import java.util.function.Consumer

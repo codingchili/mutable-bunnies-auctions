@@ -14,7 +14,7 @@ import com.codingchili.bunneh.ui.search.SearchViewModel
 class MainActivity : AppCompatActivity() {
     private val hits by viewModels<SearchViewModel>()
     private lateinit var main: Fragment
-    private var region : String? = null
+    private var region: String? = null
 
     fun setRegion(region: String) {
         this.region = region
@@ -47,6 +47,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logout() {
+        // clear out any old data which may be associated with another user.
+        viewModelStore.clear()
+
         updateTitle()
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         supportFragmentManager.beginTransaction()

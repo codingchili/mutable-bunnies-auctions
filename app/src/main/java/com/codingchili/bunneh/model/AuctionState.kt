@@ -1,5 +1,6 @@
 package com.codingchili.bunneh.model
 
+import com.codingchili.banking.model.Auction
 import com.codingchili.bunneh.R
 import java.time.Instant
 import java.time.ZoneId
@@ -29,7 +30,7 @@ enum class AuctionState(val icon: Int, val color: Int, val string: Int) {
     }
 
     companion object {
-        fun fromAuction(auction: Auction, user: User): AuctionState {
+        fun fromAuction(auction: Auction, user: String): AuctionState {
             val active = ZonedDateTime.now().isBefore(
                 ZonedDateTime.ofInstant(
                     Instant.ofEpochMilli(auction.end), ZoneId.systemDefault()

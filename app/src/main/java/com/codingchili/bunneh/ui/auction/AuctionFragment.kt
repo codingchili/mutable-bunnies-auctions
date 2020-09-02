@@ -18,13 +18,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.api.AuthenticationService
-import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.AuctionState
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
 import com.codingchili.bunneh.ui.links.AuctionListFragment
 import com.codingchili.bunneh.ui.transform.*
+import com.codingchili.banking.model.Auction
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.trello.rxlifecycle4.kotlin.bindToLifecycle
@@ -54,13 +54,13 @@ class AuctionFragment : Fragment() {
 
     private fun handleSellerClick(fragment: View): View.OnClickListener {
         return View.OnClickListener {
-            service.search("seller=${auction.seller.name}}").bindToLifecycle(fragment)
+            service.search("seller=${auction.seller}}").bindToLifecycle(fragment)
                 .subscribe { response, e ->
                     if (e == null) {
                         if (response.isEmpty()) {
                             AppToast.show(context, "No auctions found.")
                         } else {
-                            requireActivity().title = "Auctions by ${auction.seller.name}"
+                            requireActivity().title = "Auctions by ${auction.seller}"
                             requireActivity().supportFragmentManager.beginTransaction()
                                 .setCustomAnimations(
                                     android.R.anim.fade_in,
@@ -99,7 +99,7 @@ class AuctionFragment : Fragment() {
         requireActivity().title = item.name
 
         val seller = fragment.findViewById<TextView>(R.id.item_seller)
-        seller.text = auction.seller.name
+        seller.text = auction.seller
 
         // list sellers other auctions if available.
         seller.setOnClickListener(handleSellerClick(fragment))

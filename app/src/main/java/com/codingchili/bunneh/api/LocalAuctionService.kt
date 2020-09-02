@@ -2,7 +2,13 @@ package com.codingchili.bunneh.api
 
 import android.os.Handler
 import android.os.Looper
-import com.codingchili.bunneh.model.*
+import com.codingchili.banking.model.Auction
+import com.codingchili.banking.model.Bid
+import com.codingchili.banking.model.Inventory
+import com.codingchili.banking.model.Item
+import com.codingchili.bunneh.model.Notification
+import com.codingchili.bunneh.model.Response
+import com.codingchili.bunneh.model.single
 import com.codingchili.bunneh.ui.transform.formatValue
 import io.reactivex.rxjava3.core.Single
 import java.time.Instant
@@ -16,10 +22,10 @@ import kotlin.random.nextInt
  */
 class LocalAuctionService : AuctionService {
     private var auctions = ArrayList<Auction>()
-    private var notifications = HashMap<User, ArrayList<Notification>>()
-    private var inventory = HashMap<User, Inventory>()
+    private var notifications = HashMap<String, ArrayList<Notification>>()
+    private var inventory = HashMap<String, Inventory>()
     private var authentication = AuthenticationService.instance
-    private var favorites = HashMap<User, MutableSet<Auction>>()
+    private var favorites = HashMap<String, MutableSet<Auction>>()
 
     override fun search(query: String): Single<List<Auction>> {
         return when (query) {
@@ -48,7 +54,7 @@ class LocalAuctionService : AuctionService {
         return userNotifications(authentication.user()!!)
     }
 
-    private fun userNotifications(user: User): MutableList<Notification> {
+    private fun userNotifications(user: String): MutableList<Notification> {
         return notifications.computeIfAbsent(user) { ArrayList() }
     }
 
@@ -56,7 +62,7 @@ class LocalAuctionService : AuctionService {
         return userInventory(authentication.user()!!)
     }
 
-    private fun userInventory(user: User): Inventory {
+    private fun userInventory(user: String): Inventory {
         return inventory.computeIfAbsent(user) {
             val funds = Random.nextInt(100_000..24_000_000)
             Inventory(
@@ -154,7 +160,7 @@ class LocalAuctionService : AuctionService {
         }
     }
 
-    private fun notify(user: User, auction: Auction, message: String) {
+    private fun notify(user: String, auction: Auction, message: String) {
         userNotifications(user).add(
             Notification(
                 icon = auction.item.icon,

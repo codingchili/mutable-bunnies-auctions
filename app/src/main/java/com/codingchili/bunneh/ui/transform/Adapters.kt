@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Bid
-import com.codingchili.bunneh.model.Item
+import com.codingchili.banking.model.Auction
+import com.codingchili.banking.model.Bid
+import com.codingchili.banking.model.Item
+import com.codingchili.bunneh.model.Rarity
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -34,7 +35,7 @@ fun bidListAdapter(
             )
 
             view.findViewById<TextView>(R.id.item_bid_value).text = formatValue(bid.value)
-            view.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner.name
+            view.findViewById<TextView>(R.id.item_bid_owner).text = bid.owner
             view.findViewById<TextView>(R.id.bid_date).text = LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(bid.date), ZoneId.systemDefault())
                 .format(DATE_FORMAT)
@@ -146,7 +147,8 @@ fun renderItemThumbnail(
 
     view.findViewById<TextView>(R.id.item_title).text = item.name
     view.findViewById<View>(R.id.item_rarity)
-        .setBackgroundColor(fragment.resources.getColor(item.rarity.resource, null))
+        .setBackgroundColor(fragment.resources.getColor(
+            Rarity.resource(item), null))
 
     if (auction != null) {
         view.findViewById<TextView>(R.id.item_bid).text =

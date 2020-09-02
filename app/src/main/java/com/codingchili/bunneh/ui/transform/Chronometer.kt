@@ -1,7 +1,7 @@
 package com.codingchili.bunneh.ui.transform
 
 import android.widget.Chronometer
-import com.codingchili.bunneh.model.Auction
+import com.codingchili.banking.model.Auction
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime

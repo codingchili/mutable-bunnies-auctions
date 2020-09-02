@@ -10,13 +10,13 @@ import androidx.fragment.app.FragmentManager
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
 import com.codingchili.bunneh.api.AuthenticationService
-import com.codingchili.bunneh.model.Item
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.dialog.Dialogs
 import com.codingchili.bunneh.ui.dialog.NumberInputDialog
 import com.codingchili.bunneh.ui.transform.ServerResource
 import com.codingchili.bunneh.ui.transform.Type
+import com.codingchili.banking.model.Item
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.trello.rxlifecycle4.kotlin.bindToLifecycle

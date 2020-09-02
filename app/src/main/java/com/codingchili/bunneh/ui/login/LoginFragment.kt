@@ -2,9 +2,11 @@ package com.codingchili.bunneh.ui.login
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,6 +39,13 @@ class LoginFragment : Fragment() {
     private val region: MutableLiveData<String> by lazy { MutableLiveData<String>(getString(R.string.unset)) }
     private val authentication = AuthenticationService.instance
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Connector.protocol = getString(R.string.server_http)
+        Connector.api_port = getString(R.string.api_port)
+        Connector.web_port = getString(R.string.web_port)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +53,11 @@ class LoginFragment : Fragment() {
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_login, container, false)
         val regionSelector = fragment.findViewById<MaterialButton>(R.id.server_region)
+
+        fragment.findViewById<View>(R.id.button_register).setOnClickListener {
+            val server = "${Connector.protocol}${Connector.server}:${Connector.web_port}"
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(server)))
+        }
 
         regionSelector.setOnClickListener {
             NavigableTreeDialog(
@@ -86,6 +100,7 @@ class LoginFragment : Fragment() {
                 if (granted) {
                     retrieveServerRegionFromLocation()
                 } else {
+                    // no default region, creates massive confusion for the rest of the world.
                     //region.value = getString(R.string.server_region_default)
                 }
             }
@@ -156,6 +171,7 @@ class LoginFragment : Fragment() {
         authentication.authenticate(username, password).bindToLifecycle(fragment)
             .subscribe { authentication, e ->
                 if (e == null) {
+                    Connector.token = authentication.token
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.root, MainFragment())
                         .addToBackStack(MainFragment.TAG)

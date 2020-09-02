@@ -1,7 +1,7 @@
 package com.codingchili.bunneh.api
 
-import com.codingchili.bunneh.model.Authentication
-import com.codingchili.bunneh.model.User
+import com.codingchili.core.security.Account
+import com.codingchili.core.security.Token
 import io.reactivex.rxjava3.core.Single
 
 /**
@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single
  */
 interface AuthenticationService {
     companion object {
-        val instance = LocalAuthenticationService()
+        val instance = BackendAuthenticationService()
     }
 
     /**
@@ -19,16 +19,20 @@ interface AuthenticationService {
      * @param username used for authentication.
      * @param password used for authentication.
      */
-    fun authenticate(username: String, password: String): Single<Authentication>
-
-    /**
-     * Return current login state.
-     */
-    fun current(): Authentication?
+    fun authenticate(username: String, password: String): Single<AuthenticationResponse>
 
     /**
      * Clear login state.
      */
     fun logout()
-    fun user(): User?
+
+    /**
+     *
+     */
+    fun user(): String?
+
+    /**
+     *
+     */
+    fun token(): Token?
 }

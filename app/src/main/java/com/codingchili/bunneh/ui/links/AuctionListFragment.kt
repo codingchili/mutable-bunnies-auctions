@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.codingchili.banking.model.Auction
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuthenticationService
-import com.codingchili.bunneh.model.Auction
 import com.codingchili.bunneh.model.AuctionState
 import com.codingchili.bunneh.ui.auction.AuctionFragment
 import com.codingchili.bunneh.ui.transform.renderItemThumbnail
@@ -32,12 +32,12 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                 val auction = getItem(position)!!
                 val entry = convertView ?: inflater.inflate(R.layout.item_auction, parent, false)
 
-                entry.findViewById<TextView>(R.id.item_seller).text = "Sold by ${auction.seller!!.name}"
+                entry.findViewById<TextView>(R.id.item_seller).text = "Sold by ${auction.seller!!}"
                 renderItemThumbnail(this@AuctionListFragment, entry, auction = auction)
 
                 val bid = auction.bids.firstOrNull()
                 if (bid != null) {
-                    entry.findViewById<TextView>(R.id.item_bid_owner).text = "by ${bid.owner.name}"
+                    entry.findViewById<TextView>(R.id.item_bid_owner).text = "by ${bid.owner}"
                 } else {
                     entry.findViewById<TextView>(R.id.item_bid_owner).text = ""
                 }

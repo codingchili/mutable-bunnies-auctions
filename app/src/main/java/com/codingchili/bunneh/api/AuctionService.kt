@@ -1,7 +1,11 @@
 package com.codingchili.bunneh.api
 
-import com.codingchili.bunneh.model.*
 import io.reactivex.rxjava3.core.Single
+import com.codingchili.banking.model.Auction
+import com.codingchili.banking.model.Item
+import com.codingchili.banking.model.Inventory
+import com.codingchili.bunneh.model.Notification
+import com.codingchili.bunneh.model.Response
 
 /**
  * Interface for the auction service.

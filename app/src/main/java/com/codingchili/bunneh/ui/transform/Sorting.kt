@@ -2,9 +2,8 @@ package com.codingchili.bunneh.ui.transform
 
 import android.content.Context
 import com.codingchili.bunneh.R
-import com.codingchili.bunneh.model.Auction
-import com.codingchili.bunneh.model.Item
-import com.codingchili.bunneh.model.User
+import com.codingchili.banking.model.Auction
+import com.codingchili.banking.model.Item
 
 class Sorter {
     var ascending = false
@@ -22,7 +21,7 @@ class Sorter {
     fun sortItems(list: List<Item>): List<Item> {
         // wrap in auction to support sort code reuse, after sort unwrap.
         return sort(list.map {
-            Auction(initial = 0, item = it, seller = User("", ""))
+            Auction(initial = 0, item = it, seller = "")
         }).map {
             it.item
         }

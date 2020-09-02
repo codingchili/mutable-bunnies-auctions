@@ -12,8 +12,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.codingchili.bunneh.R
 import com.codingchili.bunneh.api.AuctionService
-import com.codingchili.bunneh.model.Inventory
-import com.codingchili.bunneh.model.Item
+import com.codingchili.banking.model.Inventory
+import com.codingchili.banking.model.Item
 import com.codingchili.bunneh.ui.AppToast
 import com.codingchili.bunneh.ui.dialog.*
 import com.codingchili.bunneh.ui.item.ItemFragment
