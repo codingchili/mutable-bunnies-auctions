@@ -7,21 +7,21 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.codingchili.bunneh.ui.search.SearchFragment"
+        android:name="com.codingchili.bunnies.ui.search.SearchFragment"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/navigation_inventory"
-        android:name="com.codingchili.bunneh.ui.inventory.InventoryFragment"
+        android:name="com.codingchili.bunnies.ui.inventory.InventoryFragment"
         tools:layout="@layout/fragment_inventory" />
 
     <fragment
         android:id="@+id/navigation_auctions"
-        android:name="com.codingchili.bunneh.ui.links.QuickLinksFragment"
+        android:name="com.codingchili.bunnies.ui.links.QuickLinksFragment"
         tools:layout="@layout/fragment_quick_links" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.codingchili.bunneh.ui.notifications.NotificationsFragment"
+        android:name="com.codingchili.bunnies.ui.notifications.NotificationsFragment"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
+        <!-- test server, hopefully it stays alive for a bit. -->
+        <!-- not going to bother with certificates as 443 is blocked by the ISP anyways. -->
+        <domain includeSubdomains="true">92.35.11.212</domain>
+        <!-- game server ip for local development, not submitted for grading, use local mock. -->
         <domain includeSubdomains="true">192.168.10.106</domain>
     </domain-config>
 </network-security-config>

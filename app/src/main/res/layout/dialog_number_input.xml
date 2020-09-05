@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:background="@color/card"
             android:inputType="number"
-            android:digits="0123456789,"
+            android:digits="0123456789"
             android:maxLength="11"
             android:drawableEnd="@drawable/icon_eth"
             android:imeOptions="actionSend"

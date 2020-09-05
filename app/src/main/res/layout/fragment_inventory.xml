@@ -7,16 +7,16 @@
 
     <ProgressBar
         android:id="@+id/progress_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_centerInParent="true"
         android:elevation="32dp"
         android:indeterminate="true"
         android:indeterminateTint="@color/accent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout

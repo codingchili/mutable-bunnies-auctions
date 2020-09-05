@@ -6,19 +6,25 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_auctions">Auctions</string>
 
-    <string name="hint_username">e-mail address</string>
-    <string name="hint_password">password</string>
-    <string name="login">Login</string>
-    <string name="link_register">Create account</string>
-    <string name="loading">Loading…</string>
-
     <!-- uses thirdparty cdn for game resource distribution, same for all regions. -->
-    <string name="resources_cdn">http://192.168.10.106:8080</string>
+    <!-- this is a test server in python/asyncio running in docker for serving icons. -->
+    <!-- no resource server or game server is running public yet. -->
+    <string name="resources_cdn">http://92.35.11.212:8400</string>
+
+    <!-- server region abbreviations -->
+    <string name="region_af">Africa</string>
+    <string name="region_an">Antarctica</string>
+    <string name="region_as">Asia</string>
+    <string name="region_eu">Europe</string>
+    <string name="region_na">North America</string>
+    <string name="region_oc">Oceania</string>
+    <string name="region_sa">South America</string>
 
     <!-- list of game servers. -->
     <string name="server_af">af-server.mutable.com</string>
     <string name="server_an">an-server.mutable.com</string>
     <string name="server_as">as-server.mutable.com</string>
+    <!-- game server used during development, not included for grading, use local mock. -->
     <string name="server_eu">192.168.10.106</string>
     <string name="server_na">na-server.mutable.com</string>
     <string name="server_oc">oc-server.mutable.com</string>
@@ -30,19 +36,24 @@
     <string name="web_port">8080</string>
 
 
+    <!-- inventory: liquidity -->
     <string name="liquidity_title">Liquidity</string>
     <string name="liquidity_text">Funds are displayed in two categories, total funds and liquidity.
     When leading an auction the liquidity is reduced by the value of the bid. When placing a bid the
     liquidity cannot be exceeded.</string>
     <string name="unset">…</string>
+
+    <!-- login: fragment -->
     <string name="location_title">Server region</string>
     <string name="location_text">The application requires access to location in order to automatically determine server region. This will be selected manually if the permission is not granted.</string>
-    <string name="sort_bid">Current bid</string>
-    <string name="sort_name">Name</string>
-    <string name="sort_end">Time left</string>
-    <string name="sort_rarity">Rarity</string>
-    <string name="sort_ascending">Ascending</string>
     <string name="server_region_default">EU</string>
+    <string name="hint_username">e-mail address</string>
+    <string name="hint_password">password</string>
+    <string name="login">Login</string>
+    <string name="link_register">Create account</string>
+    <string name="loading">Loading…</string>
+
+    <!-- auction states -->
     <string name="auction_leading">Leading</string>
     <string name="auction_active">Active</string>
     <string name="auction_overbid">Increase bid</string>
@@ -51,7 +62,84 @@
     <string name="auction_won">Auction won!</string>
     <string name="auction_end">Finished</string>
 
+    <!-- navigable tree -->
+    <string name="divider">divider</string>
 
+    <!-- navigable tree: auctions -->
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_selling">Selling</string>
+    <string name="nav_sold">Sold</string>
+    <string name="nav_active">Active</string>
+    <string name="nav_not_sold">Not Sold</string>
+    <string name="nav_buying">Buying</string>
+    <string name="nav_won">Won</string>
+    <string name="nav_leading">Leading</string>
+    <string name="nav_overbid">Overbid</string>
+    <string name="nav_lost">Lost</string>
+
+    <!-- navigable tree: sorting -->
+    <string name="nav_name">Name</string>
+    <string name="nav_ascending">Ascending</string>
+    <string name="nav_descending">Descending</string>
+    <string name="nav_rarity">Rarity</string>
+
+    <string name="nav_time_left">Time left</string>
+    <string name="nav_current_bid">Current bid</string>
+
+    <!-- navigable tree: searches -->
+    <string name="consumables">Consumables</string>
+    <string name="leveling">Leveling</string>
+    <string name="food">Food</string>
+    <string name="potions">Potions</string>
+    <string name="weapons">Weapons</string>
+    <string name="staff">Staff</string>
+    <string name="bow">Bow</string>
+    <string name="dagger">Dagger</string>
+    <string name="hammer">Hammer</string>
+    <string name="sword">Sword</string>
+    <string name="battleaxe">Battleaxe</string>
+    <string name="armors">Armors</string>
+    <string name="plate">Plate</string>
+    <string name="leather">Leather</string>
+    <string name="cloth">Cloth</string>
+    <string name="slots">Slots</string>
+    <string name="head">Head</string>
+    <string name="chest">Chest</string>
+    <string name="legs">Legs</string>
+    <string name="weapon">Weapon</string>
+    <string name="offhand">Offhand</string>
+    <string name="ring">Ring</string>
+    <string name="neck">Neck</string>
+    <string name="cloak">Cloak</string>
+    <string name="foot">Foot</string>
+    <string name="rarity">Rarity</string>
+    <string name="quest">Quest</string>
+
+    <!-- item rarity -->
+    <string name="mythic">Mythic</string>
+    <string name="legendary">Legendary</string>
+    <string name="epic">Epic</string>
+    <string name="rare">Rare</string>
+    <string name="uncommon">Uncommon</string>
+    <string name="common">Common</string>
+
+    <!-- template string -->
+    <string name="searching_text">Searching for %1$s…</string>
+    <string name="item_quantity">x%1$d</string>
+    <string name="sold_by">Sold by %1$s</string>
+    <string name="bid_by">by %1$s</string>
+
+    <!-- dialogs -->
+    <string name="dialog_quick_search">Quick Search</string>
+    <string name="dialog_sort">Sort</string>
+    <string name="dialog_server_region">Server region</string>
+
+    <!-- activity title -->
+    <string name="title_auctions_by">Auctions by %1$s</string>
+
+    <!-- error messages -->
     <string name="no_auctions_in_category">No auctions in that category.</string>
     <string name="no_region_selected">Please select a server region</string>
+    <string name="no_auctions_here">No auctions here, try searching.</string>
+    <string name="no_auctions_found">No auctions found.</string>
 </resources>
