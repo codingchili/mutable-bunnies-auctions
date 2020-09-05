@@ -1,7 +1,7 @@
 # Mutable Bunnies - Android Auction Client
 
-The application is a companion application for the Mutable Bunnies online game, 
-which is still in development (https://github.com/codingchili/chili-game-ext). 
+The application is a companion application for the [Mutable Bunnies](https://github.com/codingchili/mutable-bunnies-server) online game, 
+which is still in development. 
 This application provides an on-the-go access to the in-game auction house, for buying and selling 
 items. Due to the distributed design of the game, a central repository for items are required in 
 order to execute orders across realm servers. This central entity is the Banking service, 
