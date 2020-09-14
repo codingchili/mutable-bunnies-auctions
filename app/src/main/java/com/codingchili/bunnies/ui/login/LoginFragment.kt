@@ -53,6 +53,14 @@ class LoginFragment : Fragment() {
         Connector.web_port = getString(R.string.web_port)
     }
 
+    private fun assertServerRegionSet(block: () -> Unit) {
+        if (Connector.server == null) {
+            block.invoke()
+        } else {
+            AppToast.show(context, getString(R.string.no_region_selected))
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,8 +70,10 @@ class LoginFragment : Fragment() {
         val regionSelector = fragment.findViewById<MaterialButton>(R.id.server_region)
 
         fragment.findViewById<View>(R.id.button_register).setOnClickListener {
-            val server = "${Connector.protocol}${Connector.server}:${Connector.web_port}"
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(server)))
+            assertServerRegionSet {
+                val server = "${Connector.protocol}${Connector.server}:${Connector.web_port}"
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(server)))
+            }
         }
 
         fragment.findViewById<TextInputEditText>(R.id.edit_password)
@@ -90,10 +100,8 @@ class LoginFragment : Fragment() {
 
         fragment.findViewById<Button>(R.id.button_login)
             .setOnClickListener {
-                if (Connector.server != null) {
+                assertServerRegionSet {
                     authenticate(fragment)
-                } else {
-                    AppToast.show(context, getString(R.string.no_region_selected))
                 }
             }
 
