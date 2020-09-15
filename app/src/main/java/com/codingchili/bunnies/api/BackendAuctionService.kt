@@ -23,7 +23,7 @@ class BackendAuctionService : AuctionService {
             AuctionRequest(
                 route = "search",
                 query = query,
-                params = query.toString()
+                params = param
             )
         ).map { it.auctions }
     }
@@ -37,10 +37,10 @@ class BackendAuctionService : AuctionService {
         return send(
             AuctionRequest(
                 route = "auction",
-                item = item,
+                itemId = item.id,
                 value = value
             )
-        ).map { it.auctions.first() }
+        ).map { it.auctions!!.first() }
     }
 
     override fun bid(value: Int, auction: Auction): Single<Auction> {
@@ -50,7 +50,7 @@ class BackendAuctionService : AuctionService {
                 auctionId = auction.id,
                 value = value
             )
-        ).map { it.auctions.first() }
+        ).map { it.auctions!!.first() }
     }
 
     override fun notifications(): Single<List<Notification>> {
@@ -63,7 +63,7 @@ class BackendAuctionService : AuctionService {
                 route = "findById",
                 auctionId = auctionId
             )
-        ).map { it.auctions.first() }
+        ).map { it.auctions!!.first() }
     }
 
     override fun favorite(auction: Auction, add: Boolean): Single<ServerResponse> {
@@ -77,6 +77,6 @@ class BackendAuctionService : AuctionService {
     }
 
     override fun favorites(): Single<Set<Auction>> {
-        return send(AuctionRequest(route = "favorites")).map { it.auctions.toSet() }
+        return send(AuctionRequest(route = "favorites")).map { it.auctions!!.toSet() }
     }
 }

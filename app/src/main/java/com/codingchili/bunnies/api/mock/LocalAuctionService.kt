@@ -7,11 +7,13 @@ import com.codingchili.bunnies.api.AuctionService
 import com.codingchili.bunnies.api.AuthenticationService
 import com.codingchili.bunnies.api.protocol.ServerResponse
 import com.codingchili.bunnies.model.single
+import com.codingchili.bunnies.ui.transform.Type
 import com.codingchili.bunnies.ui.transform.formatValue
 import com.codingchili.core.protocol.ResponseStatus
 import io.reactivex.rxjava3.core.Single
 import java.time.Instant
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -39,22 +41,38 @@ class LocalAuctionService : AuctionService {
         AuthenticationService.instance
 
     override fun search(query: QueryType, param: String?): Single<List<Auction>> {
-        return when (param) {
-            "null" -> {
-                single(CompletableFuture.supplyAsync { listOf<Auction>() })
+        val user = authentication.user()!!
+        val fiveMinutes = 300
+        val finished = auctions.filter { it.finished() }
+        val active = auctions.filter { !it.finished() }
+        return single(CompletableFuture.supplyAsync {
+            when (query) {
+                QueryType.favorites -> auctions.filter { favorites[user]?.contains(it) ?: false }
+                QueryType.sold -> finished.filter { it.seller == user && it.bids.isNotEmpty() }
+                QueryType.active -> active.filter { it.seller == user }
+                QueryType.not_sold -> finished.filter { it.seller == user && it.bids.isEmpty() }
+                QueryType.won -> finished.filter { it.bids.isNotEmpty() && it.bids[0].owner == user }
+                QueryType.lost -> finished.filter { it.bids.find { it.owner == user } != null }
+                QueryType.leading -> active.filter { it.bids.take(1).any { it.owner == user } }
+                QueryType.overbid -> active.filter { it.bids.drop(1).any { it.owner == user } }
+                QueryType.armor_type -> active.filter { it.item.type == param!! }
+                QueryType.weapon_type -> active.filter { it.item.type == param!! }
+                QueryType.ending_soon -> active.filter {
+                    TimeUnit.MILLISECONDS.toSeconds(
+                        Instant.now().toEpochMilli() - it.end
+                    ) < fiveMinutes
+                }
+                QueryType.quest -> active.filter { it.item.type == Type.quest }
+                QueryType.text -> active.filter {
+                    it.item.name.toLowerCase().contains(param!!)
+                            || it.item.description.toLowerCase().contains(param)
+                }
+                QueryType.slot -> active.filter { it.item.slot == param }
+                QueryType.consumable -> active.filter { it.item.type == Type.consumable }
+                QueryType.rarity -> active.filter { it.item.rarity == ItemRarity.valueOf(param!!) }
+                QueryType.seller -> auctions.filter { it.seller == param }
             }
-            "error" -> {
-                val future = CompletableFuture<List<Auction>>()
-                future.completeExceptionally(Exception("Failed to parse search query."))
-                single<List<Auction>>(future)
-            }
-            else -> {
-                single<List<Auction>>(CompletableFuture.supplyAsync {
-                    Thread.sleep(MockData.delay)
-                    auctions.filter { it.end > Instant.now().toEpochMilli() }
-                })
-            }
-        }
+        })
     }
 
     private fun userFavorites(): MutableSet<Auction> {

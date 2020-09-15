@@ -1,7 +1,6 @@
 package com.codingchili.bunnies.api
 
 import com.codingchili.banking.model.*
-import com.codingchili.bunnies.api.mock.LocalAuctionService
 import com.codingchili.bunnies.api.protocol.ServerResponse
 import io.reactivex.rxjava3.core.Single
 
@@ -14,7 +13,7 @@ interface AuctionService {
 
     companion object {
         // change this to use the remote server instead - not included in assignment.
-        var instance = LocalAuctionService()
+        var instance = BackendAuctionService()
     }
 
     /**

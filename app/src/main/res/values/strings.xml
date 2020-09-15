@@ -25,7 +25,7 @@
     <string name="server_an">an-server.mutable.com</string>
     <string name="server_as">as-server.mutable.com</string>
     <!-- game server used during development, not included for grading, use local mock. -->
-    <string name="server_eu">192.168.10.106</string>
+    <string name="server_eu">92.35.11.212</string>
     <string name="server_na">na-server.mutable.com</string>
     <string name="server_oc">oc-server.mutable.com</string>
     <string name="server_sa">sa-server.mutable.com</string>
@@ -142,4 +142,5 @@
     <string name="no_region_selected">Please select a server region</string>
     <string name="no_auctions_here">No auctions here, try searching.</string>
     <string name="no_auctions_found">No auctions found.</string>
+    <string name="ending_soon">Ending soon</string>
 </resources>

@@ -8,7 +8,7 @@ import com.codingchili.banking.model.Notification
  * A response object for the auction microservice.
  */
 class AuctionResponse(
-    val inventory: Inventory,
-    val auctions: List<Auction>,
-    val notifications: List<Notification>
+    val inventory: Inventory?,
+    val auctions: List<Auction>?,
+    val notifications: List<Notification>?
 ) : ServerResponse()

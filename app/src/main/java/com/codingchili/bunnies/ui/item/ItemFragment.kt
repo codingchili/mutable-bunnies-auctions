@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingchili.banking.model.Item
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService

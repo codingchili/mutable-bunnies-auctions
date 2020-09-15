@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.codingchili.banking.model.Notification
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService
@@ -59,7 +60,11 @@ class NotificationsFragment : Fragment() {
                                         requireActivity().supportFragmentManager.beginTransaction()
                                             .add(
                                                 R.id.root,
-                                                AuctionFragment().load(response, listOf())
+                                                AuctionFragment().load(
+                                                    response, MutableLiveData(
+                                                        listOf()
+                                                    )
+                                                )
                                             )
                                             .addToBackStack(AuctionFragment.TAG)
                                             .commit()

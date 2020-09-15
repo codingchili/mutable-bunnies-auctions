@@ -11,7 +11,7 @@ class AuctionRequest(
     route: String,
     val params: String? = null,
     val auctionId: String? = null,
-    val item: Item? = null,
+    val itemId: String? = null,
     val value: Int = 0,
     val add: Boolean = false,
     val query: QueryType? = null

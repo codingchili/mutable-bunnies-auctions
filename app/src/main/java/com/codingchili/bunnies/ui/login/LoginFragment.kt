@@ -55,9 +55,9 @@ class LoginFragment : Fragment() {
 
     private fun assertServerRegionSet(block: () -> Unit) {
         if (Connector.server == null) {
-            block.invoke()
-        } else {
             AppToast.show(context, getString(R.string.no_region_selected))
+        } else {
+            block.invoke()
         }
     }
 

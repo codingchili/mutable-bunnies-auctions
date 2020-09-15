@@ -35,7 +35,7 @@ class Type {
                 view.context,
                 view.findViewById(R.id.item_type),
                 item.type,
-                R.color.type_default
+                getColorForItemType(item)
             )
             setLabel(
                 view.context,
@@ -43,6 +43,11 @@ class Type {
                 item.rarity.toString(),
                 Rarity.resource(item)
             )
+        }
+
+        private fun getColorForItemType(item: Item) = when(item.type) {
+            consumable -> R.color.type_consumable
+            else -> R.color.type_default
         }
 
         private fun getColorForItemSlot(item: Item) = when (item.slot) {

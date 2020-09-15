@@ -194,5 +194,6 @@ val navigableCategoryTree = listOf(
         .add(NavigableTree(name = R.string.rare, param = ItemRarity.rare.name))
         .add(NavigableTree(name = R.string.uncommon, param = ItemRarity.uncommon.name))
         .add(NavigableTree(name = R.string.common, param = ItemRarity.common.name)),
-    NavigableTree(name = R.string.quest, query = QueryType.quest)
+    NavigableTree(name = R.string.quest, query = QueryType.quest),
+    NavigableTree(name = R.string.ending_soon, query = QueryType.ending_soon)
 )

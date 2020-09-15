@@ -1,6 +1,5 @@
 package com.codingchili.bunnies.api
 
-import com.codingchili.bunnies.api.mock.LocalAuthenticationService
 import com.codingchili.bunnies.api.protocol.AuthenticationResponse
 import com.codingchili.core.security.Token
 import io.reactivex.rxjava3.core.Single
@@ -18,7 +17,7 @@ import io.reactivex.rxjava3.core.Single
 interface AuthenticationService {
     companion object {
         // change this to use the remote server backend, not included in assignment.
-        val instance = LocalAuthenticationService()
+        val instance = BackendAuthenticationService()
     }
 
     /**

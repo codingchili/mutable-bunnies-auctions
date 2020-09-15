@@ -1,10 +1,12 @@
 package com.codingchili.bunnies.api
 
+import android.util.Log
 import com.codingchili.bunnies.api.protocol.ServerResponse
 import com.codingchili.core.protocol.ResponseStatus
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -26,6 +28,7 @@ class Backend {
         init {
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            mapper.registerModule(KotlinModule())
         }
 
         /**
@@ -51,6 +54,7 @@ class Backend {
                     response.use {
                         if (response.isSuccessful) {
                             val reply = mapper.readValue(response.body?.string(), target) as T
+                            Log.w("foo", mapper.writeValueAsString(reply))
 
                             if (ResponseStatus.ACCEPTED == reply.status) {
                                 future.complete(reply)

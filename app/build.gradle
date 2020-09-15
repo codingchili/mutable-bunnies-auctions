@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId "com.codingchili.bunneh"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -80,6 +80,7 @@ dependencies {
 
     // for json serialization.
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.2'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.11.2'
 
     // server api
     implementation 'io.vertx:vertx-core:3.9.2'

@@ -48,7 +48,7 @@ class SearchFragment : Fragment() {
                 requireActivity().title = it.item.name
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .add(R.id.root, AuctionFragment().load(it, hits.auctions.value!!))
+                    .add(R.id.root, AuctionFragment().load(it, hits.auctions))
                     .addToBackStack(AuctionFragment.TAG)
                     .commit()
             })
@@ -109,7 +109,7 @@ class SearchFragment : Fragment() {
         val text = view.findViewById<TextView>(R.id.progress_text)
         val progress = view.findViewById<ProgressBar>(R.id.progress_search)
 
-        text.text = getString(R.string.searching_text, query.name)
+        text.text = getString(R.string.searching_text, query.readableName())
         progress.visibility = View.VISIBLE
         container.visibility = View.VISIBLE
 
