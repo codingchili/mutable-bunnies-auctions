@@ -66,7 +66,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun logout() {
         // clear out any old data which may be associated with another user.
-        viewModelStore.clear()
+        // doesn't work with savedStateHandle, throws an exception as it thinks
+        // the key already exists, clear doesn't clear the saved state handlers.
+        // viewModelStore.clear()
+
         Connector.token = null
 
         updateTitle()

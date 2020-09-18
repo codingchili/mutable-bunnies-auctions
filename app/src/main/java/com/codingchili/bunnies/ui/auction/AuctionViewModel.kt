@@ -11,7 +11,7 @@ class AuctionViewModel(private val state: SavedStateHandle) : ViewModel() {
     var auction: MutableLiveData<Auction> = state.getLiveData(KEY_AUCTION)
 
     companion object {
-        private const val KEY_LIST = "list"
+        private const val KEY_LIST = "related"
         private const val KEY_AUCTION = "auction"
     }
 

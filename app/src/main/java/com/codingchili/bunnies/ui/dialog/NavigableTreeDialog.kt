@@ -1,6 +1,7 @@
 package com.codingchili.bunnies.ui.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,11 @@ class NavigableTreeDialog(
     var tree: List<NavigableTree>,
     var listener: Consumer<NavigableTree>? = null
 ) : DialogFragment() {
+
+    override fun onStop() {
+        dismissAllowingStateLoss()
+        super.onStop()
+    }
 
     private fun adapter(inflater: LayoutInflater, view: View): ArrayAdapter<NavigableTree> {
         return object : ArrayAdapter<NavigableTree>(requireContext(), R.layout.item_navigable) {

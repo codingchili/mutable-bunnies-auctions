@@ -25,6 +25,11 @@ import java.util.function.Consumer
  */
 class NumberInputDialog(var listener: Consumer<Int>? = null) : DialogFragment() {
 
+    override fun onStop() {
+        dismissAllowingStateLoss()
+        super.onStop()
+    }
+
     private fun searchHandler(): TextView.OnEditorActionListener {
         return TextView.OnEditorActionListener { input, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {

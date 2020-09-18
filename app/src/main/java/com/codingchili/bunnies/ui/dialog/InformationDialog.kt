@@ -15,6 +15,11 @@ import com.google.android.material.button.MaterialButton
 class InformationDialog(var title: Int, var text: Int, var listener: Runnable? = null) :
     DialogFragment() {
 
+    override fun onStop() {
+        dismissAllowingStateLoss()
+        super.onStop()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

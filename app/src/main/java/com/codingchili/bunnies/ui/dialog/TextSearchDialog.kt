@@ -23,6 +23,11 @@ import java.util.function.Consumer
  */
 class TextSearchDialog(private val listener: Consumer<String>) : DialogFragment() {
 
+    override fun onStop() {
+        dismissAllowingStateLoss()
+        super.onStop()
+    }
+
     private fun searchHandler(): TextView.OnEditorActionListener {
         return TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
