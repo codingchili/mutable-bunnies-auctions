@@ -10,6 +10,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService
 import com.codingchili.bunnies.ui.AppToast
@@ -22,6 +23,7 @@ import com.trello.rxlifecycle4.kotlin.bindToLifecycle
  * Fragment used to show a list of links to a set of auctions based on status.
  */
 class QuickLinksFragment : Fragment() {
+    private val shared by activityViewModels<AuctionListViewModel>()
     private var service = AuctionService.instance
 
     override fun onCreateView(
@@ -48,13 +50,15 @@ class QuickLinksFragment : Fragment() {
 
                 if (e == null) {
                     if (auctions.isNotEmpty()) {
+                        shared.list.value = auctions
+
                         requireActivity().title = getString(leaf.name)
                         requireActivity().supportFragmentManager.beginTransaction()
                             .setCustomAnimations(
                                 android.R.anim.fade_in,
                                 android.R.anim.fade_out
                             )
-                            .add(R.id.root, AuctionListFragment(auctions))
+                            .add(R.id.root, AuctionListFragment())
                             .addToBackStack(AuctionListFragment.TAG)
                             .commit()
                     } else {

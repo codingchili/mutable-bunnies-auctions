@@ -16,6 +16,7 @@ import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService
 import com.codingchili.bunnies.ui.AppToast
 import com.codingchili.bunnies.ui.auction.AuctionFragment
+import com.codingchili.bunnies.ui.auction.AuctionViewModel
 import com.codingchili.bunnies.ui.dialog.*
 import com.codingchili.bunnies.ui.transform.Sorter
 import com.codingchili.bunnies.ui.transform.auctionGridAdapter
@@ -29,6 +30,7 @@ import java.util.function.Consumer
 class SearchFragment : Fragment() {
     private val service = AuctionService.instance
     private val hits by activityViewModels<SearchViewModel>()
+    private val shared by activityViewModels<AuctionViewModel>()
     private var sorter = Sorter()
 
     override fun onCreateView(
@@ -45,10 +47,13 @@ class SearchFragment : Fragment() {
             this,
             inflater,
             Consumer<Auction> {
+                this.shared.auction.value = it
+                this.shared.list = hits.auctions
+
                 requireActivity().title = it.item.name
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .add(R.id.root, AuctionFragment().load(it, hits.auctions))
+                    .add(R.id.root, AuctionFragment())
                     .addToBackStack(AuctionFragment.TAG)
                     .commit()
             })

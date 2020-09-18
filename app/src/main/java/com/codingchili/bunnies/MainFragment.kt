@@ -1,6 +1,7 @@
 package com.codingchili.bunnies
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,32 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
 /**
  * The main fragment hosts the bottom navigation bar and doesnt provide any other
  * useful layout on its own.
  */
 class MainFragment : Fragment() {
     private lateinit var navController: NavController
+    private var destination: Int? = null
 
     companion object {
         const val TAG = "main"
+        private const val STATE_KEY = "nav_destination"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // called twice, one where savedInstance is null, idk wat.
+        Log.e("foo", "destination == " + destination)
+        destination = savedInstanceState?.getInt(STATE_KEY) ?: destination
+        Log.e("foo", "destination update == " + savedInstanceState?.getInt(STATE_KEY))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(STATE_KEY, navController.currentDestination?.id ?: R.id.navigation_search)
     }
 
     override fun onCreateView(
@@ -36,6 +54,7 @@ class MainFragment : Fragment() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         navController = navHostFragment.navController
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_search,
@@ -45,14 +64,23 @@ class MainFragment : Fragment() {
             )
         )
 
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.mobile_navigation)
+
+        Log.e("foo", "on create nav fraggy, dest = " + destination)
+
+        if (destination == null) {
+            graph.startDestination = R.id.navigation_search
+        } else {
+            graph.startDestination = destination!!
+        }
+
+        navController.graph = graph
+
         (activity as AppCompatActivity)
             .setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         return fragment
-    }
-
-    public fun getCurrent(): String {
-        return resources.getResourceName(navController.currentDestination!!.id)
     }
 }

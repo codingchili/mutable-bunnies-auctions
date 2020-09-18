@@ -54,7 +54,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun assertServerRegionSet(block: () -> Unit) {
-        if (Connector.server == null) {
+        Log.e("foo", "server is ${region.value} connector is ${Connector.server}")
+        if (region.value == getString(R.string.unset)) {
             AppToast.show(context, getString(R.string.no_region_selected))
         } else {
             block.invoke()
@@ -78,7 +79,9 @@ class LoginFragment : Fragment() {
 
         fragment.findViewById<TextInputEditText>(R.id.edit_password)
             .setOnEditorActionListener { _, _, _ ->
-                authenticate(fragment)
+                assertServerRegionSet {
+                    authenticate(fragment)
+                }
                 true
             }
 

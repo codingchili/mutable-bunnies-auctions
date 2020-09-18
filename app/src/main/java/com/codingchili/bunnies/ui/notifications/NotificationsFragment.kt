@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.codingchili.banking.model.Notification
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService
 import com.codingchili.bunnies.ui.AppToast
 import com.codingchili.bunnies.ui.auction.AuctionFragment
+import com.codingchili.bunnies.ui.auction.AuctionViewModel
 import com.codingchili.bunnies.ui.transform.ServerResource
 import com.trello.rxlifecycle4.kotlin.bindToLifecycle
 
@@ -24,8 +26,8 @@ import com.trello.rxlifecycle4.kotlin.bindToLifecycle
  * can be streamed from the server.
  */
 class NotificationsFragment : Fragment() {
+    private val model by activityViewModels<AuctionViewModel>()
     private val service = AuctionService.instance
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,15 +59,10 @@ class NotificationsFragment : Fragment() {
                             service.findById(notification.auctionId!!).bindToLifecycle(fragment)
                                 .subscribe { response, e ->
                                     if (e == null) {
+                                        this@NotificationsFragment.model.auction.value = response
+
                                         requireActivity().supportFragmentManager.beginTransaction()
-                                            .add(
-                                                R.id.root,
-                                                AuctionFragment().load(
-                                                    response, MutableLiveData(
-                                                        listOf()
-                                                    )
-                                                )
-                                            )
+                                            .add(R.id.root, AuctionFragment())
                                             .addToBackStack(AuctionFragment.TAG)
                                             .commit()
                                     } else {

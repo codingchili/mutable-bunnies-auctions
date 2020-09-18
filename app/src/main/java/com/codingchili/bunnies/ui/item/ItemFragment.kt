@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.codingchili.banking.model.Item
+import androidx.fragment.app.activityViewModels
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService
 import com.codingchili.bunnies.ui.AppToast
 import com.codingchili.bunnies.ui.auction.AuctionFragment
+import com.codingchili.bunnies.ui.auction.AuctionViewModel
 import com.codingchili.bunnies.ui.dialog.Dialogs
 import com.codingchili.bunnies.ui.dialog.NumberInputDialog
 import com.codingchili.bunnies.ui.transform.ServerResource
@@ -27,28 +27,26 @@ import java.util.function.Consumer
  * From here the user can sell the item and view details about the item.
  */
 class ItemFragment : Fragment() {
+    private val model by activityViewModels<ItemViewModel>()
+    private val shared by activityViewModels<AuctionViewModel>()
     private var service = AuctionService.instance
-    private lateinit var item: Item
 
     companion object {
         val TAG = "item.fragment"
     }
 
-    fun load(item: Item): Fragment {
-        this.item = item
-        return this
-    }
-
     private fun auctionHandler(view: View): Consumer<Int> {
         return Consumer<Int> { initialValue ->
-            service.auction(item, initialValue).bindToLifecycle(view).subscribe { response, e ->
+            service.auction(this.model.item.value!!, initialValue).bindToLifecycle(view).subscribe { response, e ->
                 if (e == null) {
+                    this.shared.auction.value = response
+
                     requireActivity().supportFragmentManager.popBackStack(
                         ItemFragment.TAG,
                         FragmentManager.POP_BACK_STACK_INCLUSIVE
                     )
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.root, AuctionFragment().load(response))
+                        .replace(R.id.root, AuctionFragment())
                         .addToBackStack(AuctionFragment.TAG)
                         .commit()
                 } else {
@@ -64,6 +62,7 @@ class ItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val fragment = inflater.inflate(R.layout.fragment_item, container, false)
+        val item = this.model.item.value!!
 
         requireActivity().title = item.name
         fragment.findViewById<TextView>(R.id.item_description).text = item.description
@@ -85,7 +84,9 @@ class ItemFragment : Fragment() {
     }
 
     private fun updateQuantity(fragment: View) {
+        val item = this.model.item.value!!
         val quantity = fragment.findViewById<TextView>(R.id.item_quantity)
+
         if (item.quantity > 1) {
             quantity.text = getString(R.string.item_quantity, item.quantity)
         } else {

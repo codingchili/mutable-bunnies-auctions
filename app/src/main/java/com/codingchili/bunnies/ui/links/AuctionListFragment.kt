@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.codingchili.banking.model.Auction
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuthenticationService
 import com.codingchili.bunnies.model.AuctionState
 import com.codingchili.bunnies.ui.auction.AuctionFragment
+import com.codingchili.bunnies.ui.auction.AuctionViewModel
 import com.codingchili.bunnies.ui.transform.renderItemThumbnail
 import com.codingchili.bunnies.ui.transform.setupChronometerFromAuction
 import java.time.Instant
@@ -18,7 +21,9 @@ import java.time.Instant
 /**
  * This fragment displays a list of auctions, which can be shown using the auction fragment.
  */
-class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
+class AuctionListFragment() : Fragment() {
+    private val shared by activityViewModels<AuctionViewModel>()
+    private val auctions by activityViewModels<AuctionListViewModel>()
     companion object {
         const val TAG = "auction.list"
     }
@@ -52,10 +57,12 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
                 val chronometer = entry.findViewById<Chronometer>(R.id.auction_end)
 
                 entry.setOnClickListener {
+                    this@AuctionListFragment.shared.auction.value = auction
+
                     requireActivity().title = auction.item.name
                     requireActivity().supportFragmentManager.beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                        .add(R.id.root, AuctionFragment().load(auction))
+                        .add(R.id.root, AuctionFragment())
                         .addToBackStack(AuctionFragment.TAG)
                         .commit()
                 }
@@ -68,7 +75,7 @@ class AuctionListFragment(private val auctions: List<Auction>) : Fragment() {
             }
         }
         list.adapter = adapter
-        adapter.addAll(auctions.sortedBy {
+        adapter.addAll(auctions.list.value!!.sortedBy {
             if (it.finished()) {
                 it.end
             } else {

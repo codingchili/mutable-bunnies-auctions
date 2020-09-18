@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.codingchili.bunnies.ui.AppToast
 import com.codingchili.bunnies.ui.dialog.Dialogs
 import com.codingchili.bunnies.ui.dialog.NumberInputDialog
 import com.codingchili.bunnies.ui.links.AuctionListFragment
+import com.codingchili.bunnies.ui.links.AuctionListViewModel
 import com.codingchili.bunnies.ui.transform.*
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,25 +41,17 @@ import java.util.function.Consumer
 class AuctionFragment : Fragment() {
     private var authentication = AuthenticationService.instance
     private var service = AuctionService.instance
-    private lateinit var auction: Auction
-    private var hits: MutableLiveData<List<Auction>> = MutableLiveData(listOf())
+    private val model by activityViewModels<AuctionViewModel>()
+    private val auctions by activityViewModels<AuctionListViewModel>()
 
     companion object {
         const val TAG = "details"
     }
 
-    fun load(auction: Auction): AuctionFragment {
-        this.auction = auction
-        return this
-    }
 
-    fun load(auction: Auction, hits: MutableLiveData<List<Auction>>): AuctionFragment {
-        this.auction = auction
-        this.hits = hits
-        return this
-    }
 
     private fun handleSellerClick(fragment: View): View.OnClickListener {
+        val auction = this.model.auction.value!!
         return View.OnClickListener {
             service.search(QueryType.seller, auction.seller).bindToLifecycle(fragment)
                 .subscribe { response, e ->
@@ -65,6 +59,8 @@ class AuctionFragment : Fragment() {
                         if (response.isEmpty()) {
                             AppToast.show(context, getString(R.string.no_auctions_found))
                         } else {
+                            this.auctions.list.value = response
+
                             requireActivity().title =
                                 getString(R.string.title_auctions_by, auction.seller)
 
@@ -73,7 +69,7 @@ class AuctionFragment : Fragment() {
                                     android.R.anim.fade_in,
                                     android.R.anim.fade_out
                                 )
-                                .add(R.id.root, AuctionListFragment(response))
+                                .add(R.id.root, AuctionListFragment())
                                 .addToBackStack(AuctionListFragment.TAG)
                                 .commit()
                         }
@@ -92,13 +88,15 @@ class AuctionFragment : Fragment() {
         val fragment = inflater.inflate(R.layout.fragment_auction, container, false)
         val swipe = fragment.findViewById<SwipeRefreshLayout>(R.id.pull_refresh)
         swipe.setOnRefreshListener {
-            service.findById(auction.id!!).bindToLifecycle(fragment).subscribe { response, e ->
-                update(response, fragment)
+            service.findById(this.model.auction.value!!.id!!).bindToLifecycle(fragment).subscribe { response, e ->
+                if (e == null) {
+                    update(response, fragment)
+                }
                 swipe.isRefreshing = false
             }
         }
 
-        update(auction, fragment)
+        update(this.model.auction.value!!, fragment)
 
         fragment.findViewById<FloatingActionButton>(R.id.back)
             .setOnClickListener { requireActivity().onBackPressed() }
@@ -107,13 +105,15 @@ class AuctionFragment : Fragment() {
 
     // update source list with updated auction.
     private fun propagate(auction: Auction) {
-        this.hits.postValue(this.hits.value!!.map { if (it.id == auction.id) auction else it })
+        if (this.model.list.value != null) {
+            this.model.list.postValue(this.model.list.value!!.map { if (it.id == auction.id) auction else it })
+        }
     }
 
     private fun update(auction: Auction, fragment: View) {
         propagate(auction)
 
-        this.auction = auction
+        this.model.auction.value = auction
         val item = auction.item
         requireActivity().title = item.name
 
@@ -205,12 +205,14 @@ class AuctionFragment : Fragment() {
     private fun updateRelatedHits(fragment: View) {
         val relatedContainer = fragment.findViewById<View>(R.id.related_items)
         val relatedListView = fragment.findViewById(R.id.horizontal_scroll) as RecyclerView
+        val hits = this.model.list
+        val auction = this.model.auction.value!!
 
         if (hits.value.isNullOrEmpty()) {
             relatedContainer.layoutParams.height = 0
             relatedContainer.visibility = View.INVISIBLE
         } else {
-            val hits = this.hits.value!!
+            val hits = hits.value!!
             val related = hits.subList(0, Math.min(hits.size - 1, 16)).filter { it.id != auction.id }
             relatedListView.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -220,13 +222,14 @@ class AuctionFragment : Fragment() {
                     this,
                     related,
                     Consumer<Any> {
-                        it as Auction
+                        this.model.auction.value = it as Auction
+
                         requireActivity().supportFragmentManager.popBackStack(
                             TAG,
                             FragmentManager.POP_BACK_STACK_INCLUSIVE
                         );
                         requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.root, AuctionFragment().load(it, this.hits))
+                            .replace(R.id.root, AuctionFragment())
                             .addToBackStack(TAG)
                             .commit()
                     })
@@ -235,7 +238,7 @@ class AuctionFragment : Fragment() {
 
     private fun onBidHandler(fragment: View): Consumer<Int> {
         return Consumer<Int> {
-            service.bid(it, auction).bindToLifecycle(fragment).subscribe { response, e ->
+            service.bid(it, this.model.auction.value!!).bindToLifecycle(fragment).subscribe { response, e ->
                 if (e == null) {
                     update(response, fragment)
                 } else {
@@ -246,6 +249,7 @@ class AuctionFragment : Fragment() {
     }
 
     private fun updateAuctionState(fragment: View) {
+        val auction = this.model.auction.value!!
         val user = authentication.user()!!
         val state = AuctionState.fromAuction(auction, user)
         val button = fragment.findViewById<MaterialButton>(R.id.button)

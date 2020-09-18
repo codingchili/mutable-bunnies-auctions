@@ -17,6 +17,7 @@ import com.codingchili.bunnies.api.AuctionService
 import com.codingchili.bunnies.ui.AppToast
 import com.codingchili.bunnies.ui.dialog.*
 import com.codingchili.bunnies.ui.item.ItemFragment
+import com.codingchili.bunnies.ui.item.ItemViewModel
 import com.codingchili.bunnies.ui.transform.Sorter
 import com.codingchili.bunnies.ui.transform.formatValue
 import com.codingchili.bunnies.ui.transform.itemGridAdapter
@@ -31,6 +32,7 @@ import java.util.function.Consumer
 class InventoryFragment : Fragment() {
     private val service = AuctionService.instance
     private val model by activityViewModels<InventoryViewModel>()
+    private val shared by activityViewModels<ItemViewModel>()
     private val sorter = Sorter()
 
     override fun onCreateView(
@@ -67,10 +69,11 @@ class InventoryFragment : Fragment() {
             this,
             inflater,
             Consumer<Item> { item ->
+                this.shared.item.value = item
                 requireActivity().title = item.name
                 requireActivity().supportFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .add(R.id.root, ItemFragment().load(item))
+                    .add(R.id.root, ItemFragment())
                     .addToBackStack(ItemFragment.TAG)
                     .commit()
             })
