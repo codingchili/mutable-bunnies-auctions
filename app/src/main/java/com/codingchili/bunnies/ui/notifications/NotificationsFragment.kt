@@ -9,7 +9,6 @@ import android.widget.*
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import com.codingchili.banking.model.Notification
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuctionService

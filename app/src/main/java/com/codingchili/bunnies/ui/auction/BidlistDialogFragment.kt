@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.DialogFragment
-import com.codingchili.banking.model.Auction
+import androidx.fragment.app.activityViewModels
 import com.codingchili.banking.model.Bid
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.ui.transform.bidListAdapter
@@ -17,12 +17,7 @@ import java.util.function.Consumer
  * This fragment is shown in a dialog to display the bid history of an auction.
  */
 class BidlistDialogFragment : DialogFragment() {
-    private lateinit var auction: Auction
-
-    fun setAuction(auction: Auction): BidlistDialogFragment {
-        this.auction = auction
-        return this
-    }
+    private val model by activityViewModels<AuctionViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +34,7 @@ class BidlistDialogFragment : DialogFragment() {
             inflater,
             Consumer<Bid> { /* no action yet. */ })
         list.adapter = adapter
-        adapter.addAll(auction.bids)
+        adapter.addAll(model.auction.value?.bids!!)
 
         return view
     }

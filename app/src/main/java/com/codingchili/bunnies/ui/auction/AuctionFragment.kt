@@ -13,7 +13,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -47,8 +46,6 @@ class AuctionFragment : Fragment() {
     companion object {
         const val TAG = "details"
     }
-
-
 
     private fun handleSellerClick(fragment: View): View.OnClickListener {
         val auction = this.model.auction.value!!
@@ -130,7 +127,6 @@ class AuctionFragment : Fragment() {
 
         fragment.findViewById<RelativeLayout>(R.id.bid_list).setOnClickListener {
             BidlistDialogFragment()
-                .setAuction(auction)
                 .show(requireActivity().supportFragmentManager, Dialogs.TAG)
         }
 

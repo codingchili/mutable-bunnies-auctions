@@ -1,6 +1,5 @@
 package com.codingchili.bunnies.api.protocol
 
-import com.codingchili.banking.model.Item
 import com.codingchili.banking.model.QueryType
 import com.codingchili.core.security.Token
 

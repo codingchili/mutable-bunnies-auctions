@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.codingchili.banking.model.Auction
 import com.codingchili.bunnies.R
 import com.codingchili.bunnies.api.AuthenticationService

@@ -1,7 +1,6 @@
 package com.codingchili.bunnies
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,9 +31,7 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         // called twice, one where savedInstance is null, idk wat.
-        Log.e("foo", "destination == " + destination)
         destination = savedInstanceState?.getInt(STATE_KEY) ?: destination
-        Log.e("foo", "destination update == " + savedInstanceState?.getInt(STATE_KEY))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -66,8 +63,6 @@ class MainFragment : Fragment() {
 
         val navInflater = navController.navInflater
         val graph = navInflater.inflate(R.navigation.mobile_navigation)
-
-        Log.e("foo", "on create nav fraggy, dest = " + destination)
 
         if (destination == null) {
             graph.startDestination = R.id.navigation_search
