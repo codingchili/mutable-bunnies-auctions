@@ -76,6 +76,10 @@ class MainFragment : Fragment() {
             .setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        // save current destination because the graph is recreated when popping the backstack.
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            this@MainFragment.destination = destination.id }
+
         return fragment
     }
 }

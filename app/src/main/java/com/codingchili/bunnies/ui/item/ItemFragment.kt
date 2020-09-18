@@ -40,6 +40,8 @@ class ItemFragment : Fragment() {
             service.auction(this.model.item.value!!, initialValue).bindToLifecycle(view).subscribe { response, e ->
                 if (e == null) {
                     this.shared.auction.value = response
+                    // empty the related hits.
+                    this.shared.list.value = listOf()
 
                     requireActivity().supportFragmentManager.popBackStack(
                         ItemFragment.TAG,
